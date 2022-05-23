@@ -1,0 +1,30 @@
+name: GCP - Auth Methods
+on:
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+
+#define JOB_ID as-env
+#define TEST_JOB_ID test-as-env
+#define LABEL env-test
+jobs:
+  #include "../includes/setup.yml"
+    #
+      #include "../includes/gcp/runner-env.yml"
+  #include "../includes/tests/version.yml"
+
+  #define JOB_ID as-file
+  #define TEST_JOB_ID test-as-file
+  #define LABEL file-test
+  #include "../includes/setup.yml"
+    #
+      #include "../includes/gcp/runner-g-auth.yml"
+  #include "../includes/tests/version.yml"
+
+  #define JOB_ID as-oidc
+  #define TEST_JOB_ID test-as-oidc
+  #define LABEL oidc-test
+  #include "../includes/setup.yml"
+    #
+      #include "../includes/gcp/runner-oidc.yml"
+  #include "../includes/tests/version.yml"

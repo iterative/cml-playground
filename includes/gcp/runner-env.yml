@@ -1,0 +1,14 @@
+#
+  #
+    #
+      - name: Create Runner
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GCP_KEY }}
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --single \
+            --labels=LABEL \
+            --cloud=gcp \
+            --cloud-region=us-west \
+            --cloud-type=e2-highcpu-2
