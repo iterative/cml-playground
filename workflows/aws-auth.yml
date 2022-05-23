@@ -1,4 +1,4 @@
-name: GCP - Auth Methods
+name: AWS - Auth Methods
 on:
   workflow_dispatch:
 
