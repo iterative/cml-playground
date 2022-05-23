@@ -1,0 +1,50 @@
+name: GCP - Auth Methods
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+jobs:
+  static-creds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: iterative/setup-cml@v1
+      - name: Create Runner
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRECT_ACCESS_KEY }}
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --single --labels=static-creds-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+  test-static-creds:
+    needs: [static-creds]
+    runs-on: [self-hosted, static-creds-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test
+        run: |
+          which cml
+          cml --version
+  oidc-creds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: iterative/setup-cml@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::1234567890:role/cml_oidc_role
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --single --labels=oidc-creds-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+  test-oidc-creds:
+    needs: [oidc-creds]
+    runs-on: [self-hosted, oidc-creds-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test
+        run: |
+          which cml
+          cml --version

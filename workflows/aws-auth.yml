@@ -1,0 +1,19 @@
+name: GCP - Auth Methods
+on:
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+jobs:
+  #define JOB_ID static-creds
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #
+      #include "../includes/aws/runner-auth.yml"
+  #include "../includes/tests/version.yml"
+
+  #define JOB_ID oidc-creds
+  #include "../includes/setup.yml"
+    #
+      #include "../includes/aws/runner-oidc.yml"
+  #include "../includes/tests/version.yml"
