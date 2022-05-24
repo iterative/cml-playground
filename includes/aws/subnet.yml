@@ -1,0 +1,18 @@
+#
+  #
+    #
+      #define AWS_SECURITY_GROUP todo
+      #define AWS_SUBNET todo
+      #include "aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --single \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west \
+            --cloud-type=t3.small \
+            --cloud-aws-security-group=AWS_SECURITY_GROUP \
+            --cloud-aws-subnet-id=AWS_SUBNET
