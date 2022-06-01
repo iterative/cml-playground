@@ -3,7 +3,7 @@
     needs: [JOB_ID]
     runs-on: [self-hosted, LABEL]
     steps:
-      - uses: actions/checkout@v3
+      #include "../steps/base-checkout.yml"
       - name: Test
         run: |
           which cml
