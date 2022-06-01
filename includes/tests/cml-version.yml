@@ -1,0 +1,14 @@
+
+#
+  #
+    #
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+          #ifdef CML_TARGET_VERSION
+          if [ "$(cml --version 2>&1)" != 'CML_TARGET_VERSION' ]; then
+            exit 1
+          fi
+          echo OK
+          #endif

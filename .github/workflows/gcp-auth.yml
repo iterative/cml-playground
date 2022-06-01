@@ -21,7 +21,7 @@ jobs:
     runs-on: [self-hosted, as-env-test]
     steps:
       - uses: actions/checkout@v3
-      - name: Test
+      - name: CML Version Test
         run: |
           which cml
           cml --version
@@ -44,7 +44,7 @@ jobs:
     runs-on: [self-hosted, as-file-test]
     steps:
       - uses: actions/checkout@v3
-      - name: Test
+      - name: CML Version Test
         run: |
           which cml
           cml --version
@@ -68,7 +68,7 @@ jobs:
     runs-on: [self-hosted, as-oidc-test]
     steps:
       - uses: actions/checkout@v3
-      - name: Test
+      - name: CML Version Test
         run: |
           which cml
           cml --version

@@ -4,7 +4,4 @@
     runs-on: [self-hosted, LABEL]
     steps:
       #include "../steps/base-checkout.yml"
-      - name: Test
-        run: |
-          which cml
-          cml --version
+      #include "./cml-version.yml"
