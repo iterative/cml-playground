@@ -1,0 +1,34 @@
+#define COMMENT #
+#define SPACE
+name: train-my-model
+
+on: [push]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/base-cml.yml"
+      #include "../includes/steps/base-dvc.yml"
+      #include "../includes/steps/python.yml"
+
+      - name: cml
+        env:
+        run: |
+          pip install -r requirements.txt
+          SPACE
+          COMMENT Pull dataset with DVC 
+          dvc pull data
+          SPACE
+          COMMENT Reproduce pipeline if any changes detected in dependencies
+          dvc repro 
+          SPACE
+          COMMENT Use DVC metrics diff to compare metrics to master
+          git fetch --prune --unshallow
+          dvc metrics diff --show-md master >> report.md
+          SPACE
+          COMMENT Add figure to report
+          dvc plots diff --target loss.csv --show-vega master > vega.json
+          vl2png vega.json -s 1.3 | cml publish --md >> report.md
+          cml send-comment report.md 
