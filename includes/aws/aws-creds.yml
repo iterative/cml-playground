@@ -5,3 +5,6 @@
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: AWS_OIDC_ROLE
+          #ifdef __AWS_REGION__
+          region: __AWS_REGION__
+          #endif
