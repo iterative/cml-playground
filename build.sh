@@ -5,5 +5,6 @@ rm .github/workflows/*
 for workflow in workflows/*
 do
     echo "Processing $workflow > .github/workflows/$workflow"
-    cpp -P $workflow | sed '/./,$!d' > .github/$workflow
+    #cpp -nostdinc -P $workflow | sed '/./,$!d' > .github/$workflow
+    cpp -nostdinc -w -P $workflow | sed '/./,$!d' > .github/$workflow
 done
