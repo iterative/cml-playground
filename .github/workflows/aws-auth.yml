@@ -33,7 +33,7 @@ jobs:
       - uses: iterative/setup-cml@v1
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::1234567890:role/cml_oidc_role
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
       - name: Create Runner
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}

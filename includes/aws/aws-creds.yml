@@ -1,7 +1,7 @@
 #
   #
     #
-      #define AWS_OIDC_ROLE arn:aws:iam::1234567890:role/cml_oidc_role
+      #define AWS_OIDC_ROLE arn:aws:iam::342840881361:role/SandboxUser
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: AWS_OIDC_ROLE

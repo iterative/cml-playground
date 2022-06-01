@@ -1,0 +1,11 @@
+#
+  #
+    #
+      #define PROVIDER 'projects/200200923017/locations/global/workloadIdentityPools/gh-actions-pool/providers/github-actions'
+      #define SA 'cml-runner@cml-pulse.iam.gserviceaccount.com'
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: PROVIDER
+          service_account: SA
+      #undef PROVIDER SA
