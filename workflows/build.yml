@@ -1,0 +1,11 @@
+name: Build Workflows
+on:
+  push:
+jobs:
+  build_verify:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      - run: |
+        ./build.sh
+        git diff --exit-code
