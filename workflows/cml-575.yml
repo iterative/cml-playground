@@ -1,0 +1,30 @@
+#// https://github.com/iterative/cml/issues/575
+name: Reuse Idle Runners
+on:
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+
+jobs:
+  #define JOB_ID reuse-idle
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+          env:
+            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+          run: |
+            cml runner \
+              --reuse-idle \
+              --labels=LABEL \
+              --cloud=aws \
+              --cloud-region=us-west \
+              --cloud-type=t3.small
+      - name: Let Idle...
+        run: sleep 120
+  #include "../includes/tests/on-test.yml"
+  #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
