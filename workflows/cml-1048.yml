@@ -1,0 +1,36 @@
+#// https://github.com/iterative/cml/issues/1048
+#// https://github.com/iterative/cml/pull/1049
+name: Allow Native GPU types
+on:
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+
+jobs:
+  #define JOB_ID gcp-t4
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/gcp/auth-oidc.yml"
+      #// user's example
+      #// https://cloud.google.com/compute/docs/general-purpose-machines#n1-high-memory
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --single=true \
+            --labels=LABEL \
+            --cloud=gcp \
+            --cloud-region=us-central1-a \
+            --cloud-type=n1-highmem-2 \
+            --cloud-spot=false \
+            --cloud-gpu=nvidia-tesla-t4 \
+            --cloud-hdd-size=50
+
+  #include "../includes/tests/on-test.yml"
+    #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+      #include "../includes/tests/nvidia.yml"

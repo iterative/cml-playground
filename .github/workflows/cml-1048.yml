@@ -1,0 +1,34 @@
+name: Allow Native GPU types
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+jobs:
+  gcp-t4:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: iterative/setup-cml@v1
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: 'projects/200200923017/locations/global/workloadIdentityPools/gh-actions-pool/providers/github-actions'
+          service_account: 'cml-runner@cml-pulse.iam.gserviceaccount.com'
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --single=true --labels=gcp-t4-test --cloud=gcp --cloud-region=us-central1-a --cloud-type=n1-highmem-2 --cloud-spot=false --cloud-gpu=nvidia-tesla-t4 --cloud-hdd-size=50
+  test-gcp-t4:
+    needs: [gcp-t4]
+    runs-on: [self-hosted, gcp-t4-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+      - name: Nvidia drivers
+        run: |
+          nvidia-smi

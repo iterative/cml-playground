@@ -1,0 +1,6 @@
+#
+  #
+    #
+      - name: Nvidia drivers
+        run: |
+          nvidia-smi
