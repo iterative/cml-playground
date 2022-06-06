@@ -1,0 +1,75 @@
+name: CML Runner takes multiple jobs
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+ # Not strictly parallel because of GitHub Actions queuing jobs
+ # but logicly parallel via default mechanics of GHA
+jobs:
+  parallel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: iterative/setup-cml@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+      - name: Create Runner
+          env:
+            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+          run: |
+            cml runner --labels=parallel-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+  test-parallel:
+    needs: [parallel]
+    runs-on: [self-hosted, parallel-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+  test-parallel-2:
+    needs: [parallel]
+    runs-on: [self-hosted, parallel-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Wait
+        run: sleep 120
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+  sequence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: iterative/setup-cml@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+      - name: Create Runner
+          env:
+            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+          run: |
+            cml runner --labels=sequence-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+  test-sequence:
+    needs: [sequence]
+    runs-on: [self-hosted, sequence-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+  test-sequence-2:
+    needs: [sequence, test-sequence]
+    runs-on: [self-hosted, sequence-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Wait
+        run: sleep 120
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
