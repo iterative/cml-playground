@@ -1,0 +1,12 @@
+#
+  #
+    #
+      - name: CML send-comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          today=$(date --iso-8601)
+          current_sha=$(git rev-parse HEAD)
+          prev_sha=$(git rev-parse HEAD~1)
+          echo "My test comment on $today" > report.md
+          cml send-comment report.md
