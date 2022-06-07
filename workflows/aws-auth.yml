@@ -1,3 +1,5 @@
+#define NEEDS_AWS true
+
 name: AWS - Auth Methods
 on:
   workflow_dispatch:

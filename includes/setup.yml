@@ -1,5 +1,8 @@
 #
   JOB_ID:
+    #ifdef NEEDS_AWS
+    #include "./environment.yml"
+    #endif
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

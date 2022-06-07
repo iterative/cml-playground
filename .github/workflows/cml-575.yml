@@ -6,6 +6,7 @@ permissions:
   contents: write
 jobs:
   reuse-idle:
+    environment: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,6 +24,7 @@ jobs:
   test-reuse-idle:
     needs: [reuse-idle]
     runs-on: [self-hosted, reuse-idle-test]
+    environment: test
     steps:
       - uses: actions/checkout@v3
       - name: CML Version Test

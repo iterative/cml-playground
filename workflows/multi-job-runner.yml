@@ -1,3 +1,6 @@
+#// ref issue/pr?
+#define NEEDS_AWS true
+
 name: CML Runner takes multiple jobs
 on:
   workflow_dispatch:
@@ -57,6 +60,9 @@ jobs:
   TEST_JOB_ID2:
     needs: [JOB_ID, TEST_JOB_ID]
     runs-on: [self-hosted, LABEL]
+    #ifdef NEEDS_AWS
+    #include "../includes/environment.yml"
+    #endif
     steps:
       #include "../includes/steps/base-checkout.yml"
       - name: Wait

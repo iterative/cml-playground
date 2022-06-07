@@ -2,5 +2,8 @@
   TEST_JOB_ID:
     needs: [JOB_ID]
     runs-on: [self-hosted, LABEL]
+    #ifdef NEEDS_AWS
+    #include "../environment.yml"
+    #endif
     steps:
       #

@@ -8,6 +8,7 @@ permissions:
  # but logicly parallel via default mechanics of GHA
 jobs:
   parallel:
+    environment: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,6 +24,7 @@ jobs:
   test-parallel:
     needs: [parallel]
     runs-on: [self-hosted, parallel-test]
+    environment: test
     steps:
       - uses: actions/checkout@v3
       - name: CML Version Test
@@ -32,6 +34,7 @@ jobs:
   test-parallel-2:
     needs: [parallel]
     runs-on: [self-hosted, parallel-test]
+    environment: test
     steps:
       - uses: actions/checkout@v3
       - name: Wait
@@ -41,6 +44,7 @@ jobs:
           which cml
           cml --version
   sequence:
+    environment: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -56,6 +60,7 @@ jobs:
   test-sequence:
     needs: [sequence]
     runs-on: [self-hosted, sequence-test]
+    environment: test
     steps:
       - uses: actions/checkout@v3
       - name: CML Version Test
@@ -65,6 +70,7 @@ jobs:
   test-sequence-2:
     needs: [sequence, test-sequence]
     runs-on: [self-hosted, sequence-test]
+    environment: test
     steps:
       - uses: actions/checkout@v3
       - name: Wait
