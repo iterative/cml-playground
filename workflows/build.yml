@@ -7,5 +7,5 @@ jobs:
     steps:
       #include "../includes/steps/base-checkout.yml"
       - run: |
-        ./build.sh
-        git diff --exit-code
+          ./build.sh
+          git diff --exit-code

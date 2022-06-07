@@ -1,4 +1,4 @@
-name: Received CML Publish Event
+name: Receive CML Publish Event
 on:
   repository_dispatch:
     types:

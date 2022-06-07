@@ -14,14 +14,14 @@ jobs:
     #// steps:
       #include "../includes/aws/aws-creds.yml"
       - name: Create Runner
-          env:
-            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-          run: |
-            cml runner \
-              --labels=LABEL \
-              --cloud=aws \
-              --cloud-region=us-west \
-              --cloud-type=t3.small
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west \
+            --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
   #// steps:
       #include "../includes/steps/base-checkout.yml"
@@ -41,14 +41,14 @@ jobs:
     #// steps:
       #include "../includes/aws/aws-creds.yml"
       - name: Create Runner
-          env:
-            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-          run: |
-            cml runner \
-              --labels=LABEL \
-              --cloud=aws \
-              --cloud-region=us-west \
-              --cloud-type=t3.small
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west \
+            --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
     #// steps:
       #include "../includes/steps/base-checkout.yml"

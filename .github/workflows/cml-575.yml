@@ -14,10 +14,10 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
       - name: Create Runner
-          env:
-            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-          run: |
-            cml runner --reuse-idle --labels=reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --reuse-idle --labels=reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
       - name: Let Idle...
         run: sleep 120
   test-reuse-idle:

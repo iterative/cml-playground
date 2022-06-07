@@ -13,15 +13,15 @@ jobs:
     #// steps:
       #include "../includes/aws/aws-creds.yml"
       - name: Create Runner
-          env:
-            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-          run: |
-            cml runner \
-              --reuse-idle \
-              --labels=LABEL \
-              --cloud=aws \
-              --cloud-region=us-west \
-              --cloud-type=t3.small
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --reuse-idle \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west \
+            --cloud-type=t3.small
       - name: Let Idle...
         run: sleep 120
   #include "../includes/tests/on-test.yml"

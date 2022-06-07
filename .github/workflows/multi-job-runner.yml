@@ -16,10 +16,10 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
       - name: Create Runner
-          env:
-            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-          run: |
-            cml runner --labels=parallel-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --labels=parallel-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
   test-parallel:
     needs: [parallel]
     runs-on: [self-hosted, parallel-test]
@@ -49,10 +49,10 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
       - name: Create Runner
-          env:
-            REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-          run: |
-            cml runner --labels=sequence-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --labels=sequence-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
   test-sequence:
     needs: [sequence]
     runs-on: [self-hosted, sequence-test]
