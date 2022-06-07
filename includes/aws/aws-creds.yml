@@ -6,5 +6,5 @@
         with:
           role-to-assume: AWS_OIDC_ROLE
           #ifdef __AWS_REGION__
-          region: __AWS_REGION__
+          aws-region: __AWS_REGION__
           #endif
