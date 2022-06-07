@@ -1,5 +1,6 @@
 #// ref issue/pr?
 #define NEEDS_AWS true
+#define __AWS_REGION__ us-west-1
 
 name: CML Runner takes multiple jobs
 on:

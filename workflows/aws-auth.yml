@@ -1,4 +1,6 @@
 #define NEEDS_AWS true
+#define __AWS_REGION__ us-west-1
+
 
 name: AWS - Auth Methods
 on:
