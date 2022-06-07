@@ -1,0 +1,13 @@
+name: Received CML Publish Event
+on:
+  repository_dispatch:
+    types:
+      - new-cml
+
+jobs:
+  receive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: |
+          echo "CML version ${{ github.event.client_payload.tag }}"
