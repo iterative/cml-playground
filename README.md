@@ -15,3 +15,7 @@ https://github.com/iterative/stale-model-example
 ## defintions / vars
 
 ## File Structure
+
+# refs
+https://www.man7.org/linux/man-pages/man1/cpp.1.html
+https://gcc.gnu.org/onlinedocs/gcc-12.1.0/cpp.pdf
