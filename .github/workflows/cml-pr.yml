@@ -13,7 +13,7 @@ jobs:
       - uses: iterative/setup-cml@v1
       - name: Modifiy file for PR
         run: |
-          echo "# Test on $(date --rfc-3339=ns)" >> README.md
+          echo "$(date +%s%N) - pr basic" >> .cml.log
       - name: CML PR
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -26,9 +26,7 @@ jobs:
       - uses: iterative/setup-cml@v1
       - name: Modifiy file for PR
         run: |
-          echo "# Test on $(date --rfc-3339=ns)" >> README.md
-          sleep 60
-          echo "# Test on $(date --rfc-3339=ns)" >> README.md
+          echo "$(date +%s%N) - pr user" >> .cml.log
       - name: CML PR
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
