@@ -1,4 +1,4 @@
-name: Allow Native GPU types
+name: cml#1049 Allow Native GPU types
 on:
   workflow_dispatch:
 permissions:

@@ -2,7 +2,7 @@
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
 
-name: Reuse Idle Runners
+name: cml#575 Reuse Idle Runners
 on:
   workflow_dispatch:
 
