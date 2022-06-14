@@ -1,0 +1,20 @@
+name: Test CML PR usage
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+jobs:
+  basic-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: iterative/setup-cml@v1
+      - name: Modifiy file for PR
+        run: |
+          echo "# Test on $(date --iso-8601)" >> README.md
+      - name: CML PR
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr .
