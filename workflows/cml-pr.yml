@@ -4,10 +4,6 @@ on:
 
 #include "../includes/token.yml"
 jobs:
-  #define JOB_ID basic-pr
-  #include "../includes/setup.yml"
-    #
-      #include "../includes/tests/pr-basic.yml"
   #define JOB_ID user-pr
   #include "../includes/setup.yml"
     #
