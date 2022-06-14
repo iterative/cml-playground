@@ -1,0 +1,11 @@
+#
+  #
+    #
+      - name: Modifiy file for PR
+        run: |
+          echo "# Test on $(date --iso-8601)" >> README.md
+      - name: CML PR
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr --user-email=TEST_USER_EMAIL --user-name=TEST_USERNAME .
