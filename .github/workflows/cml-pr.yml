@@ -26,6 +26,7 @@ jobs:
       - uses: iterative/setup-cml@v1
       - name: Modifiy file for PR
         run: |
+          echo "# Test on $(date --iso-8601)" >> README.md
           sleep 60
           echo "# Test on $(date --iso-8601)" >> README.md
       - name: CML PR
