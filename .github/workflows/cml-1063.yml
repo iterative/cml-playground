@@ -1,4 +1,4 @@
-name: cml#10XX Advanced pr options
+name: cml#1063 Advanced pr options
 on:
   workflow_dispatch:
 permissions:
