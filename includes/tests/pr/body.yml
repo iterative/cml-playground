@@ -5,7 +5,7 @@
         run: |
           echo "$(date +%s%N) - pr custom" >> cml.log
           echo "# Cool body" >> report.md
-          echo "some stats: `1`" >> report.md
+          echo "some stats" >> report.md
       - name: CML PR with body as a read file
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
