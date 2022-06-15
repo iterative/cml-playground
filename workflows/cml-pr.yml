@@ -7,10 +7,10 @@ jobs:
   #define JOB_ID basic-pr
   #include "../includes/setup.yml"
     #
-      #include "../includes/tests/pr-basic.yml"
+      #include "../includes/tests/pr/basic.yml"
   #define JOB_ID user-pr
   #include "../includes/setup.yml"
     #
       #define TEST_USER_EMAIL dabarnes2b@gmail.com
       #define TEST_USERNAME dacbd
-      #include "../includes/tests/pr-user.yml"
+      #include "../includes/tests/pr/user.yml"

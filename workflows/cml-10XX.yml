@@ -11,4 +11,11 @@ jobs:
     steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml-branch.yml"
-      #include "../includes/tests/pr-custom.yml"
+      #include "../includes/tests/pr/custom.yml"
+  #define JOB_ID branch-pr
+  JOB_ID:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml-branch.yml"
+      #include "../includes/tests/pr/branch.yml"
