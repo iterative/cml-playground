@@ -1,0 +1,11 @@
+name: cml#10XX Advanced pr options
+on:
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+jobs:
+  #define TEST_CML_BRANCH cml-pr-opts
+  #define JOB_ID advanced-pr
+  #include "../includes/setup.yml"
+    #
+      #include "../includes/tests/pr-custom.yml"

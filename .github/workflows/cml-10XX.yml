@@ -1,0 +1,23 @@
+name: cml#10XX Advanced pr options
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+jobs:
+  advanced-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: iterative/setup-cml@v1
+        with:
+          version: cml-pr-opts
+      - name: Modifiy file for PR
+        run: |
+          echo "$(date +%s%N) - pr user" >> .cml.log
+      - name: CML PR
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr --title test --body="test pr body" --message="my commit message" .

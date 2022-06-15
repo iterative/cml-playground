@@ -5,5 +5,5 @@
     #endif
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: iterative/setup-cml@v1
+      #include "./steps/base-checkout.yml"
+      #include "./steps/base-cml.yml"
