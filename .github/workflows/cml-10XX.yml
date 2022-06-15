@@ -16,8 +16,16 @@ jobs:
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr custom" >> cml.log
-      - name: CML PR
+      - name: CML PR with custom title, body, and message
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cml pr --title test --body="test pr body" --message="my commit message" .
+      - name: Modifiy file for PR
+        run: |
+          echo "$(date +%s%N) - pr custom" >> cml.log
+      - name: CML PR with custom message/branch and [skip ci]
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr --skip-ci --branch exp-1234 --message="my commit message" .
