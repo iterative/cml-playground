@@ -6,6 +6,9 @@ on:
 jobs:
   #define TEST_CML_BRANCH cml-pr-opts
   #define JOB_ID advanced-pr
-  #include "../includes/setup.yml"
-    #
+  JOB_ID:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml-branch.yml"
       #include "../includes/tests/pr-custom.yml"

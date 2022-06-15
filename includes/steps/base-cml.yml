@@ -3,7 +3,7 @@
     #
       #// https://github.com/iterative/setup-cml
       - uses: iterative/setup-cml@v1
-      #ifdef TEST_CML_BRANCH
+      #ifdef TEST_CML_VERSION
         with:
-          version: TEST_CML_BRANCH
+          version: TEST_CML_VERSION
       #endif
