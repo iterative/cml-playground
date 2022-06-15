@@ -15,7 +15,8 @@ jobs:
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#cml-pr-opts
       - name: Modifiy file for PR
         run: |
-          echo "$(date +%s%N) - pr user" >> .cml.log
+          echo "$(date +%s%N) - pr custom" >> .cml.log
+          echo "$(date +%s%N) - pr custom" >> README.md
       - name: CML PR
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
