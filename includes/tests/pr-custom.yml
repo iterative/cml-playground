@@ -4,7 +4,6 @@
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr custom" >> cml.log
-          echo "$(date +%s%N) - pr custom" >> README.md
       - name: CML PR
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

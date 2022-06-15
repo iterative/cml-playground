@@ -13,7 +13,7 @@ jobs:
       - uses: iterative/setup-cml@v1
       - name: Modifiy file for PR
         run: |
-          echo "$(date +%s%N) - pr basic" >> .cml.log
+          echo "$(date +%s%N) - pr basic" >> cml.log
       - name: CML PR
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -26,7 +26,7 @@ jobs:
       - uses: iterative/setup-cml@v1
       - name: Modifiy file for PR
         run: |
-          echo "$(date +%s%N) - pr user" >> .cml.log
+          echo "$(date +%s%N) - pr user" >> cml.log
       - name: CML PR
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
