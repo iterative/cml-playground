@@ -36,3 +36,20 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cml pr --skip-ci --branch exp-1234 --message="my commit message" .
+  file-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup CML
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#cml-pr-opts
+      - name: Modifiy file for PR
+        run: |
+          echo "$(date +%s%N) - pr custom" >> cml.log
+          echo "# Cool body" >> report.md
+          echo "some stats: `1`" >> report.md
+      - name: CML PR with body as a read file
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr --title="Fancy PR Body" --body report.md --branch body-pr-test .
