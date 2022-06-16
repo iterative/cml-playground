@@ -8,6 +8,7 @@ jobs:
   #include "../includes/setup.yml"
     #
       #include "../includes/tests/pr/basic.yml"
+      #include "../includes/tests/pr/basic.yml"
   #define JOB_ID user-pr
   #include "../includes/setup.yml"
     #
