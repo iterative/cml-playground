@@ -6,8 +6,8 @@
           echo "$(date +%s%N) - pr custom" >> cml.log
           echo "# Cool body" >> report.md
           echo "some stats" >> report.md
-      - name: CML PR with body as a read file
+      - name: CML PR with body cat file example
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml pr --title="Fancy PR Body" --body-file report.md --branch body-pr-test .
+          cml pr --title="Fancy PR Body" --body="$(cat report.md)" --branch body-pr-test .
