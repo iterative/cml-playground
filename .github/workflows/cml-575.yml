@@ -40,3 +40,60 @@ jobs:
         run: |
           which cml
           cml --version
+  negitive-reuse-idle:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup CML
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#reuse-runners
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-1
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --reuse-idle --labels=negitive-reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+  test-negitive-reuse-idle:
+    needs: [negitive-reuse-idle]
+    runs-on: [self-hosted, negitive-reuse-idle-test]
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+      - name: Spin for 3 minutes
+        run: sleep 180
+  test-negitive-reuse-idle-2:
+    needs: [negitive-reuse-idle]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup CML
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#reuse-runners
+      - name: Spin for 1 minute
+        run: sleep 60
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-1
+      - name: Create Runner, previous runner should be busy create new one
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --reuse-idle --labels=negitive-reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+  test-negitive-reuse-idle-3:
+    needs: [test-negitive-reuse-idle-2]
+    runs-on: [negitive-reuse-idle-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version

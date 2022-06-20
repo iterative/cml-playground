@@ -42,3 +42,51 @@ jobs:
   #// steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/tests/cml-version.yml"
+
+  #define JOB_ID negitive-reuse-idle
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --reuse-idle \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west \
+            --cloud-type=t3.small
+  #include "../includes/tests/on-test.yml"
+  #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+      - name: Spin for 3 minutes
+        run: sleep 180
+  TEST_JOB_ID-2:
+    needs: [JOB_ID]
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/base-cml.yml"
+      - name: Spin for 1 minute
+        run: sleep 60
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner, previous runner should be busy create new one
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --reuse-idle \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west \
+            --cloud-type=t3.small
+  TEST_JOB_ID-3:
+    needs: [TEST_JOB_ID-2]
+    runs-on: [LABEL]
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
