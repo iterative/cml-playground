@@ -1,6 +1,7 @@
 #// https://github.com/iterative/cml/issues/575
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
+#define TEST_CML_BRANCH reuse-runners
 
 name: cml#575 Reuse Idle Runners
 on:
@@ -27,6 +28,16 @@ jobs:
             --cloud-type=t3.small
       - name: Let Idle...
         run: sleep 120
+      - name: Create Runner should exit right away
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --reuse-idle \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west \
+            --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
   #// steps:
       #include "../includes/steps/base-checkout.yml"

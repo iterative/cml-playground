@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: iterative/setup-cml@v1
+      - name: Setup CML
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#reuse-runners
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
@@ -23,6 +25,11 @@ jobs:
           cml runner --reuse-idle --labels=reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
       - name: Let Idle...
         run: sleep 120
+      - name: Create Runner should exit right away
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --reuse-idle --labels=reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
   test-reuse-idle:
     needs: [reuse-idle]
     runs-on: [self-hosted, reuse-idle-test]
