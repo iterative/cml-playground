@@ -14,8 +14,7 @@ jobs:
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'
         with:
-          workload_identity_provider: 'projects/200200923017/locations/global/workloadIdentityPools/gh-actions-pool/providers/github-actions'
-          service_account: 'cml-runner@cml-pulse.iam.gserviceaccount.com'
+          credentials_json: ${{ secrets.GCP_CML_RUNNER_KEY }}
       - name: Create Runner
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}

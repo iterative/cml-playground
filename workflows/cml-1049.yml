@@ -12,7 +12,7 @@ jobs:
   #define LABEL JOB_ID-test
   #include "../includes/setup.yml"
     #// steps:
-      #include "../includes/gcp/auth-oidc.yml"
+      #include "../includes/gcp/auth-key.yml"
       #// user's example
       #// https://cloud.google.com/compute/docs/general-purpose-machines#n1-high-memory
       - name: Create Runner
