@@ -1,5 +1,7 @@
 name: cml#1049 Allow Native GPU types
 on:
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
   workflow_dispatch:
 permissions:
   id-token: write
@@ -19,7 +21,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --single=true --labels=gcp-t4-test --cloud=gcp --cloud-region=us-central1-a --cloud-type=n1-highmem-2 --cloud-spot=false --cloud-gpu=nvidia-tesla-t4 --cloud-hdd-size=50
+          cml runner --single --labels=gcp-t4-test --cloud=gcp --cloud-region=us-central1-a --cloud-type=n1-highmem-2 --cloud-spot --cloud-gpu=nvidia-tesla-t4 --cloud-hdd-size=50
   test-gcp-t4:
     needs: [gcp-t4]
     runs-on: [self-hosted, gcp-t4-test]
