@@ -1,7 +1,7 @@
 #define NEEDS_AWS true
 
 #define __AWS_REGION__ us-east-1
-#define TEST_CML_BRANCH reuse-runners
+#define TEST_CML_BRANCH self-publish
 name: cml#10xx self-host publish
 on:
   workflow_dispatch:

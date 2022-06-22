@@ -37,7 +37,7 @@ jobs:
     steps:
       - name: Setup CML
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#reuse-runners
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#self-publish
       - name: Test
         env:
           CML_PUBLISH_DOMAIN: ${{ needs.setup.outputs.domain }}
