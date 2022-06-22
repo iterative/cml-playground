@@ -20,7 +20,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --reuse-idle --labels=negitive-reuse-idle-test --cloud=aws --cloud-spot --cloud-region=us-west --cloud-type=t3.small
+          cml runner --labels=negitive-reuse-idle-test --cloud=aws --cloud-spot --cloud-region=us-west --cloud-type=t3.small
   test-negitive-reuse-idle:
     needs: [negitive-reuse-idle]
     runs-on: [self-hosted, negitive-reuse-idle-test]
