@@ -1,0 +1,31 @@
+name: gcp spot loop
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+jobs:
+  gcp-spot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: iterative/setup-cml@v1
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: ${{ secrets.GCP_CML_RUNNER_KEY }}
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --single --labels=gcp-spot-test --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2 --cloud-spot
+  test-gcp-spot:
+    needs: [gcp-spot]
+    runs-on: [self-hosted, gcp-spot-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
