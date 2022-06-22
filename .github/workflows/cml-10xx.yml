@@ -1,0 +1,72 @@
+name: cml#10xx self-host publish
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+jobs:
+  setup:
+    outputs:
+      domain: ${{ steps.deploy.outputs.domain }}
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 0x2b3bfa0/minroud
+      - name: Install Deps
+        run: npm install --global serverless
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-east-1
+      - name: Deploy
+        id: deploy
+        run: |
+          npx serverless deploy
+          domain=$(npx serverless info | awk 'match($0, "endpoint: "){ print substr($0, RSTART + 10 + 8)}' | tr -d "\/")
+          echo "::set-output name=domain::$domain"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: state
+          path: .serverless
+  test:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Setup CML
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#reuse-runners
+      - name: Test
+        env:
+          CML_PUBLISH_DOMAIN: ${{ needs.setup.outputs.domain }}
+        run: |
+          echo "hello" >> file.md
+          url=$(cml publish file.md)
+          echo "$url"
+          test "hello" == $(curl --silent $url)
+  clean-up:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: test
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 0x2b3bfa0/minroud
+      - name: Install Deps
+        run: npm install --global serverless
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-east-1
+      - uses: actions/download-artifact@v3
+        with:
+          name: state
+          path: .serverless
+      - name: Clean up
+        run: |
+          bucket_name=$(aws s3 ls | awk 'match($0, /minroud/){ print $3}')
+          aws s3 rm --recursive "s3://$bucket_name"
+          npx serverless remove

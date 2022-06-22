@@ -1,0 +1,66 @@
+#define NEEDS_AWS true
+
+#define __AWS_REGION__ us-east-1
+#define TEST_CML_BRANCH reuse-runners
+name: cml#10xx self-host publish
+on:
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+jobs:
+  setup:
+    outputs:
+      domain: ${{ steps.deploy.outputs.domain }}
+    runs-on: ubuntu-latest
+    #include "../includes/environment.yml"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 0x2b3bfa0/minroud
+      - name: Install Deps
+        run: npm install --global serverless
+      #include "../includes/aws/aws-creds.yml"
+      - name: Deploy
+        id: deploy
+        run: |
+          npx serverless deploy
+          domain=$(npx serverless info | awk 'match($0, "endpoint: "){ print substr($0, RSTART + 10 + 8)}' | tr -d "\/")
+          echo "::set-output name=domain::$domain"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: state
+          path: .serverless
+  test:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      #include "../includes/steps/cml-branch.yml"
+      - name: Test
+        env:
+          CML_PUBLISH_DOMAIN: ${{ needs.setup.outputs.domain }}
+        run: |
+          echo "hello" >> file.md
+          url=$(cml publish file.md)
+          echo "$url"
+          test "hello" == $(curl --silent $url)
+  clean-up:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: test
+    #include "../includes/environment.yml"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 0x2b3bfa0/minroud
+      - name: Install Deps
+        run: npm install --global serverless
+      #include "../includes/aws/aws-creds.yml"
+      - uses: actions/download-artifact@v3
+        with:
+          name: state
+          path: .serverless
+      - name: Clean up
+        run: |
+          bucket_name=$(aws s3 ls | awk 'match($0, /minroud/){ print $3}')
+          aws s3 rm --recursive "s3://$bucket_name"
+          npx serverless remove
