@@ -1,0 +1,25 @@
+name: AWS - Auth Methods
+on:
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+jobs:
+
+  #define JOB_ID negitive-reuse-idle
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --reuse-idle \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-spot \
+            --cloud-region=us-west \
+            --cloud-type=t3.small
+  #include "../includes/tests/version.yml"
