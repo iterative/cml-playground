@@ -25,7 +25,7 @@ jobs:
             --single \
             --labels=LABEL \
             --cloud=gcp \
-            --cloud-region=us-central1-a \
+            --cloud-region=us-west \
             --cloud-type=n1-highmem-2 \
             --cloud-spot \
             --cloud-gpu=nvidia-tesla-t4 \

@@ -21,7 +21,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --single --labels=gcp-t4-test --cloud=gcp --cloud-region=us-central1-a --cloud-type=n1-highmem-2 --cloud-spot --cloud-gpu=nvidia-tesla-t4 --cloud-hdd-size=50
+          cml runner --single --labels=gcp-t4-test --cloud=gcp --cloud-region=us-west --cloud-type=n1-highmem-2 --cloud-spot --cloud-gpu=nvidia-tesla-t4 --cloud-hdd-size=50
   test-gcp-t4:
     needs: [gcp-t4]
     runs-on: [self-hosted, gcp-t4-test]
