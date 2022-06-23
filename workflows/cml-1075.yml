@@ -10,7 +10,7 @@ on:
 jobs:
   setup:
     outputs:
-      domain: ${{ steps.deploy.outputs.domain }}
+      domain: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest
     #include "../includes/environment.yml"
     steps:
@@ -24,8 +24,9 @@ jobs:
         id: deploy
         run: |
           npx serverless deploy
-          domain=$(npx serverless info | awk 'match($0, "endpoint: "){ print substr($0, RSTART + 10 + 8)}' | tr -d "\/")
-          echo "::set-output name=domain::$domain"
+          url=$(npx serverless info | awk 'match($0, "endpoint: "){ print substr($0, RSTART + 10)}')
+
+          echo "::set-output name=url::$url"
       - uses: actions/upload-artifact@v3
         with:
           name: state
@@ -37,7 +38,7 @@ jobs:
       #include "../includes/steps/cml-branch.yml"
       - name: Test
         env:
-          CML_PUBLISH_DOMAIN: ${{ needs.setup.outputs.domain }}
+          CML_PUBLISH_URL: ${{ needs.setup.outputs.url }}
         run: |
           echo "hello" >> file.md
           url=$(cml publish file.md)
