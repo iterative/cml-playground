@@ -26,6 +26,7 @@ jobs:
         run: |
           npx serverless deploy
           url=$(npx serverless info | awk 'match($0, "endpoint: "){ print substr($0, RSTART + 10)}')
+          echo "$url"
           echo "::set-output name=url::$url"
       - uses: actions/upload-artifact@v3
         with:
