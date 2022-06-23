@@ -10,7 +10,7 @@ on:
 jobs:
   setup:
     outputs:
-      domain: ${{ steps.deploy.outputs.url }}
+      url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest
     #include "../includes/environment.yml"
     steps:

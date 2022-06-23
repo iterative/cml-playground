@@ -8,7 +8,7 @@ permissions:
 jobs:
   setup:
     outputs:
-      domain: ${{ steps.deploy.outputs.url }}
+      url: ${{ steps.deploy.outputs.url }}
     runs-on: ubuntu-latest
     environment: test
     steps:
