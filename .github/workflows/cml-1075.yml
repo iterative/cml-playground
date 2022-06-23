@@ -1,4 +1,4 @@
-name: cml#10xx self-host publish
+name: cml#1075 Self-Host Publish
 on:
   workflow_dispatch:
 permissions:
