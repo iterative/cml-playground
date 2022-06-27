@@ -1,6 +1,8 @@
 name: cml#575 Reuse Idle Runners
 on:
   workflow_dispatch:
+env:
+  TEST_CML_BRANCH: reuse-runners
 permissions:
   id-token: write
   contents: write
@@ -11,9 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup CML
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_BRANCH }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#reuse-runners
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ !env.TEST_CML_BRANCH }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
@@ -45,9 +53,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup CML
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_BRANCH }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#reuse-runners
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ !env.TEST_CML_BRANCH }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
@@ -75,9 +89,15 @@ jobs:
     environment: test
     steps:
       - uses: actions/checkout@v3
-      - name: Setup CML
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_BRANCH }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#reuse-runners
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ !env.TEST_CML_BRANCH }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
       - name: Spin for 1 minute
         run: sleep 60
       - uses: aws-actions/configure-aws-credentials@v1

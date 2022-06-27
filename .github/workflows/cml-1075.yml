@@ -1,6 +1,8 @@
 name: cml#1075 Self-Host Publish
 on:
   workflow_dispatch:
+env:
+  TEST_CML_BRANCH: self-publish
 permissions:
   id-token: write
   contents: write
@@ -36,9 +38,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     steps:
-      - name: Setup CML
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_BRANCH }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#self-publish
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ !env.TEST_CML_BRANCH }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
       - name: Test
         env:
           CML_PUBLISH_URL: ${{ needs.setup.outputs.url }}

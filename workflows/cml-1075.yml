@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     steps:
-      #include "../includes/steps/cml-branch.yml"
+      #include "../includes/steps/cml.yml"
       - name: Test
         env:
           CML_PUBLISH_URL: ${{ needs.setup.outputs.url }}

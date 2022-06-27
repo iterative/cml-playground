@@ -73,7 +73,7 @@ jobs:
     #include "../includes/environment.yml"
     steps:
       #include "../includes/steps/base-checkout.yml"
-      #include "../includes/steps/base-cml.yml"
+      #include "../includes/steps/cml.yml"
       - name: Spin for 1 minute
         run: sleep 60
       #include "../includes/aws/aws-creds.yml"
