@@ -1,7 +1,0 @@
-#
-  #
-    #
-      #
-      - name: Setup CML
-        run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#TEST_CML_BRANCH

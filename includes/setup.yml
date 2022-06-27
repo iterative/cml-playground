@@ -6,4 +6,4 @@
     runs-on: ubuntu-latest
     steps:
       #include "./steps/base-checkout.yml"
-      #include "./steps/base-cml.yml"
+      #include "./steps/cml.yml"

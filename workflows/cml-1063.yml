@@ -2,9 +2,11 @@ name: cml#1063 Advanced pr options
 on:
   workflow_dispatch:
 
+env:
+  TEST_CML_BRANCH: master
+
 #include "../includes/token.yml"
 jobs:
-  #define TEST_CML_BRANCH cml-pr-opts
   #define JOB_ID advanced-pr
   JOB_ID:
     runs-on: ubuntu-latest

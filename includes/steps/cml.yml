@@ -1,0 +1,13 @@
+#
+  #
+    #
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_BRANCH }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      #// https://github.com/iterative/setup-cml
+      - name: Standard CML setup
+        if: ${{ !env.TEST_CML_BRANCH }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}

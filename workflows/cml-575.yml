@@ -1,11 +1,13 @@
 #// https://github.com/iterative/cml/issues/575
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
-#define TEST_CML_BRANCH reuse-runners
 
 name: cml#575 Reuse Idle Runners
 on:
   workflow_dispatch:
+
+env:
+  TEST_CML_BRANCH: reuse-runners
 
 #include "../includes/token.yml"
 
