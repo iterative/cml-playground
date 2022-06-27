@@ -2,7 +2,7 @@ name: cml#1075 Self-Host Publish
 on:
   workflow_dispatch:
 env:
-  TEST_CML_BRANCH: self-publish
+  TEST_CML_BRANCH: master
 permissions:
   id-token: write
   contents: write

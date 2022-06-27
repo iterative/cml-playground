@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  TEST_CML_BRANCH:  self-publish
+  TEST_CML_BRANCH:  master
 
 #include "../includes/token.yml"
 jobs:
