@@ -1,9 +1,15 @@
 name: cml#1063 Advanced pr options
+
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
 
 env:
-  TEST_CML_BRANCH: master
+  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
 
 #include "../includes/token.yml"
 jobs:
