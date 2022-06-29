@@ -30,7 +30,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --single --labels=termination-test --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2
+          cml runner --single --cml-version=github:iterative/cml#runner/detect-terminate-dacbd --labels=termination-test --cloud=gcp --cloud-region=us-west --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --cloud-type=e2-highcpu-2
   test-termination:
     needs: [termination]
     runs-on: [self-hosted, termination-test]
