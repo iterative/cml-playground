@@ -1,0 +1,24 @@
+name: cml#1068 Termination Testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+
+env:
+  TEST_CML_BRANCH:  ${{ inputs.branch || 'runner/detect-terminate-dacbd' }}
+
+
+jobs:
+  #define JOB_ID termination
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #
+      #include "../includes/gcp/runner-g-auth.yml"
+  #include "../includes/tests/version.yml"
+      - name: spin
+        run: sleep 300
