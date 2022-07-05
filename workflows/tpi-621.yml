@@ -50,7 +50,7 @@ jobs:
             --labels=LABEL \
             --cloud=gcp \
             --cloud-region=us-west \
-            --cloud-type=e2-highcpu-2\
+            --cloud-type=e2-highcpu-2
   #include "../includes/tests/on-test.yml"
     #// steps:
       #include "../includes/steps/base-checkout.yml"

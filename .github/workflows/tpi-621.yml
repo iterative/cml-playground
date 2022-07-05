@@ -68,7 +68,12 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --single --labels=gcp-test --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2 #include "../includes/tests/on-test.yml"
+          cml runner --single --labels=gcp-test --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2
+  test-gcp:
+    needs: [gcp]
+    runs-on: [self-hosted, gcp-test]
+    environment: test
+    steps:
       - uses: actions/checkout@v3
       - name: Check an APT install
         run: |
