@@ -4,10 +4,17 @@
 
 name: cml#575 Reuse Idle Runners
 on:
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
 
 env:
-  TEST_CML_BRANCH: reuse-runners
+  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
 
 #include "../includes/token.yml"
 
