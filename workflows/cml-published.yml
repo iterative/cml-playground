@@ -7,11 +7,11 @@ on:
 
 jobs:
   cml-pr:
-    if: ${{ github.event.event_type == 'pr' }}
     runs-on: ubuntu-latest
     steps:
       - name: TODO
         run: |
+          echo "${{ github.event.event_type }}"
           echo "${{ github.event.client_playload.branch }}"
   cml-published:
     if: ${{ github.event.event_type == 'new-cml' }}
