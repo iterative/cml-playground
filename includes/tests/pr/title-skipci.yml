@@ -1,0 +1,11 @@
+#
+  #
+    #
+      - name: Modifiy file for PR
+        run: |
+          echo "$(date +%s%N) - pr custom" >> cml.log
+      - name: CML PR with custom title and [skip ci]
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr --title test_title --skip-ci .
