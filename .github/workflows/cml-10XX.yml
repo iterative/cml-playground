@@ -33,4 +33,4 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml pr --title test_title --skip-ci .
+          cml pr --title test_title --skip-ci --merge .
