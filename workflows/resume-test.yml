@@ -3,9 +3,19 @@
 
 name: resume with git pull example
 on:
-  push:
-    branches:
-      - "resume-test"
+#//  push:
+#//    branches:
+#//      - "resume-test"
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: "start workflow from:"
+        type: choice
+        options:
+          - start
+          - prepare
+          - train
+          - inference
 
 #include "../includes/token.yml"
 jobs:
@@ -32,8 +42,13 @@ jobs:
         id: control
         run: |
           git pull
-          head_message=$(git show -s --format=%s HEAD)
-          case "$head_message" in
+          control_str=""
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] then;
+            control_str="${{ inputs.stage }}"
+          else
+            control_str=$(git show -s --format=%s HEAD)
+          fi
+          case "$control_str" in
             prepare)
               echo "::set-output name=stage::1"
               ;;
