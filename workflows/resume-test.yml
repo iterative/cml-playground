@@ -1,0 +1,92 @@
+#define NEEDS_AWS true
+#define __AWS_REGION__ us-east-1
+
+name: resume with git pull example
+on:
+#//  push:
+#//    branches:
+#//      - "resume-test"
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: "start workflow from:"
+        type: choice
+        options:
+          - start
+          - prepare
+          - train
+          - inference
+
+#include "../includes/token.yml"
+jobs:
+  #define JOB_ID resume
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west \
+            --cloud-type=t3.small
+  #include "../includes/tests/on-test.yml"
+  #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+      - name: flow control
+        id: control
+        run: |
+          git pull
+          control_str=""
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] then;
+            control_str="${{ inputs.stage }}"
+          else
+            control_str=$(git show -s --format=%s HEAD)
+          fi
+          case "$control_str" in
+            prepare)
+              echo "::set-output name=stage::1"
+              ;;
+            train)
+              echo "::set-output name=stage::2"
+              ;;
+            inference)
+              echo "::set-output name=stage::3"
+              ;;
+            *)
+              echo "::set-output name=stage::0"
+              ;;
+          esac
+      - name: prepare stage
+        if: steps.control.outputs.stage < 1
+        run: |
+          echo "prepare commands"
+          sleep 120
+          echo "prepare done; git checkpoint"
+          git commit --allow-empty -m "prepare"
+          git push
+      - name: train stage
+        if: steps.control.outputs.stage < 2
+        run: |
+          echo "train commands"
+          sleep 120
+          echo "train done; git checkpoint"
+          git commit --allow-empty -m "train"
+          git push
+      - name: inference stage
+        if: steps.control.outputs.stage < 3
+        run: |
+          echo "inference commands"
+          sleep 120
+          echo "inference done; git checkpoint"
+          git commit --allow-empty -m "inference"
+          git push
+      - name: Complete
+        run: |
+          echo "report" >> report.md
+          cml send-comment report.md
