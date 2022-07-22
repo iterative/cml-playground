@@ -15,6 +15,15 @@ env:
 #include "../includes/token.yml"
 
 jobs:
+  random:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Cool job that needs a timeout
+        run: |
+          echo "doing stuff"
+          sleep 120
+          echo "done"
   #define JOB_ID check-timeout
   #define TEST_JOB_ID test-JOB_ID
   #define LABEL JOB_ID-test

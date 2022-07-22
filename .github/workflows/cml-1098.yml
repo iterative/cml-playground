@@ -13,6 +13,15 @@ permissions:
   contents: write
   pull-requests: write
 jobs:
+  random:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Cool job that needs a timeout
+        run: |
+          echo "doing stuff"
+          sleep 120
+          echo "done"
   check-timeout:
     environment: test
     runs-on: ubuntu-latest
