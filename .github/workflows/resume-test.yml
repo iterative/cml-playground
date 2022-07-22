@@ -23,7 +23,7 @@ jobs:
       - name: Test a CML Branch
         if: ${{ env.TEST_CML_BRANCH }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@4 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
       - name: Standard CML setup
         if: ${{ !env.TEST_CML_BRANCH }}
         uses: iterative/setup-cml@v1
