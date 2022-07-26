@@ -59,4 +59,4 @@ jobs:
           aws-region: us-west-1
       - name: Check Instance tags
         run: |
-          aws ec2 describe-instances --filters Name=tag:Name,Values=cml-* --region us-west-1 | jq '.Reservations[].Instances[]'
+          aws ec2 describe-instances --filters Name=tag:Name,Values=cml-* --region us-west-1 | jq '.Reservations[].Instances[] | .Tags'
