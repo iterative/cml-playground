@@ -55,4 +55,4 @@ jobs:
           aws ec2 describe-instances \
             --filters Name=tag:Name,Values=cml-* \
             --region __AWS_REGION__ \
-            | jq '.Reservations[].Instances[]
+            | jq '.Reservations[].Instances[]'
