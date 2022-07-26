@@ -1,0 +1,28 @@
+name: Check the lights in AWS
+on:
+  schedule:
+    - cron: '45 23 * * *'
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+
+jobs:
+  check-lights:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        region:
+          - us-west-1
+          - us-west-2
+          - us-east-1
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: ${{ matrix.region }}
+      - name: Check the lights
+        run: |
+          aws ec2 describe-instances \
+            --filters Name=tag:Name,Values=cml-* \
+            --region ${{ matrix.region }} \
+            | jq '.Reservations[].Instances[] | select(.State.Name == "running") | .InstanceId'
