@@ -8,6 +8,7 @@ on:
 
 jobs:
   check-lights:
+    #include "../includes/environment.yml"
     runs-on: ubuntu-latest
     strategy:
       matrix:

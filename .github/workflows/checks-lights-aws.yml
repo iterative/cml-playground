@@ -9,6 +9,7 @@ permissions:
   pull-requests: write
 jobs:
   check-lights:
+    environment: test
     runs-on: ubuntu-latest
     strategy:
       matrix:
