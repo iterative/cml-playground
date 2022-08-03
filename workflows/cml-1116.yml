@@ -25,7 +25,7 @@ jobs:
       #include "../includes/aws/aws-creds.yml"
       - name: Create Private key
         run: |
-          ssh-keygen -t rsa -b 2048 -f key
+          ssh-keygen -t rsa -b 2048 -f key -N ""
           openssl rsa -in key -outform PEM -out key.pem
       - name: Create Runner
         env:
