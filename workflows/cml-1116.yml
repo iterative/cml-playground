@@ -4,6 +4,8 @@
 
 name: cml#1116 runner with private ssh key .pem
 on:
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
   workflow_dispatch:
     inputs:
       branch:
@@ -25,7 +27,6 @@ jobs:
       #include "../includes/aws/aws-creds.yml"
       - name: Create Private key
         run: |
-          #// ssh-keygen -t rsa -b 2048 -f key.pem -m pem -N ""
           openssl genrsa -out key.pem
       - name: Create Runner
         env:
@@ -35,7 +36,7 @@ jobs:
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
-            --cloud-ssh-private="$(cat ./key.pem) "
+            --cloud-ssh-private="$(cat ./key.pem) " \
             --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
   #// steps:

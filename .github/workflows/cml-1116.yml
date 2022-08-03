@@ -1,5 +1,7 @@
 name: cml#1116 runner with private ssh key .pem
 on:
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
   workflow_dispatch:
     inputs:
       branch:
@@ -38,8 +40,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --labels=private-key-test --cloud=aws --cloud-region=us-west --cloud-ssh-private="$(cat ./key.pem) "
-            --cloud-type=t3.small
+          cml runner --labels=private-key-test --cloud=aws --cloud-region=us-west --cloud-ssh-private="$(cat ./key.pem) " --cloud-type=t3.small
   test-private-key:
     needs: [private-key]
     runs-on: [self-hosted, private-key-test]
