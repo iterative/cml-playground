@@ -25,7 +25,8 @@ jobs:
       #include "../includes/aws/aws-creds.yml"
       - name: Create Private key
         run: |
-          ssh-keygen -t rsa -b 2048 -f key -N ""
+          #// ssh-keygen -t rsa -b 2048 -f key.pem -m pem -N ""
+          openssl genrsa -out key.pem
       - name: Create Runner
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -34,7 +35,7 @@ jobs:
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
-            --cloud-ssh-private="$(cat ./key) "
+            --cloud-ssh-private="$(cat ./key.pem) "
             --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
   #// steps:
