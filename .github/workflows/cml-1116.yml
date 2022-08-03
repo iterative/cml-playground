@@ -34,12 +34,11 @@ jobs:
       - name: Create Private key
         run: |
           ssh-keygen -t rsa -b 2048 -f key -N ""
-          openssl rsa -in key -outform PEM -out key.pem
       - name: Create Runner
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --labels=private-key-test --cloud=aws --cloud-region=us-west --cloud-ssh-private="$(cat key.pem)"
+          cml runner --labels=private-key-test --cloud=aws --cloud-region=us-west --cloud-ssh-private="$(cat ./key)"
             --cloud-type=t3.small
   test-private-key:
     needs: [private-key]
