@@ -34,7 +34,7 @@ jobs:
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
-            --cloud-ssh-private="$(cat ./key)"
+            --cloud-ssh-private="$(cat ./key) "
             --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
   #// steps:
