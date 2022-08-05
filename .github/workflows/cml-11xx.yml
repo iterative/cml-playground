@@ -13,7 +13,7 @@ permissions:
   contents: write
   pull-requests: write
 jobs:
-  private-key:
+  extraneous-json:
     environment: test
     runs-on: ubuntu-latest
     steps:
@@ -35,10 +35,43 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --labels=private-key-test --cloud=aws --cloud-region=us-west-2 --cloud-type=t3.small --cloud-hdd-size=100 --cloud-spot=true --cloud-aws-subnet=subnet-5d7ee225 --cloud-aws-security-group=cml-test-sg --idle-timeout=1000 --cloud-metadata="Testing=true" --cloud-metadata="Team=CML" --cloud-metadata="Environment=Development" --single
-  test-private-key:
-    needs: [private-key]
-    runs-on: [self-hosted, private-key-test]
+          cml runner --labels=extraneous-json-test --cloud=aws --cloud-region=us-west-2 --cloud-type=t3.small --cloud-metadata="Testing=true" --cloud-metadata="Team=CML" --cloud-metadata="Environment=Development" --single
+  test-extraneous-json:
+    needs: [extraneous-json]
+    runs-on: [self-hosted, extraneous-json-test]
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+  org-extraneous-json:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_BRANCH }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ !env.TEST_CML_BRANCH }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-2
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --labels=org-extraneous-json-test --cloud=aws --cloud-region=us-west-2 --cloud-type=t3.small --cloud-hdd-size=100 --cloud-spot=true --cloud-aws-subnet=subnet-5d7ee225 --cloud-aws-security-group=cml-test-sg --idle-timeout=1000 --cloud-metadata="Testing=true" --cloud-metadata="Team=CML" --cloud-metadata="Environment=Development" --single
+  test-org-extraneous-json:
+    needs: [org-extraneous-json]
+    runs-on: [self-hosted, org-extraneous-json-test]
     environment: test
     steps:
       - uses: actions/checkout@v3
