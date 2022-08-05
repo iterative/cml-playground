@@ -1,4 +1,5 @@
 #// ref issue/pr?
+#include "../includes/common_defines.yml"
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
 
@@ -7,9 +8,8 @@ on:
   workflow_dispatch:
 
 #include "../includes/token.yml"
-#define COMMENT #
-COMMENT Not strictly parallel because of GitHub Actions queuing jobs
-COMMENT but logicly parallel via default mechanics of GHA
+__COMMENT__  Not strictly parallel because of GitHub Actions queuing jobs
+__COMMENT__  but logicly parallel via default mechanics of GHA
 jobs:
   #define JOB_ID parallel
   #define TEST_JOB_ID test-JOB_ID
@@ -25,6 +25,8 @@ jobs:
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
+            __LINK_RUN__ \
+            __SSH_KEYS__ \
             --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
   #// steps:
@@ -52,6 +54,8 @@ jobs:
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
+            __LINK_RUN__ \
+            __SSH_KEYS__ \
             --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
     #// steps:
