@@ -1,4 +1,4 @@
-name: cml#11xx AWS subnet/SG usage - extraneous json error
+name: cml#1121 AWS subnet/SG usage - extraneous json error
 on:
   schedule:
     - cron: '45 14 * * 1' # Mondays 1445 UTC
