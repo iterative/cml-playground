@@ -13,6 +13,39 @@ permissions:
   contents: write
   pull-requests: write
 jobs:
+  min-extraneous-json:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_BRANCH }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ !env.TEST_CML_BRANCH }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-2
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --single --labels=min-extraneous-json-test --cloud=aws --cloud-region=us-west-2 --cloud-type=t3.small --cloud-metadata="six=thing1" --cloud-metadata="seven=thing2" --cloud-metadata="eight=thing3" --cloud-metadata="nine=thing4" --cloud-metadata="ten=thing5"
+  test-min-extraneous-json:
+    needs: [min-extraneous-json]
+    runs-on: [self-hosted, min-extraneous-json-test]
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
   extraneous-json:
     environment: test
     runs-on: ubuntu-latest
@@ -35,7 +68,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --labels=extraneous-json-test --cloud=aws --cloud-region=us-west-2 --cloud-type=t3.small --idle-timeout=1000 --cloud-metadata="Testing=true" --cloud-metadata="Team=CML" --cloud-metadata="Environment=Development" --single
+          cml runner --labels=extraneous-json-test --cloud=aws --cloud-region=us-west-2 --cloud-type=t3.small --cloud-aws-subnet=subnet-5d7ee225 --cloud-aws-security-group=cml-test-sg --cloud-metadata="Testing=true" --cloud-metadata="Team=CML" --cloud-metadata="Environment=Development" --single
   test-extraneous-json:
     needs: [extraneous-json]
     runs-on: [self-hosted, extraneous-json-test]

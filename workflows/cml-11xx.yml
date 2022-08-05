@@ -17,6 +17,31 @@ env:
 #include "../includes/token.yml"
 
 jobs:
+  #define JOB_ID min-extraneous-json
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --single \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=__AWS_REGION__ \
+            --cloud-type=t3.small \
+            --cloud-metadata="six=thing1" \
+            --cloud-metadata="seven=thing2" \
+            --cloud-metadata="eight=thing3" \
+            --cloud-metadata="nine=thing4" \
+            --cloud-metadata="ten=thing5" 
+  #include "../includes/tests/on-test.yml"
+  #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
   #define JOB_ID extraneous-json
   #define TEST_JOB_ID test-JOB_ID
   #define LABEL JOB_ID-test
@@ -32,7 +57,8 @@ jobs:
             --cloud=aws \
             --cloud-region=__AWS_REGION__ \
             --cloud-type=t3.small \
-            --idle-timeout=1000 \
+            --cloud-aws-subnet=subnet-5d7ee225 \
+            --cloud-aws-security-group=cml-test-sg \
             --cloud-metadata="Testing=true" \
             --cloud-metadata="Team=CML" \
             --cloud-metadata="Environment=Development" \
