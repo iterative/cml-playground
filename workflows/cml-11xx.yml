@@ -34,7 +34,6 @@ jobs:
             --cloud-type=t3.small \
             --cloud-aws-subnet=subnet-5d7ee225 \
             --cloud-aws-security-group=cml-test-sg \
-            --idle-timeout=1000 \
             --cloud-metadata="Testing=true" \
             --cloud-metadata="Team=CML" \
             --cloud-metadata="Environment=Development" \
