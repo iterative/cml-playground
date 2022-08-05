@@ -34,12 +34,7 @@ jobs:
             --cloud-region=__AWS_REGION__ \
             --cloud-type=t3.small \
             --cloud-aws-security-group=cml-test-sg \
-            --cloud-aws-subnet=subnet-5d7ee225 \
-            --cloud-metadata="six=thing1" \
-            --cloud-metadata="seven=thing2" \
-            --cloud-metadata="eight=thing3" \
-            --cloud-metadata="nine=thing4" \
-            --cloud-metadata="ten=thing5" 
+            --cloud-aws-subnet=subnet-5d7ee225
   #include "../includes/tests/on-test.yml"
   #// steps:
       #include "../includes/steps/base-checkout.yml"
