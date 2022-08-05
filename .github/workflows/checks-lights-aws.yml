@@ -11,17 +11,24 @@ jobs:
   check-lights:
     environment: test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        region:
-          - us-west-1
-          - us-west-2
-          - us-east-1
     steps:
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
-          aws-region: ${{ matrix.region }}
+          aws-region: us-east-1
       - name: Check the lights
         run: |
-          aws ec2 describe-instances --filters Name=tag:Name,Values=cml-* --region ${{ matrix.region }} | jq '.Reservations[].Instances[] | select(.State.Name == "running") | .InstanceId'
+          now=$(date +%s)
+          regions=$(aws ec2 --region us-east-1 describe-regions | jq .Regions[].RegionName | tr -d \")
+          for region in $regions; do
+              result=$(aws ec2 describe-instances --filters Name=tag:Name,Values=cml*,tpi* --region "$region" | jq -c '.Reservations[].Instances[] | select(.State.Name == "running") | { id: .InstanceId, start: .LaunchTime }')
+              if [[ -n "$result" ]]; then
+                  echo "Found instances in region $region"
+                  for json in $result; do
+                      id=$(echo "$json" | jq '.id' | tr -d \")
+                      time=$(echo "$json" | jq '.start' | tr -d \")
+                      launch_time=$(date -d "$time" +%s)
+                      echo "Instance $id on for $(date -u -d "0 $now seconds - $launch_time seconds" +"%Hh %Mm %Ss")"
+                  done
+              fi
+          done
