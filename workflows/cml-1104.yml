@@ -32,6 +32,8 @@ jobs:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml runner \
+            __LINK_RUN__ \
+            __SSH_KEYS__ \
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=__AWS_REGION__ \

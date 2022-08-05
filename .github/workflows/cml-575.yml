@@ -37,14 +37,14 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --reuse-idle --labels=reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --reuse-idle --labels=reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
       - name: Let Idle...
         run: sleep 120
       - name: Create Runner should exit right away
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --reuse-idle --labels=reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --reuse-idle --labels=reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
   test-reuse-idle:
     needs: [reuse-idle]
     runs-on: [self-hosted, reuse-idle-test]
@@ -77,7 +77,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --reuse-idle --labels=negitive-reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --reuse-idle --labels=negitive-reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
   test-negitive-reuse-idle:
     needs: [negitive-reuse-idle]
     runs-on: [self-hosted, negitive-reuse-idle-test]
@@ -115,7 +115,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --reuse-idle --labels=negitive-reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --reuse-idle --labels=negitive-reuse-idle-test --cloud=aws --cloud-region=us-west --cloud-type=t3.small
   test-negitive-reuse-idle-3:
     needs: [test-negitive-reuse-idle-2]
     runs-on: [negitive-reuse-idle-test]

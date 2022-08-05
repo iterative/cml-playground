@@ -37,7 +37,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --labels=metadata-test --cloud=aws --cloud-region=us-west-1 --cloud-metadata="condition one=KeyHasASpace" --cloud-metadata='"condition two"="KeyAndValueAreWrappedWithQuotes"' --cloud-metadata='"condition three"=KeyIsWrappedValueIsNot' --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=metadata-test --cloud=aws --cloud-region=us-west-1 --cloud-metadata="condition one=KeyHasASpace" --cloud-metadata='"condition two"="KeyAndValueAreWrappedWithQuotes"' --cloud-metadata='"condition three"=KeyIsWrappedValueIsNot' --cloud-type=t3.small
   test-metadata:
     needs: [metadata]
     runs-on: [self-hosted, metadata-test]
