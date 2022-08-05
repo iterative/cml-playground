@@ -17,18 +17,30 @@ jobs:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
           aws-region: us-east-1
       - name: Check the lights
+        id: lights
         run: |
           now=$(date +%s)
           regions=$(aws ec2 --region us-east-1 describe-regions | jq .Regions[].RegionName | tr -d \")
           for region in $regions; do
               result=$(aws ec2 describe-instances --filters Name=tag:Name,Values=cml*,tpi* --region "$region" | jq -c '.Reservations[].Instances[] | select(.State.Name == "running") | { id: .InstanceId, start: .LaunchTime }')
               if [[ -n "$result" ]]; then
-                  echo "Found instances in region $region"
+                  echo "### Found instances in region $region" >> report.md
                   for json in $result; do
                       id=$(echo "$json" | jq '.id' | tr -d \")
                       time=$(echo "$json" | jq '.start' | tr -d \")
                       launch_time=$(date -d "$time" +%s)
-                      echo "Instance $id on for $(date -u -d "0 $now seconds - $launch_time seconds" +"%Hh %Mm %Ss")"
+                      echo "Instance [$id](https://console.aws.amazon.com/ec2/v2/home?region=$region#InstanceDetails:instanceId=$id) on for $(date -u -d "0 $now seconds - $launch_time seconds" +"%Hh %Mm %Ss")" >> report.md
                   done
               fi
           done
+          if [[ -e ./report.md ]]; then
+            echo "::set-output name=report::$(cat ./report.md)"
+          fi
+      - name: Send Notification
+        if: ${{ steps.lights.outputs.report }}
+        uses: dacbd/create-issue-action@v1
+        with:
+          token: ${{ github.token }}
+          title: Someone left the lights on
+          body: ${{ steps.lights.outputs.report }}
+          assignees: dacbd
