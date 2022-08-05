@@ -1,4 +1,5 @@
 #// https://github.com/iterative/cml/issues/1116
+#include "../includes/common_defines.yml"
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
 

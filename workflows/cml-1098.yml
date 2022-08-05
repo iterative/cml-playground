@@ -1,5 +1,6 @@
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
+#include "../includes/common_defines.yml"
 name: cml#1098 Warn Users of timeout-minutes change
 on:
   workflow_dispatch:

@@ -1,5 +1,5 @@
+#include "../includes/common_defines.yml"
 name: cml#1063 Advanced pr options
-
 on:
   workflow_dispatch:
     inputs:
