@@ -35,7 +35,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --labels=extraneous-json-test --cloud=aws --cloud-region=us-west-2 --cloud-type=t3.small --cloud-aws-subnet=subnet-5d7ee225 --cloud-aws-security-group=cml-test-sg --cloud-metadata="Testing=true" --cloud-metadata="Team=CML" --cloud-metadata="Environment=Development" --single
+          cml runner --labels=extraneous-json-test --cloud=aws --cloud-region=us-west-2 --cloud-type=t3.small --idle-timeout=1000 --cloud-metadata="Testing=true" --cloud-metadata="Team=CML" --cloud-metadata="Environment=Development" --single
   test-extraneous-json:
     needs: [extraneous-json]
     runs-on: [self-hosted, extraneous-json-test]
