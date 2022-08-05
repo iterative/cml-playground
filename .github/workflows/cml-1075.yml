@@ -59,7 +59,7 @@ jobs:
           echo "hello" >> file.md
           url=$(cml publish file.md)
           echo "$url"
-          test "hello" == $(curl --silent $url)
+          test "hello" == $(curl --silent "$url")
   clean-up:
     runs-on: ubuntu-latest
     if: ${{ always() }}
