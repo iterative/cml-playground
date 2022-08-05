@@ -33,6 +33,7 @@ jobs:
             --cloud=aws \
             --cloud-region=__AWS_REGION__ \
             --cloud-type=t3.small \
+            --cloud-aws-security-group=cml-test-sg \
             --cloud-metadata="six=thing1" \
             --cloud-metadata="seven=thing2" \
             --cloud-metadata="eight=thing3" \
