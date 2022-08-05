@@ -2,8 +2,10 @@
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-2
 
-name: cml#11xx extraneous json
+name: cml#11xx AWS subnet/SG usage - extraneous json error
 on:
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
   workflow_dispatch:
     inputs:
       branch:
@@ -12,12 +14,12 @@ on:
         type: string
 
 env:
-  TEST_CML_BRANCH:  ${{ inputs.branch || 'extraneous-json' }}
+  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
 
 #include "../includes/token.yml"
 
 jobs:
-  #define JOB_ID min-extraneous-json
+  #define JOB_ID extraneous-json
   #define TEST_JOB_ID test-JOB_ID
   #define LABEL JOB_ID-test
   #include "../includes/setup.yml"
@@ -35,59 +37,6 @@ jobs:
             --cloud-type=t3.small \
             --cloud-aws-security-group=cml-test-sg \
             --cloud-aws-subnet=subnet-5d7ee225
-  #include "../includes/tests/on-test.yml"
-  #// steps:
-      #include "../includes/steps/base-checkout.yml"
-      #include "../includes/tests/cml-version.yml"
-  #define JOB_ID extraneous-json
-  #define TEST_JOB_ID test-JOB_ID
-  #define LABEL JOB_ID-test
-  #include "../includes/setup.yml"
-    #// steps:
-      #include "../includes/aws/aws-creds.yml"
-      - name: Create Runner
-        env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: |
-          cml runner \
-            --labels=LABEL \
-            --cloud=aws \
-            --cloud-region=__AWS_REGION__ \
-            --cloud-type=t3.small \
-            --cloud-aws-subnet=subnet-5d7ee225 \
-            --cloud-aws-security-group=cml-test-sg \
-            --cloud-metadata="Testing=true" \
-            --cloud-metadata="Team=CML" \
-            --cloud-metadata="Environment=Development" \
-            --single
-  #include "../includes/tests/on-test.yml"
-  #// steps:
-      #include "../includes/steps/base-checkout.yml"
-      #include "../includes/tests/cml-version.yml"
-  #define JOB_ID org-extraneous-json
-  #define TEST_JOB_ID test-JOB_ID
-  #define LABEL JOB_ID-test
-  #include "../includes/setup.yml"
-    #// steps:
-      #include "../includes/aws/aws-creds.yml"
-      - name: Create Runner
-        env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: |
-          cml runner \
-            --labels=LABEL \
-            --cloud=aws \
-            --cloud-region=__AWS_REGION__ \
-            --cloud-type=t3.small \
-            --cloud-hdd-size=100 \
-            --cloud-spot=true \
-            --cloud-aws-subnet=subnet-5d7ee225 \
-            --cloud-aws-security-group=cml-test-sg \
-            --idle-timeout=1000 \
-            --cloud-metadata="Testing=true" \
-            --cloud-metadata="Team=CML" \
-            --cloud-metadata="Environment=Development" \
-            --single
   #include "../includes/tests/on-test.yml"
   #// steps:
       #include "../includes/steps/base-checkout.yml"
