@@ -56,9 +56,13 @@ jobs:
         env:
           CML_PUBLISH_URL: ${{ needs.setup.outputs.url }}
         run: |
+          echo "Pause for possible debugging, starting in 2 mins"
+          sleep 120
           echo "hello" >> file.md
           url=$(cml publish file.md)
           echo "$url"
+          echo "curl-ing:"
+          curl "$url"
           test "hello" == $(curl --silent "$url")
   clean-up:
     runs-on: ubuntu-latest
