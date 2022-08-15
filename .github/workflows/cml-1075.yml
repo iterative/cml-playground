@@ -56,6 +56,7 @@ jobs:
         env:
           CML_PUBLISH_URL: ${{ needs.setup.outputs.url }}
         run: |
+          echo "$CML_PUBLISH_URL"
           echo "Pause for possible debugging, starting in 2 mins"
           sleep 120
           echo "hello" >> file.md
