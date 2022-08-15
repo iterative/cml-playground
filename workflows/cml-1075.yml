@@ -45,13 +45,14 @@ jobs:
       #include "../includes/steps/cml.yml"
       - name: Test
         env:
-          CML_PUBLISH_URL: ${{ needs.setup.outputs.url }}
+          #//CML_PUBLISH_URL: ${{ needs.setup.outputs.url }}
+          PUBLISH_URL: ${{ needs.setup.outputs.url }}
         run: |
-          echo "$CML_PUBLISH_URL"
+          echo "$PUBLISH_URL"
           echo "Pause for possible debugging, starting in 2 mins"
           sleep 120
           echo "hello" >> file.md
-          url=$(cml publish file.md)
+          url=$(cml publish --url=$PUBLISH_URL file.md)
           echo "$url"
           echo "curl-ing:"
           curl "$url"
