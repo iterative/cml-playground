@@ -46,7 +46,7 @@ jobs:
   #// steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/tests/cml-version.yml"
-  #define JOB_ID private-key-852
+  #define JOB_ID private-key_852
   #define TEST_JOB_ID test-JOB_ID
   #define LABEL JOB_ID-test
   #include "../includes/setup.yml"
