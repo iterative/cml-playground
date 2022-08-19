@@ -1,4 +1,5 @@
 #// https://github.com/iterative/cml/issues/1116
+#// https://github.com/iterative/cml/issues/852
 #include "../includes/common_defines.yml"
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
@@ -40,6 +41,31 @@ jobs:
             --cloud=aws \
             --cloud-region=us-west \
             --cloud-ssh-private="$(cat ./key.pem) " \
+            --cloud-type=t3.small
+  #include "../includes/tests/on-test.yml"
+  #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+  #define JOB_ID private-key-852
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Private key
+        run: |
+          openssl genrsa -out key.pem
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            __LINK_RUN__ \
+            __SSH_KEYS__ \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west \
+            --cloud-ssh-private="$(cat ./key.pem)" \
             --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
   #// steps:
