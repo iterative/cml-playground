@@ -1,0 +1,26 @@
+#// https://github.com/iterative/cml/issues/1116
+#include "../includes/common_defines.yml"
+#define NEEDS_AWS true
+#define __AWS_REGION__ us-west-2
+
+name: cml#1134 pr overide files error
+on:
+#//  schedule:
+#//    - cron: '45 14 * * 1' # Mondays 1445 UTC
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+
+env:
+  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
+
+#include "../includes/token.yml"
+
+jobs:
+  #define JOB_ID create-pr
+  #include "../includes/setup.yml"
+    #
+      #include "../includes/tests/pr/merge.yml"

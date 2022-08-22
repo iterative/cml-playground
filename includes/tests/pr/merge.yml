@@ -1,0 +1,11 @@
+#
+  #
+    #
+      - name: Modifiy file for PR
+        run: |
+          echo "$(date +%s%N) - pr auto merge" >> cml.log
+      - name: CML PR
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr --skip-ci --merge .
