@@ -1,0 +1,50 @@
+#// ref issue/pr?
+#include "../includes/common_defines.yml"
+#define NEEDS_AWS true
+#define __AWS_REGION__ us-west-1
+name: cml Long run testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+
+#include "../includes/token.yml"
+
+env:
+  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
+
+
+jobs:
+  #define JOB_ID long_run
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --reuse-idle --idle-timeout=30min \
+            --labels=LABEL \
+            __LINK_RUN__ \
+            __SSH_KEYS__ \
+            --cloud=aws \
+            --cloud-region=__AWS_REGION__ \
+            --cloud-type=t3.small
+  #include "../includes/tests/version.yml"
+      - name: spin 1
+        run: sleep 900
+      - name: spin 2
+        run: sleep 900
+      - name: spin 3
+        run: sleep 900
+      - name: spin 4
+        run: sleep 900
+      - name: spin 5
+        run: sleep 900
