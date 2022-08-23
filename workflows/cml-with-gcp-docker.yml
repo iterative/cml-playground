@@ -29,11 +29,9 @@ jobs:
         run: |
           cml runner \
             --cloud-startup-script=$( \
-              echo 'echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | \
-                sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-                sudo apt-get update && sudo apt-get install google-cloud-cli && \
-                gcloud auth configure-docker us-west1-docker.pkg.dev'\
-            | base64 -w 0) \
+              echo 'curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-399.0.0-linux-x86_64.tar.gz && \
+                tar -xf google-cloud-cli-399.0.0-linux-x86.tar.gz && \
+                ./google-cloud-sdk/install.sh' | base64 -w 0) \
             --single \
             --labels=LABEL \
             --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw \
