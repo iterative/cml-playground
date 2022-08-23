@@ -40,6 +40,9 @@ jobs:
     runs-on: [self-hosted, tarball-gcloud-test]
     container:
       image: us-west1-docker.pkg.dev/cml-gcp-test/cml-test/cml:latest
+      credentials:
+        username: _json_key
+        password: ${{ secrets.GCP_DOCKER_KEY }}
     steps:
       - uses: actions/checkout@v3
       - name: CML Version Test
