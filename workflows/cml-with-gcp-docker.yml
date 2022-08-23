@@ -28,7 +28,12 @@ jobs:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml runner \
-            __SSH_KEYS__ \
+            --cloud-startup-script=$( \
+              echo 'echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | \
+                sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+                sudo apt-get update && sudo apt-get install google-cloud-cli && \
+                gcloud auth configure-docker us-west1-docker.pkg.dev'\
+            | base64 -w 0) \
             --single \
             --labels=LABEL \
             --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw \

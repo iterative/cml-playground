@@ -34,7 +34,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-private-container-test --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2 --cloud-hdd-size=50
+          cml runner --cloud-startup-script=$( echo 'echo "deb https://packages.cloud.google.com/apt cloud-sdk main" |                 sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&                 sudo apt-get update && sudo apt-get install google-cloud-cli &&                 gcloud auth configure-docker us-west1-docker.pkg.dev' | base64 -w 0) --single --labels=gcp-private-container-test --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2 --cloud-hdd-size=50
   test-gcp-private-container:
     needs: [gcp-private-container]
     runs-on: [self-hosted, gcp-private-container-test]
