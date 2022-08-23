@@ -1,0 +1,55 @@
+#// https://github.com/iterative/cml/issues/1048
+#// https://github.com/iterative/cml/pull/1049
+#include "../includes/common_defines.yml"
+name: cml Test docker registry permissions
+on:
+#//  schedule:
+#//    - cron: '45 14 * * 1' # Mondays 1445 UTC
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+
+env:
+  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
+#include "../includes/token.yml"
+
+jobs:
+  #define JOB_ID gcp-permission-set
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/gcp/auth-key.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            __SSH_KEYS__ \
+            --single \
+            --labels=LABEL \
+            --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw \
+            --cloud=gcp \
+            --cloud-region=us-west \
+            --cloud-type=e2-highcpu-2 \
+            --cloud-hdd-size=50
+
+  #include "../includes/tests/on-test.yml"
+    #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v0
+      - name: Docker pull
+        run: |
+          docker pull ghcr.io/iterative/cml:latest
+          docker images
+      - name: Docker push
+        run: |
+          gcloud auth configure-docker us-west1-docker.pkg.dev
+          docker tag ghcr.io/iterative/cml:latest us-west1-docker.pkg.dev/cml-gcp-test/cml-test/cml:latest
+          docker images
+          docker push us-west1-docker.pkg.dev/cml-gcp-test/cml-test/cml:latest
