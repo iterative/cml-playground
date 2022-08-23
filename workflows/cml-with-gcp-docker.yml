@@ -29,11 +29,8 @@ jobs:
         run: |
           cml runner \
             --cloud-startup-script=$( \
-              echo 'curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-399.0.0-linux-x86_64.tar.gz && \
-                tar -xf google-cloud-cli-399.0.0-linux-x86.tar.gz && \
-                ./google-cloud-sdk/install.sh && \
-                bash -e "gcloud auth configure-docker us-west1-docker.pkg.dev"' \
-                | base64 -w 0) \
+              echo 'curl -fsSL "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v2.1.5/docker-credential-gcr_linux_amd64-2.1.5.tar.gz" | tar xz docker-credential-gcr && chmod +x docker-credential-gcr && sudo mv docker-credential-gcr /usr/bin/' \
+              | base64 -w 0) \
             --single \
             --labels=LABEL \
             --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw \
