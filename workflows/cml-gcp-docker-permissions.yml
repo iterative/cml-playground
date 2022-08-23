@@ -49,7 +49,7 @@ jobs:
           docker images
       - name: Docker push
         run: |
-          #//gcloud auth configure-docker us-west1-docker.pkg.dev
+          gcloud auth configure-docker us-west1-docker.pkg.dev
           docker tag ghcr.io/iterative/cml:latest us-west1-docker.pkg.dev/cml-gcp-test/cml-test/cml:latest
           docker images
           docker push us-west1-docker.pkg.dev/cml-gcp-test/cml-test/cml:latest
