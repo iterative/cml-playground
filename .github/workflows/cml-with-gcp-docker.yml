@@ -46,36 +46,3 @@ jobs:
         run: |
           which cml
           cml --version
-  apt-gcloud:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Test a CML Branch
-        if: ${{ !env.TEST_CML_VERSION || github.event_name != 'schedule' }}
-        run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
-      - name: Standard CML setup
-        if: ${{ env.TEST_CML_VERSION || github.event_name == 'schedule' }}
-        uses: iterative/setup-cml@v1
-        with:
-          version: ${{ env.TEST_CML_VERSION || 'latest' }}
-      - name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          credentials_json: ${{ secrets.GCP_CML_RUNNER_KEY }}
-      - name: Create Runner
-        env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: |
-          cml runner --cloud-startup-script=$( echo 'echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |                 sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&                 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - &&                 sudo apt-get update && sudo apt-get install google-cloud-cli &&                 gcloud auth configure-docker us-west1-docker.pkg.dev' | base64 -w 0) --single --labels=apt-gcloud-test --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2 --cloud-hdd-size=50
-  test-apt-gcloud:
-    needs: [apt-gcloud]
-    runs-on: [self-hosted, apt-gcloud-test]
-    container:
-      image: us-west1-docker.pkg.dev/cml-gcp-test/cml-test/cml:latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: CML Version Test
-        run: |
-          which cml
-          cml --version

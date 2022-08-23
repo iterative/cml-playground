@@ -49,37 +49,37 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/tests/cml-version.yml"
 
-  #define JOB_ID apt-gcloud
-  #define TEST_JOB_ID test-JOB_ID
-  #define LABEL JOB_ID-test
-  #include "../includes/setup.yml"
-    #// steps:
-      #include "../includes/gcp/auth-key.yml"
-      - name: Create Runner
-        env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: |
-          cml runner \
-            --cloud-startup-script=$( \
-              echo 'echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
-                sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-                curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
-                sudo apt-get update && sudo apt-get install google-cloud-cli && \
-                gcloud auth configure-docker us-west1-docker.pkg.dev'\
-                | base64 -w 0) \
-            --single \
-            --labels=LABEL \
-            --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw \
-            --cloud=gcp \
-            --cloud-region=us-west \
-            --cloud-type=e2-highcpu-2 \
-            --cloud-hdd-size=50
-#
-  TEST_JOB_ID:
-    needs: [JOB_ID]
-    runs-on: [self-hosted, LABEL]
-    container:
-      image: us-west1-docker.pkg.dev/cml-gcp-test/cml-test/cml:latest
-    steps:
-      #include "../includes/steps/base-checkout.yml"
-      #include "../includes/tests/cml-version.yml"
+#//  #define JOB_ID apt-gcloud
+#//  #define TEST_JOB_ID test-JOB_ID
+#//  #define LABEL JOB_ID-test
+#//  #include "../includes/setup.yml"
+#//    #// steps:
+#//      #include "../includes/gcp/auth-key.yml"
+#//      - name: Create Runner
+#//        env:
+#//          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+#//        run: |
+#//          cml runner \
+#//            --cloud-startup-script=$( \
+#//              echo 'echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
+#//                sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+#//                curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
+#//                sudo apt-get update && sudo apt-get install google-cloud-cli && \
+#//                gcloud auth configure-docker us-west1-docker.pkg.dev'\
+#//                | base64 -w 0) \
+#//            --single \
+#//            --labels=LABEL \
+#//            --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw \
+#//            --cloud=gcp \
+#//            --cloud-region=us-west \
+#//            --cloud-type=e2-highcpu-2 \
+#//            --cloud-hdd-size=50
+#//#
+#//  TEST_JOB_ID:
+#//    needs: [JOB_ID]
+#//    runs-on: [self-hosted, LABEL]
+#//    container:
+#//      image: us-west1-docker.pkg.dev/cml-gcp-test/cml-test/cml:latest
+#//    steps:
+#//      #include "../includes/steps/base-checkout.yml"
+#//      #include "../includes/tests/cml-version.yml"
