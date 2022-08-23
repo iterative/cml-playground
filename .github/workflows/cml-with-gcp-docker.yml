@@ -34,8 +34,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-startup-script=$( echo 'curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-399.0.0-linux-x86_64.tar.gz &&                 tar -xf google-cloud-cli-399.0.0-linux-x86.tar.gz &&                 ./google-cloud-sdk/install.sh && 
-                gcloud auth configure-docker us-west1-docker.pkg.dev'                 | base64 -w 0)             --single             --labels=LABEL             --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw             --cloud=gcp             --cloud-region=us-west             --cloud-type=e2-highcpu-2             --cloud-hdd-size=50
+          cml runner --cloud-startup-script=$( echo 'curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-399.0.0-linux-x86_64.tar.gz &&                 tar -xf google-cloud-cli-399.0.0-linux-x86.tar.gz &&                 ./google-cloud-sdk/install.sh &&                 gcloud auth configure-docker us-west1-docker.pkg.dev' | base64 -w 0) --single --labels=tarball-gcloud-test --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2 --cloud-hdd-size=50
   test-tarball-gcloud:
     needs: [tarball-gcloud]
     runs-on: [self-hosted, tarball-gcloud-test]
@@ -68,8 +67,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-startup-script=$( echo 'echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |                 sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&                 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-                sudo apt-get update && sudo apt-get install google-cloud-cli && gcloud auth configure-docker us-west1-docker.pkg.dev'                | base64 -w 0)             --single             --labels=LABEL             --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw             --cloud=gcp             --cloud-region=us-west             --cloud-type=e2-highcpu-2             --cloud-hdd-size=50
+          cml runner --cloud-startup-script=$( echo 'echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" |                 sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&                 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - &&                 sudo apt-get update && sudo apt-get install google-cloud-cli &&                 gcloud auth configure-docker us-west1-docker.pkg.dev' | base64 -w 0) --single --labels=apt-gcloud-test --cloud-permission-set=permission-set-test@cml-gcp-test.iam.gserviceaccount.com,scopes=storage-rw --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2 --cloud-hdd-size=50
   test-apt-gcloud:
     needs: [apt-gcloud]
     runs-on: [self-hosted, apt-gcloud-test]
