@@ -32,7 +32,7 @@ jobs:
               echo 'curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-399.0.0-linux-x86_64.tar.gz && \
                 tar -xf google-cloud-cli-399.0.0-linux-x86.tar.gz && \
                 ./google-cloud-sdk/install.sh && \
-                gcloud auth configure-docker us-west1-docker.pkg.dev' \
+                bash -e "gcloud auth configure-docker us-west1-docker.pkg.dev"' \
                 | base64 -w 0) \
             --single \
             --labels=LABEL \
