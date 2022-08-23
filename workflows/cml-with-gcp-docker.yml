@@ -29,7 +29,8 @@ jobs:
         run: |
           cml runner \
             --cloud-startup-script=$( \
-              echo 'curl -fsSL "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v2.1.5/docker-credential-gcr_linux_amd64-2.1.5.tar.gz" | tar xz docker-credential-gcr && chmod +x docker-credential-gcr && sudo mv docker-credential-gcr /usr/bin/' \
+              echo 'curl -fsSL "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v2.1.5/docker-credential-gcr_linux_amd64-2.1.5.tar.gz" | tar xz docker-credential-gcr && chmod +x docker-credential-gcr && sudo mv docker-credential-gcr /usr/bin/ && \
+              docker-credential-gcr configure-docker --registries=us-west1-docker.pkg.dev' \
               | base64 -w 0) \
             --single \
             --labels=LABEL \
