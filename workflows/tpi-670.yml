@@ -1,8 +1,10 @@
+#// https://github.com/iterative/terraform-provider-iterative/issues/668
+#// https://github.com/iterative/terraform-provider-iterative/pull/670 
 #include "../includes/common_defines.yml"
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
 
-name: test me
+name: tpi#670 AWS auto-select-aws-availability-zone
 on:
   workflow_dispatch:
     inputs:

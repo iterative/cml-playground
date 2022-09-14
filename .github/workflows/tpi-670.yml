@@ -1,4 +1,4 @@
-name: test me
+name: tpi#670 AWS auto-select-aws-availability-zone
 on:
   workflow_dispatch:
     inputs:
