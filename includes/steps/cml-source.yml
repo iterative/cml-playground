@@ -1,0 +1,52 @@
+
+#
+  #
+    #
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Clone CML
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/cml
+          ref: CML_SOURCE
+          path: cml
+      - name: CML deps
+        run: |
+          pushd cml
+          npm ci
+          popd
+      #ifdef TPI_SOURCE
+      - name: Hack cml for local tpi
+        run: |
+          pushd cml
+          sed -i "s/source: 'iterative\/iterative',/source: 'github.com\/iterative\/iterative'/g" src/terraform.js
+          sed -i "/...(tpiVersion && { version: tpiVersion })/d" src/terraform.js
+          popd
+      #endif
+      - name: Install CML
+        run: |
+          pushd cml
+          npm install -g .
+          popd
+      - name: Install misc CML tooling
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5
+      #ifdef TPI_SOURCE
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.18.0
+      - name: Clone TPI
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/terraform-provider-iterative
+          ref: TPI_SOURCE
+          path: tpi
+      - name: Build/Install TPI
+        run: |
+          pushd tpi
+          make build
+          make install
+      #endif

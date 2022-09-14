@@ -6,4 +6,8 @@
     runs-on: ubuntu-latest
     steps:
       #include "./steps/base-checkout.yml"
+      #ifdef CML_SOURCE
+      #include "./steps/cml-source.yml"
+      #else
       #include "./steps/cml.yml"
+      #endif

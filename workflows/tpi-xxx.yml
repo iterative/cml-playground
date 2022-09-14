@@ -1,0 +1,64 @@
+#include "../includes/common_defines.yml"
+#define NEEDS_AWS true
+#define __AWS_REGION__ us-west-1
+
+name: test me
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+
+#include "../includes/token.yml"
+#define CML_SOURCE master
+#define TPI_SOURCE auto-select-aws-availability-zone
+
+
+jobs:
+  #define JOB_ID target_avail_zone
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            __LINK_RUN__ \
+            __SSH_KEYS__ \
+            --single \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=us-west-1b \
+            --cloud-type=t3.small 
+  #include "../includes/tests/on-test.yml"
+  #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+  #define JOB_ID jump_avail_zones
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #define __AWS_REGION__ eu-central-1
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            __LINK_RUN__ \
+            __SSH_KEYS__ \
+            --single \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=__AWS_REGION__ \
+            --cloud-type=t3.small
+  #include "../includes/tests/on-test.yml"
+  #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"

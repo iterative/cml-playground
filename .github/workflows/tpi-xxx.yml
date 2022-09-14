@@ -1,0 +1,149 @@
+name: test me
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+jobs:
+  target_avail_zone:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Clone CML
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/cml
+          ref: master
+          path: cml
+      - name: CML deps
+        run: |
+          pushd cml
+          npm ci
+          popd
+      - name: Hack cml for local tpi
+        run: |
+          pushd cml
+          sed -i "s/source: 'iterative\/iterative',/source: 'github.com\/iterative\/iterative'/g" src/terraform.js
+          sed -i "/...(tpiVersion && { version: tpiVersion })/d" src/terraform.js
+          popd
+      - name: Install CML
+        run: |
+          pushd cml
+          npm install -g .
+          popd
+      - name: Install misc CML tooling
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.18.0
+      - name: Clone TPI
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/terraform-provider-iterative
+          ref: auto-select-aws-availability-zone
+          path: tpi
+      - name: Build/Install TPI
+        run: |
+          pushd tpi
+          make build
+          make install
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-1
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=target_avail_zone-test --cloud=aws --cloud-region=us-west-1b --cloud-type=t3.small
+  test-target_avail_zone:
+    needs: [target_avail_zone]
+    runs-on: [self-hosted, target_avail_zone-test]
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+  jump_avail_zones:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Clone CML
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/cml
+          ref: master
+          path: cml
+      - name: CML deps
+        run: |
+          pushd cml
+          npm ci
+          popd
+      - name: Hack cml for local tpi
+        run: |
+          pushd cml
+          sed -i "s/source: 'iterative\/iterative',/source: 'github.com\/iterative\/iterative'/g" src/terraform.js
+          sed -i "/...(tpiVersion && { version: tpiVersion })/d" src/terraform.js
+          popd
+      - name: Install CML
+        run: |
+          pushd cml
+          npm install -g .
+          popd
+      - name: Install misc CML tooling
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.18.0
+      - name: Clone TPI
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/terraform-provider-iterative
+          ref: auto-select-aws-availability-zone
+          path: tpi
+      - name: Build/Install TPI
+        run: |
+          pushd tpi
+          make build
+          make install
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: eu-central-1
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=jump_avail_zones-test --cloud=aws --cloud-region=eu-central-1 --cloud-type=t3.small
+  test-jump_avail_zones:
+    needs: [jump_avail_zones]
+    runs-on: [self-hosted, jump_avail_zones-test]
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
