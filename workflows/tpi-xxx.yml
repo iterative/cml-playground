@@ -57,7 +57,7 @@ jobs:
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=__AWS_REGION__ \
-            --cloud-type=t3.small
+            --cloud-type=g4dn.2xlarge
   #include "../includes/tests/on-test.yml"
   #// steps:
       #include "../includes/steps/base-checkout.yml"
