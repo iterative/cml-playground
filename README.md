@@ -15,10 +15,17 @@ generate github actions cml workflows with `./build.sh`
 ## defintions / vars
 
 ## File Structure
-- examples (WIP, build docs/demos/etc examples from here and PR to there repestive locations)
-- includes (were reusable chunks live)
-- workflows (tests/base for `.github/workflows`)
-
+- `examples` (WIP, build docs/demos/etc examples from here and PR to there repestive locations)
+- `workflows` (tests/base for `.github/workflows`)
+    - `.` workflows that run in this repo
+    - `checks-*.yml` tools to make sure nothing is going wrong
+    - `cml-*.yml`, `tpi-*.yml` tests which are named for a specific issue or pr, they should validate it's functionality. **Ideally** they run on schedule via the lastest published version, and manually against a specific branch (default master)
+- `includes` (were reusable chunks live)
+    - `.` most oftenly used items
+    - `aws` components more specific to AWS
+    - `gcp` components more specific to GCP
+    - `steps` commonly used "complete" github actions steps
+    - `tests` testing elements which may be reapeated/reused
 # Useful References
 The worklfow's are generated using some slight hacking of `cpp` the C-preprocessor. But Why? So that when there is an update to a chunk of a commonly reused action, its updated once and goes everywhere.
 This could be some as simple as `actions/checkout@v2` -> `actions/checkout@v3` or something more involved.
