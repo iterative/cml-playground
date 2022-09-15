@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: 0x2b3bfa0/minroud
+          repository: iterative/minroud-s3
       - name: Install Deps
         run: npm install --global serverless
       #include "../includes/aws/aws-creds.yml"
@@ -31,6 +31,7 @@ jobs:
         id: deploy
         run: |
           npx serverless deploy
+          npx serverless info
           url=$(npx serverless info | awk 'match($0, "endpoint: "){ print substr($0, RSTART + 10)}')
           echo "$url"
           echo "::set-output name=url::$url"
@@ -65,7 +66,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: 0x2b3bfa0/minroud
+          repository: iterative/minroud-s3
       - name: Install Deps
         run: npm install --global serverless
       #include "../includes/aws/aws-creds.yml"
