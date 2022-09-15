@@ -3,8 +3,7 @@
 #include "../includes/common_defines.yml"
 name: cml#1049 Allow Native GPU types
 on:
-  schedule:
-    - cron: '45 14 * * 1' # Mondays 1445 UTC
+  #include "../includes/schedule.yml"
   workflow_dispatch:
     inputs:
       branch:

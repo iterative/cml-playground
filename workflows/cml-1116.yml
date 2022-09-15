@@ -6,8 +6,7 @@
 
 name: cml#1116 runner with private ssh key .pem
 on:
-  schedule:
-    - cron: '45 14 * * 1' # Mondays 1445 UTC
+  #include "../includes/schedule.yml"
   workflow_dispatch:
     inputs:
       branch:
