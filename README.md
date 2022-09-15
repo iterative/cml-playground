@@ -15,6 +15,9 @@ generate github actions cml workflows with `./build.sh`
 ## defintions / vars
 
 ## File Structure
+- examples (WIP, build docs/demos/etc examples from here and PR to there repestive locations)
+- includes (were reusable chunks live)
+- workflows (tests/base for `.github/workflows`)
 
 # Useful References
 The worklfow's are generated using some slight hacking of `cpp` the C-preprocessor. But Why? So that when there is an update to a chunk of a commonly reused action, its updated once and goes everywhere.
