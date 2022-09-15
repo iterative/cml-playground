@@ -1,0 +1,1 @@
+sudo echo '{"credHelpers": {"342840881361.dkr.ecr.us-west-1.amazonaws.com": "ecr-login"}}' >> /root/.docker/config.json

@@ -1,0 +1,80 @@
+name: Example CML/AWS private docker registry
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+jobs:
+  setup:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-1
+      - name: prep registry
+        run: |
+          aws ecr create-repository --repository-name test_docker_example
+          docker pull ghcr.io/iterative/cml:latest
+          docker tag ghcr.io/iterative/cml:latest 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com/docker_example_test:latest
+      - uses: docker/login-action@v2
+        with:
+          registry: 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com
+      - name: Push private container
+        run: |
+          docker push 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com/docker_example_test:latest
+  docker_example:
+    environment: test
+    needs: [setup]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        if: ${{ !env.TEST_CML_VERSION || github.event_name != 'schedule' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-1
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(cat scripts/docker.sh | base64 -w 0) --single --labels=docker_example-test --cloud=aws --cloud-region=us-west-1 --cloud-type=t3.small
+  test-docker_example:
+    needs: [docker_example]
+    runs-on: [self-hosted, docker_example-test]
+    container:
+      image: 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com/docker_example_test:latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+      - name: Say Hi
+        run: |
+          echo "hi"
+  clean-up:
+    if: ${{ always ()}}
+    needs: test-docker_example
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-1
+      - name: delete registry
+        run: |
+          aws ecr delete-repository --repository-name test_docker_example --force

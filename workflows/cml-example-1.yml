@@ -1,0 +1,74 @@
+#include "../includes/common_defines.yml"
+#define NEEDS_AWS true
+#define __AWS_REGION__ us-west-1
+name: Example CML/AWS private docker registry
+on:
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+jobs:
+  setup:
+    #include "../includes/environment.yml"
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/aws/aws-creds.yml"
+      - name: prep registry
+        run: |
+          aws ecr create-repository \
+            --repository-name test_docker_example
+          docker pull ghcr.io/iterative/cml:latest
+          docker tag ghcr.io/iterative/cml:latest 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com/docker_example_test:latest
+      - uses: docker/login-action@v2
+        with:
+          registry: 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com
+      - name: Push private container
+        run: |
+          docker push 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com/docker_example_test:latest
+  #define JOB_ID docker_example
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  JOB_ID:
+    #include "../includes/environment.yml"
+    needs: [setup]
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            __LINK_RUN__ \
+            --cloud-startup-script=$(cat scripts/docker.sh | base64 -w 0) \
+            --single \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=__AWS_REGION__ \
+            --cloud-type=t3.small 
+  TEST_JOB_ID:
+    needs: [JOB_ID]
+    runs-on: [self-hosted, LABEL]
+    container:
+      image: 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com/docker_example_test:latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+      - name: Say Hi
+        run: |
+          echo "hi"
+  clean-up:
+    if: ${{ always ()}}
+    needs: TEST_JOB_ID
+    runs-on: ubuntu-latest
+    #include "../includes/environment.yml"
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/aws/aws-creds.yml"
+      - name: delete registry
+        run: |
+          aws ecr delete-repository \
+            --repository-name test_docker_example \
+            --force
