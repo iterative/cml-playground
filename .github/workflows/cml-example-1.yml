@@ -19,13 +19,13 @@ jobs:
         run: |
           aws ecr create-repository --repository-name test_docker_example
           docker pull ghcr.io/iterative/cml:latest
-          docker tag ghcr.io/iterative/cml:latest 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com/docker_example_test:latest
+          docker tag ghcr.io/iterative/cml:latest 342840881361.dkr.ecr.us-west-1.amazonaws.com/docker_example_test:latest
       - uses: docker/login-action@v2
         with:
-          registry: 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com
+          registry: 342840881361.dkr.ecr.us-west-1.amazonaws.com
       - name: Push private container
         run: |
-          docker push 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com/docker_example_test:latest
+          docker push 342840881361.dkr.ecr.us-west-1.amazonaws.com/docker_example_test:latest
   docker_example:
     environment: test
     needs: [setup]
@@ -54,7 +54,7 @@ jobs:
     needs: [docker_example]
     runs-on: [self-hosted, docker_example-test]
     container:
-      image: 342840881361.dkr.ecr.__AWS_REGION__.amazonaws.com/docker_example_test:latest
+      image: 342840881361.dkr.ecr.us-west-1.amazonaws.com/docker_example_test:latest
     steps:
       - uses: actions/checkout@v3
       - name: CML Version Test
