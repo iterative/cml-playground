@@ -55,6 +55,9 @@ jobs:
     runs-on: [self-hosted, docker_example-test]
     container:
       image: 342840881361.dkr.ecr.us-west-1.amazonaws.com/docker_example_test:latest
+      credentials:
+        username: $AWS_ACCESS_KEY_ID
+        password: $AWS_SECRET_ACCESS_KEY
     steps:
       - uses: actions/checkout@v3
       - name: CML Version Test
