@@ -36,7 +36,6 @@ jobs:
           cml runner \
             __LINK_RUN__ \
             __SSH_KEYS__ \
-            ${{ inputs.branch != null && format('--cml-version {0}', inputs.branch) }} \
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
@@ -62,7 +61,6 @@ jobs:
           cml runner \
             __LINK_RUN__ \
             __SSH_KEYS__ \
-            ${{ inputs.branch != null && format('--cml-version {0}', inputs.branch) }} \
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
