@@ -58,6 +58,8 @@ jobs:
           PUBLISH_URL: ${{ needs.setup.outputs.url }}
         shell: bash -e -x {0}
         run: |
+          mkdir -p $HOME/.config/iterative
+          echo '{ "user_id": "do-not-track" }' >> $HOME/.config/iterative/telemetry
           echo "$PUBLISH_URL"
           echo "Pause for possible debugging, starting in 2 mins"
           sleep 120
