@@ -1,0 +1,22 @@
+#
+  clean-up:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: JOB_ID
+    #include "../environment.yml"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: iterative/minroud-s3
+      - name: Install Deps
+        run: npm install --global serverless
+      #include "./aws-creds.yml"
+      - uses: actions/download-artifact@v3
+        with:
+          name: state
+          path: .serverless
+      - name: Clean up
+        run: |
+          bucket_name=$(aws s3 ls | awk 'match($0, /minroud/){ print $3}')
+          aws s3 rm --recursive "s3://$bucket_name"
+          npx serverless remove

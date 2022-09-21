@@ -1,0 +1,25 @@
+#
+  aws-self-host-setup:
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    runs-on: ubuntu-latest
+    #include "../environment.yml"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: iterative/minroud-s3
+      - name: Install Deps
+        run: npm install --global serverless
+      #include "./aws-creds.yml"
+      - name: Deploy
+        id: deploy
+        run: |
+          npx serverless deploy
+          npx serverless info
+          url=$(npx serverless info | awk 'match($0, "endpoint: "){ print substr($0, RSTART + 10)}')
+          echo "$url"
+          echo "::set-output name=url::$url"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: state
+          path: .serverless

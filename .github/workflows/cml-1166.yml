@@ -1,0 +1,74 @@
+name: cml#1166 comment --publish-url self-hosted
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+env:
+  TEST_CML_BRANCH: ${{ inputs.branch || 'master' }}
+jobs:
+  aws-self-host-setup:
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: iterative/minroud-s3
+      - name: Install Deps
+        run: npm install --global serverless
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-east-1
+      - name: Deploy
+        id: deploy
+        run: |
+          npx serverless deploy
+          npx serverless info
+          url=$(npx serverless info | awk 'match($0, "endpoint: "){ print substr($0, RSTART + 10)}')
+          echo "$url"
+          echo "::set-output name=url::$url"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: state
+          path: .serverless
+  test:
+    needs: aws-self-host-setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        env:
+          CML_COMMENT_PUBLISH_URL: ${{ needs.setup.outputs.url }}
+        run: |
+          curl "https://avatars.githubusercontent.com/u/1105843?s=400&v=4" --output img1.jpg
+          echo "# hello" >> file.md
+          echo "![An Image](./img1.jpg)"
+          cml comment create --publish file.md
+  clean-up:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: test
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: iterative/minroud-s3
+      - name: Install Deps
+        run: npm install --global serverless
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-east-1
+      - uses: actions/download-artifact@v3
+        with:
+          name: state
+          path: .serverless
+      - name: Clean up
+        run: |
+          bucket_name=$(aws s3 ls | awk 'match($0, /minroud/){ print $3}')
+          aws s3 rm --recursive "s3://$bucket_name"
+          npx serverless remove
