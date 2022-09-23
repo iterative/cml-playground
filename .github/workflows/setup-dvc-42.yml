@@ -1,0 +1,37 @@
+name: setup-dvc#42 allow version downgrades
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *' # 0800 UTC
+jobs:
+  plain:
+    runs-on: ubuntu-latest
+    container: ghcr.io/iterative/cml:latest
+    steps:
+      - run: dvc --version
+  control:
+    runs-on: ubuntu-latest
+    container: ghcr.io/iterative/cml:latest
+    steps:
+      - uses: iterative/setup-dvc@v1
+      - run: dvc --version
+  neg-control:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: iterative/setup-dvc@v1
+      - run: dvc --version
+  neg-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: iterative/setup-dvc@v1
+        with:
+          version: '2.9.5'
+      - run: dvc --version
+  test:
+    runs-on: ubuntu-latest
+    container: ghcr.io/iterative/cml:latest
+    steps:
+      - uses: iterative/setup-dvc@v1
+        with:
+          version: '2.9.5'
+      - run: dvc --version
