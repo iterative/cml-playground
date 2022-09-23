@@ -1,3 +1,6 @@
 #
+  #ifndef SCHEDULE
   schedule:
     - cron: '45 14 * * 1' # Mondays 1445 UTC
+  #endif
+  # // if SCHUDULE == 'weekly' include weekly?

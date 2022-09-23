@@ -1,0 +1,5 @@
+#  
+  #ifndef SCHEDULE
+  schedule:
+  #endif
+    - cron: '0 8 * * *' # 0800 UTC

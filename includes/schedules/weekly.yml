@@ -1,0 +1,5 @@
+#
+  #ifndef SCHEDULE
+  schedule:
+  #endif
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
