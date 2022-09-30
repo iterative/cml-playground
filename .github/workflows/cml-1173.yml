@@ -19,11 +19,11 @@ jobs:
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
           echo custom_1 >> ./comment.md
-          if [ "${{ }}" == "opened" ]; then
+          if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
             cml comment create --pr --label custom_1-wm ./comment.md
           fi
-          if [ "${{ }}" == "synchronize" ]; then
+          if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list main.. --count)" >> ./comment.md
             cml comment update --pr --label custom_1-wm ./comment.md
           fi
@@ -42,11 +42,11 @@ jobs:
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
           echo custom_2 >> ./comment.md
-          if [ "${{ }}" == "opened" ]; then
+          if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
             cml comment create --pr --label custom_2-wm ./comment.md
           fi
-          if [ "${{ }}" == "synchronize" ]; then
+          if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list main.. --count)" >> ./comment.md
             cml comment update --pr --label custom_2-wm ./comment.md
           fi
@@ -65,11 +65,11 @@ jobs:
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
           echo workflow_label >> ./comment.md
-          if [ "${{ }}" == "opened" ]; then
+          if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
             cml comment create --pr --label "{workflow}" ./comment.md
           fi
-          if [ "${{ }}" == "synchronize" ]; then
+          if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list main.. --count)" >> ./comment.md
             cml comment update --pr --label "{workflow}" ./comment.md
           fi
