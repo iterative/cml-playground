@@ -1,0 +1,19 @@
+#// https://github.com/iterative/cml/pull/1173
+#// issue
+
+name: cml#1173 part 2
+on:
+  pull_request:
+    branches:
+      - main
+#define __PULL_REQUEST__ true
+#define __CML_BRANCH__ d001-watermark-spaces
+jobs:
+  #define JOB_ID workflow_label
+  JOB_ID:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      #define WM_LABEL "{workflow}"
+      #include "../includes/tests/comment/label.yml"
