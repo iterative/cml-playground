@@ -6,4 +6,5 @@
       #ifdef __PULL_REQUEST__
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          depth: 0
       #endif
