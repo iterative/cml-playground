@@ -1,7 +1,7 @@
-#jobs
-  #jobid
-    #steps
-      # should have JOB_ID and WM_LABEL defined
+#// jobs
+  #// jobid
+    #// steps
+      #// should have JOB_ID and WM_LABEL defined
       - name: Create or Update comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
