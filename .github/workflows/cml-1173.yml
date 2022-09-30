@@ -18,7 +18,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
-          echo "JOB_ID" >> ./comment.md
+          echo custom_1 >> ./comment.md
           if [ "${{ }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
             cml comment create --pr --label custom_1-wm ./comment.md
@@ -41,7 +41,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
-          echo "JOB_ID" >> ./comment.md
+          echo custom_2 >> ./comment.md
           if [ "${{ }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
             cml comment create --pr --label custom_2-wm ./comment.md
@@ -64,7 +64,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
-          echo "JOB_ID" >> ./comment.md
+          echo workflow_label >> ./comment.md
           if [ "${{ }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
             cml comment create --pr --label "{workflow}" ./comment.md
