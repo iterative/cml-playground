@@ -1,6 +1,11 @@
 #
   #
     #
+      #ifdef __CML_BRANCH__
+      - name: Using CML Branch __CML_BRANCH__
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#__CML_BRANCH__
+      #else
       - name: Test a CML Branch
         if: ${{ !env.TEST_CML_VERSION || github.event_name != 'schedule' }}
         run: |
@@ -11,3 +16,4 @@
         uses: iterative/setup-cml@v1
         with:
           version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      #endif
