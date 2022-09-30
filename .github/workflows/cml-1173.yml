@@ -24,7 +24,7 @@ jobs:
             cml comment create --pr --label custom_1-wm ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
-            echo "PR commit count: $(git rev-list main.. --count)" >> ./comment.md
+            echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
             cml comment update --pr --label custom_1-wm ./comment.md
           fi
   custom_2:
@@ -47,7 +47,7 @@ jobs:
             cml comment create --pr --label custom_2-wm ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
-            echo "PR commit count: $(git rev-list main.. --count)" >> ./comment.md
+            echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
             cml comment update --pr --label custom_2-wm ./comment.md
           fi
   workflow_label:
@@ -70,6 +70,6 @@ jobs:
             cml comment create --pr --label "{workflow}" ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
-            echo "PR commit count: $(git rev-list main.. --count)" >> ./comment.md
+            echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
             cml comment update --pr --label "{workflow}" ./comment.md
           fi
