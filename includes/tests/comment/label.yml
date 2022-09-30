@@ -13,6 +13,6 @@
             cml comment create --pr --label WM_LABEL ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
-            echo "PR commit count: $(git rev-list main.. --count)" >> ./comment.md
+            echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
             cml comment update --pr --label WM_LABEL ./comment.md
           fi
