@@ -9,7 +9,7 @@ on:
 #define __PULL_REQUEST__ true
 #define __CML_BRANCH__ d001-watermark-spaces
 jobs:
-  #define JOB_ID workflow_label
+  #define JOB_ID workflow_label_2
   JOB_ID:
     runs-on: ubuntu-latest
     steps:

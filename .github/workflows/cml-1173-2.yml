@@ -4,7 +4,7 @@ on:
     branches:
       - main
 jobs:
-  workflow_label:
+  workflow_label_2:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +19,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
-          echo workflow_label >> ./comment.md
+          echo workflow_label_2 >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
             cml comment create --pr --label "{workflow}" ./comment.md
