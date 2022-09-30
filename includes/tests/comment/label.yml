@@ -1,0 +1,18 @@
+#jobs
+  #jobid
+    #steps
+      # should have JOB_ID and WM_LABEL defined
+      - name: Create or Update comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "### Custom Water Mark Test" > ./comment.md
+          echo "JOB_ID" >> ./comment.md
+          if [ "${{ }}" == "opened" ]; then
+            echo "PR Opened" >> ./comment.md
+            cml comment create --pr --label WM_LABEL ./comment.md
+          fi
+          if [ "${{ }}" == "synchronize" ]; then
+            echo "PR commit count: $(git rev-list main.. --count)" >> ./comment.md
+            cml comment update --pr --label WM_LABEL ./comment.md
+          fi
