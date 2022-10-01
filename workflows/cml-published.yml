@@ -27,7 +27,7 @@ jobs:
           - distribution: package
             version: npx --yes @dvcorg/cml --version
     steps:
-      - timeout-minutes: 60
+      - name: Check release artifacts
         run: |
           version="v$(${{ matrix.version }})"
           if [[ "$version" != "$EXPECTED" ]]; then
