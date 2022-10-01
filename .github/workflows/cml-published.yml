@@ -15,7 +15,33 @@ jobs:
   cml-published:
     if: ${{ github.event.event_type == 'new-cml' }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distribution: [binary, image, package]
+        include:
+          - distribution: binary
+            version: curl --location https:
+          - distribution: container
+            version: docker run --interactive ghcr.io/iterative/cml --version
+          - distribution: package
+            version: npx --yes @dvcorg/cml --version
     steps:
-      - name: TODO
+      - name: Check release artifacts
         run: |
-          echo "CML version ${{ github.event.client_payload.tag }}"
+          version="v$(${{ matrix.version }})"
+          if [[ "$version" != "$EXPECTED" ]]; then
+            echo "${{ matrix.distribution }} version mismatch: expected $EXPECTED, got $version"
+            exit 1
+          fi
+        env:
+          EXPECTED: ${{ github.event.client_payload.tag }}
+  cml-published-failure:
+    needs: cml-published
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Release of <https://github.com/iterative/cml|iterative/cml> <$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID|*failed*>!" |
+          jq --raw-input {text:.} | curl --header content-type:application/json --data @- "$SLACK_WEBHOOK"
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
