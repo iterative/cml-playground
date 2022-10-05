@@ -25,6 +25,8 @@ jobs:
       - run: |
           echo "cml comment create --issue test" > report.md
           cml comment create --issue ${{ steps.create-issue.outputs.number }} ./report.md
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           gh issue view ${{ steps.create-issue.outputs.number }} --comments 
         env:
