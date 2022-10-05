@@ -1,0 +1,29 @@
+#// https://github.com/iterative/cml/pull/1202
+#// issue
+
+name: cml#1202 CML Comment on issue
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+#define __CML_BRANCH__ d003-issue-comments
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - uses: dacbd/create-issue-action@v1
+        id: create-issue
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Test for `cml comment create`
+      - run: |
+          echo "cml comment create --issue test" > report.md
+          cml comment create --issue ${{ steps.create-issue.outputs.number }} ./report.md
+      - run: |
+          gh issue view ${{ steps.create-issue.outputs.number }} --comments 
