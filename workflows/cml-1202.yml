@@ -27,6 +27,10 @@ jobs:
           cml comment create --issue ${{ steps.create-issue.outputs.number }} ./report.md
       - run: |
           gh issue view ${{ steps.create-issue.outputs.number }} --comments 
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: clean-up
         if: always()
         run: gh issue close ${{ steps.create-issue.outputs.number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
