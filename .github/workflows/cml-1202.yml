@@ -24,3 +24,6 @@ jobs:
           cml comment create --issue ${{ steps.create-issue.outputs.number }} ./report.md
       - run: |
           gh issue view ${{ steps.create-issue.outputs.number }} --comments
+      - name: clean-up
+        if: always()
+        run: gh issue close ${{ steps.create-issue.outputs.number }}
