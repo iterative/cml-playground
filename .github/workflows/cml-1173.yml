@@ -22,11 +22,11 @@ jobs:
           echo custom_1 >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
-            cml comment create --pr --label custom_1-wm ./comment.md
+            cml comment create --pr --comment-tag custom_1-wm ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
-            cml comment update --pr --label custom_1-wm ./comment.md
+            cml comment update --pr --comment-tag custom_1-wm ./comment.md
           fi
   custom_2:
     runs-on: ubuntu-latest
@@ -46,11 +46,11 @@ jobs:
           echo custom_2 >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
-            cml comment create --pr --label custom_2-wm ./comment.md
+            cml comment create --pr --comment-tag custom_2-wm ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
-            cml comment update --pr --label custom_2-wm ./comment.md
+            cml comment update --pr --comment-tag custom_2-wm ./comment.md
           fi
   workflow_label:
     runs-on: ubuntu-latest
@@ -70,9 +70,9 @@ jobs:
           echo workflow_label >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
-            cml comment create --pr --label "{workflow}" ./comment.md
+            cml comment create --pr --comment-tag "{workflow}" ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
-            cml comment update --pr --label "{workflow}" ./comment.md
+            cml comment update --pr --comment-tag "{workflow}" ./comment.md
           fi
