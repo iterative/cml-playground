@@ -32,7 +32,7 @@ jobs:
             --cloud=aws \
             --cloud-metadata="termination_test=true" \
             --cloud-region=__AWS_REGION__ \
-            --cloud-hhd-size=10 \
+            --cloud-hdd-size=10 \
             --cloud-type=t3.small 
   #include "../includes/tests/on-test.yml"
   #// steps:

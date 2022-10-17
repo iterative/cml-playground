@@ -28,7 +28,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --cml-version=github:iterative/cml#master --labels=fill_the_disk-test --cloud=aws --cloud-metadata="termination_test=true" --cloud-region=us-east-1 --cloud-hhd-size=10 --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --cml-version=github:iterative/cml#master --labels=fill_the_disk-test --cloud=aws --cloud-metadata="termination_test=true" --cloud-region=us-east-1 --cloud-hdd-size=10 --cloud-type=t3.small
   test-fill_the_disk:
     needs: [fill_the_disk]
     runs-on: [self-hosted, fill_the_disk-test]
