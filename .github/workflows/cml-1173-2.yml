@@ -22,9 +22,9 @@ jobs:
           echo workflow_label_2 >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
-            cml comment create --pr --comment-tag "{workflow}" ./comment.md
+            cml comment create --pr --watermark-label "{workflow}" ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
-            cml comment update --pr --comment-tag "{workflow}" ./comment.md
+            cml comment update --pr --watermark-label "{workflow}" ./comment.md
           fi

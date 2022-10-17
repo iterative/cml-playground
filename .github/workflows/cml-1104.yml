@@ -21,11 +21,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test a CML Branch
-        if: ${{ !env.TEST_CML_VERSION || github.event_name != 'schedule' }}
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
       - name: Standard CML setup
-        if: ${{ env.TEST_CML_VERSION || github.event_name == 'schedule' }}
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
         uses: iterative/setup-cml@v1
         with:
           version: ${{ env.TEST_CML_VERSION || 'latest' }}
