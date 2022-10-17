@@ -41,7 +41,7 @@ jobs:
           cml --version
       - name: Fill disk
         run: |
-          for i in {0..15}; do
+          for i in {0..31}; do
             dd if=/dev/urandom of="file_$i.txt" bs=256M count=1 || exit 0
           done
   check:
@@ -55,6 +55,8 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
           aws-region: us-east-1
+      - name: Spin
+        run: sleep 300
       - name: check for Instance
         run: |
           aws ec2 describe-instances --filters Name=tag:termination_test,Values=* --region us-east-1 | jq '.Reservations[].Instances[]'

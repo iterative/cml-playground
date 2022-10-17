@@ -40,7 +40,7 @@ jobs:
       #include "../includes/tests/cml-version.yml"
       - name: Fill disk
         run: |
-          for i in {0..15}; do
+          for i in {0..31}; do
             dd if=/dev/urandom of="file_$i.txt" bs=256M count=1 || exit 0
           done
   check:
@@ -51,6 +51,8 @@ jobs:
     steps: 
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/aws/aws-creds.yml"
+      - name: Spin
+        run: sleep 300
       - name: check for Instance
         run: |
           aws ec2 describe-instances --filters Name=tag:termination_test,Values=* --region __AWS_REGION__ | jq '.Reservations[].Instances[]'
