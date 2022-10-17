@@ -46,6 +46,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     needs: [ TEST_JOB_ID ]
+    #include "../includes/environment.yml"
     if: ${{ always() }}
     steps: 
       #include "../includes/steps/base-checkout.yml"

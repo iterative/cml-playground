@@ -47,6 +47,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     needs: [ test-fill_the_disk ]
+    environment: test
     if: ${{ always() }}
     steps:
       - uses: actions/checkout@v3
