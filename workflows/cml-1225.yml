@@ -55,4 +55,5 @@ jobs:
         run: sleep 300
       - name: check for Instance
         run: |
-          aws ec2 describe-instances --filters Name=tag:termination_test,Values=* --region __AWS_REGION__ | jq '.Reservations[].Instances[]'
+          status=$(aws ec2 describe-instances --filters Name=tag:termination_test,Values=* --region __AWS_REGION__ | jq '.Reservations[].Instances[].State.Name')
+          test $status != "running"
