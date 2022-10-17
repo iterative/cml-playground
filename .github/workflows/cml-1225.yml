@@ -42,7 +42,7 @@ jobs:
       - name: Fill disk
         run: |
           for i in {0..10}; do
-            cat /dev/random | head -c 256M > "file_$i.txt" || exit 0
+            dd if=/dev/urandom of="file_$i.txt" bs=256M count=1 || exit 0
           done
   check:
     runs-on: ubuntu-latest
