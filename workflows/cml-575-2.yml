@@ -3,13 +3,13 @@
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
 
-name: CML Runner takes multiple jobs
+name: cml#575 Takes multiple jobs
 on:
   workflow_dispatch:
 
 #include "../includes/token.yml"
-__COMMENT__  Not strictly parallel because of GitHub Actions queuing jobs
-__COMMENT__  but logicly parallel via default mechanics of GHA
+#//  Not strictly parallel because of GitHub Actions queuing jobs
+#//  but logicly parallel via default mechanics of GHA
 jobs:
   #define JOB_ID parallel
   #define TEST_JOB_ID test-JOB_ID

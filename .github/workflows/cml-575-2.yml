@@ -1,12 +1,10 @@
-name: CML Runner takes multiple jobs
+name: cml#575 Takes multiple jobs
 on:
   workflow_dispatch:
 permissions:
   id-token: write
   contents: write
   pull-requests: write
- # Not strictly parallel because of GitHub Actions queuing jobs
- # but logicly parallel via default mechanics of GHA
 jobs:
   parallel:
     environment: test
