@@ -16,7 +16,7 @@ on:
 #define TPI_SOURCE sensitive
 
 jobs:
-  #define JOB_ID target_avail_zone
+  #define JOB_ID no_env_leak
   #define TEST_JOB_ID test-JOB_ID
   #define LABEL JOB_ID-test
   #include "../includes/setup.yml"
