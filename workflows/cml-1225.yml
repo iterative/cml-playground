@@ -40,7 +40,7 @@ jobs:
       #include "../includes/tests/cml-version.yml"
       - name: Fill disk
         run: |
-          for i in {0..10}; do
+          for i in {0..15}; do
             dd if=/dev/urandom of="file_$i.txt" bs=256M count=1 || exit 0
           done
   check:
