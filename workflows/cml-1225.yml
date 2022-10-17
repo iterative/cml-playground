@@ -13,7 +13,7 @@ on:
 #include "../includes/token.yml"
 
 jobs:
-  #define JOB_ID no_env_leak
+  #define JOB_ID fill_the_disk
   #define TEST_JOB_ID test-JOB_ID
   #define LABEL JOB_ID-test
   #include "../includes/setup.yml"
@@ -32,7 +32,7 @@ jobs:
             --cloud=aws \
             --cloud-metadata="termination_test=true" \
             --cloud-region=__AWS_REGION__ \
-            --disk-size=10 \
+            --cloud-hhd-size=10 \
             --cloud-type=t3.small 
   #include "../includes/tests/on-test.yml"
   #// steps:
