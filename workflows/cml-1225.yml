@@ -1,0 +1,55 @@
+#// https://github.com/iterative/cml/pull/1225
+#// https://github.com/iterative/cml/issues/1138
+#// https://github.com/iterative/cml/issues/1006
+
+#include "../includes/common_defines.yml"
+#define NEEDS_AWS true
+#define __AWS_REGION__ us-east-1
+
+name: cml#1225 Instances still self-terminate with a full drive
+on:
+  workflow_dispatch:
+
+#include "../includes/token.yml"
+
+jobs:
+  #define JOB_ID no_env_leak
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            __LINK_RUN__ \
+            __SSH_KEYS__ \
+            --single \
+            --cml-version=github:iterative/cml#master \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-metadata="termination_test=true" \
+            --cloud-region=__AWS_REGION__ \
+            --disk-size=10 \
+            --cloud-type=t3.small 
+  #include "../includes/tests/on-test.yml"
+  #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+      - name: Fill disk
+        run: |
+          for i in {0..10}; do
+            cat /dev/random | head -c 256M > "file_$i.txt" || exit 0
+          done
+  check:
+    runs-on: ubuntu-latest
+    needs: [ TEST_JOB_ID ]
+    if: ${{ always() }}
+    steps: 
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/aws/aws-creds.yml"
+      - name: check for Instance
+        run: |
+          aws ec2 describe-instances --filters Name=tag:termination_test,Values=* --region __AWS_REGION__ | jq '.Reservations[].Instances[]'

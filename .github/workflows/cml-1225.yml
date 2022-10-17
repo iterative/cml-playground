@@ -1,0 +1,59 @@
+name: cml#1225 Instances still self-terminate with a full drive
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+jobs:
+  no_env_leak:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-east-1
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --cml-version=github:iterative/cml#master --labels=no_env_leak-test --cloud=aws --cloud-metadata="termination_test=true" --cloud-region=us-east-1 --disk-size=10 --cloud-type=t3.small
+  test-no_env_leak:
+    needs: [no_env_leak]
+    runs-on: [self-hosted, no_env_leak-test]
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+      - name: Fill disk
+        run: |
+          for i in {0..10}; do
+            cat /dev/random | head -c 256M > "file_$i.txt" || exit 0
+          done
+  check:
+    runs-on: ubuntu-latest
+    needs: [ test-no_env_leak ]
+    if: ${{ always() }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-east-1
+      - name: check for Instance
+        run: |
+          aws ec2 describe-instances --filters Name=tag:termination_test,Values=* --region us-east-1 | jq '.Reservations[].Instances[]'
