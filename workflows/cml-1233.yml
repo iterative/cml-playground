@@ -21,7 +21,7 @@ jobs:
           cml ci --unshallow
       - name: verify
         run: |
-          git log --oneline -10
+          test $(git log --oneline | wc -l) > 1
   test:
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +36,7 @@ jobs:
           cml ci --fetch-depth 0
       - name: verify
         run: |
-          git log --oneline -10
+          test $(git log --oneline | wc -l) > 1
   mid-test:
     runs-on: ubuntu-latest
     steps:
@@ -51,7 +51,7 @@ jobs:
           cml ci --fetch-depth 5
       - name: verify
         run: |
-          git log --oneline -10
+          test $(git log --oneline | wc -l) = 5
   neg-test:
     runs-on: ubuntu-latest
     steps:
@@ -66,4 +66,4 @@ jobs:
           cml ci
       - name: verify
         run: |
-          git log --oneline -10
+          test $(git log --oneline | wc -l) = 1
