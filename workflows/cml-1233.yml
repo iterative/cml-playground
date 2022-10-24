@@ -55,6 +55,7 @@ jobs:
           cml ci --fetch-depth 5
       - name: verify
         run: |
+          git log --oneline
           count=$(git rev-list --count HEAD)
           echo "$count"
           test $count = 5
