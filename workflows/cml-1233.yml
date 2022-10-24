@@ -10,7 +10,9 @@ jobs:
   unshallow:
     runs-on: ubuntu-latest
     steps:
-      #include "../includes/steps/base-checkout.yml"
+      - uses: actions/checkout@v3
+        with:
+          ref: main
       #include "../includes/steps/cml.yml"
       - name: cml ci fetch-depth
         env:
@@ -23,7 +25,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      #include "../includes/steps/base-checkout.yml"
+      - uses: actions/checkout@v3
+        with:
+          ref: main
       #include "../includes/steps/cml.yml"
       - name: cml ci fetch-depth
         env:
@@ -36,7 +40,9 @@ jobs:
   mid-test:
     runs-on: ubuntu-latest
     steps:
-      #include "../includes/steps/base-checkout.yml"
+      - uses: actions/checkout@v3
+        with:
+          ref: main
       #include "../includes/steps/cml.yml"
       - name: cml ci fetch-depth
         env:
@@ -49,7 +55,9 @@ jobs:
   neg-test:
     runs-on: ubuntu-latest
     steps:
-      #include "../includes/steps/base-checkout.yml"
+      - uses: actions/checkout@v3
+        with:
+          ref: main
       #include "../includes/steps/cml.yml"
       - name: cml ci fetch-depth
         env:
