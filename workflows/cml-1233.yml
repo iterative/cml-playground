@@ -1,0 +1,53 @@
+#// https://github.com/iterative/cml/pull/1233
+
+name: cml#1233 --ci-fetch depth
+on:
+  manual_dispatch:
+
+#define __CML_BRANCH__ internal-deepyaman
+
+jobs:
+  unshallow:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - name: cml ci fetch-depth
+        run: |
+          cml ci --unshallow
+      - name: verify
+        run: |
+          git log --online -10
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - name: cml ci fetch-depth
+        run: |
+          cml ci --fetch-depth 0
+      - name: verify
+        run: |
+          git log --online -10
+  mid-test:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - name: cml ci fetch-depth
+        run: |
+          cml ci --fetch-depth 5
+      - name: verify
+        run: |
+          git log --online -10
+  neg-test:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - name: cml ci fetch-depth
+        run: |
+          cml ci
+      - name: verify
+        run: |
+          git log --online -10
