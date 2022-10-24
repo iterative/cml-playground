@@ -21,7 +21,9 @@ jobs:
           cml ci --unshallow
       - name: verify
         run: |
-          test $(git log --oneline | wc -l) > 1
+          count=$(git log --oneline | wc -l)
+          echo "$count"
+          test $count > 1
   test:
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +38,9 @@ jobs:
           cml ci --fetch-depth 0
       - name: verify
         run: |
-          test $(git log --oneline | wc -l) > 1
+          count=$(git log --oneline | wc -l)
+          echo "$count"
+          test $count > 1
   mid-test:
     runs-on: ubuntu-latest
     steps:
@@ -51,7 +55,9 @@ jobs:
           cml ci --fetch-depth 5
       - name: verify
         run: |
-          test $(git log --oneline | wc -l) = 5
+          count=$(git log --oneline | wc -l)
+          echo "$count"
+          test $count = 5
   neg-test:
     runs-on: ubuntu-latest
     steps:
@@ -66,4 +72,6 @@ jobs:
           cml ci
       - name: verify
         run: |
-          test $(git log --oneline | wc -l) = 1
+          count=$(git log --oneline | wc -l)
+          echo "$count"
+          test $count = 1
