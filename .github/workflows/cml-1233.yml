@@ -20,7 +20,7 @@ jobs:
         run: |
           count=$(git log --oneline | wc -l)
           echo "$count"
-          test $count > 1
+          test $count != 1
   test:
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +39,7 @@ jobs:
         run: |
           count=$(git log --oneline | wc -l)
           echo "$count"
-          test $count > 1
+          test $count != 1
   mid-test:
     runs-on: ubuntu-latest
     steps:
