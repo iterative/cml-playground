@@ -18,7 +18,7 @@ jobs:
           cml ci --unshallow
       - name: verify
         run: |
-          count=$(git log --oneline | wc -l)
+          count=$(git rev-list --all --count)
           echo "$count"
           test $count != 1
   test:
@@ -37,7 +37,7 @@ jobs:
           cml ci --fetch-depth 0
       - name: verify
         run: |
-          count=$(git log --oneline | wc -l)
+          count=$(git rev-list --all --count)
           echo "$count"
           test $count != 1
   mid-test:
@@ -56,7 +56,7 @@ jobs:
           cml ci --fetch-depth 5
       - name: verify
         run: |
-          count=$(git log --oneline | wc -l)
+          count=$(git rev-list --all --count)
           echo "$count"
           test $count = 5
   neg-test:
@@ -75,6 +75,6 @@ jobs:
           cml ci
       - name: verify
         run: |
-          count=$(git log --oneline | wc -l)
+          count=$(git rev-list --all --count)
           echo "$count"
           test $count = 1
