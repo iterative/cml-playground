@@ -10,9 +10,9 @@
           echo JOB_ID >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
-            cml comment create --pr --watermark-label WM_LABEL ./comment.md
+            cml comment create --pr --watermark-title WM_LABEL ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
-            cml comment update --pr --watermark-label WM_LABEL ./comment.md
+            cml comment update --pr --watermark-title WM_LABEL ./comment.md
           fi
