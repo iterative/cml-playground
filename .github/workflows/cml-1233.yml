@@ -10,6 +10,8 @@ jobs:
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
       - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml ci --unshallow
       - name: verify
@@ -23,6 +25,8 @@ jobs:
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
       - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml ci --fetch-depth 0
       - name: verify
@@ -36,6 +40,8 @@ jobs:
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
       - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml ci --fetch-depth 5
       - name: verify
@@ -49,6 +55,8 @@ jobs:
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
       - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml ci
       - name: verify

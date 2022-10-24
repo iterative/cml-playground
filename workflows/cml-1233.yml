@@ -13,6 +13,8 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
       - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml ci --unshallow
       - name: verify
@@ -24,6 +26,8 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
       - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml ci --fetch-depth 0
       - name: verify
@@ -35,6 +39,8 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
       - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml ci --fetch-depth 5
       - name: verify
@@ -46,6 +52,8 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
       - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml ci
       - name: verify
