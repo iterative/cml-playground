@@ -1,6 +1,6 @@
 name: cml#1233 --ci-fetch depth
 on:
-  manual_dispatch:
+  workflow_dispatch:
 jobs:
   unshallow:
     runs-on: ubuntu-latest
