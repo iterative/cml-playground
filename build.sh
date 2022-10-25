@@ -9,14 +9,19 @@ build() {
     pushd /opt/playground
   fi
 
-  echo "Purging existing workflows..."
-  rm .github/workflows/*
+  printf "Checking and Building."
   for workflow in workflows/*
   do
-    echo "Processing $workflow > .github/workflows/$workflow"
-    #cpp -nostdinc -P $workflow | sed '/./,$!d' > .github/$workflow
-    cpp -nostdinc -w -P $workflow | sed '/./,$!d' > .github/$workflow
+    current_file_hash=$(openssl md5 .github/$workflow | awk '{print $2}')
+    new_file_hash=$(cpp -nostdinc -w -P $workflow | sed '/./,$!d' | openssl md5 | awk '{print $2}')
+    printf "."
+    if test $current_file_hash != $new_file_hash; then
+      printf "\nChange detected: building $workflow > .github/$workflow\n"
+      #cpp -nostdinc -P $workflow | sed '/./,$!d' > .github/$workflow
+      cpp -nostdinc -w -P $workflow | sed '/./,$!d' > .github/$workflow
+    fi
   done
+  printf "\n"
 }
 
 
