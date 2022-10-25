@@ -22,7 +22,7 @@ jobs:
           now=$(date +%s)
           regions=$(aws ec2 --region us-east-1 describe-regions | jq .Regions[].RegionName | tr -d \")
           for region in $regions; do
-              result=$(aws ec2 describe-instances --filters Name=tag:Name,Values=cml*,tpi* --region "$region" | jq -c '.Reservations[].Instances[] | select(.State.Name == "running") | { id: .InstanceId, start: .LaunchTime }')
+              result=$(aws ec2 describe-instances --filters Name=tag:Name,Values=cml*,tpi*,iterative* --region "$region" | jq -c '.Reservations[].Instances[] | select(.State.Name == "running") | { id: .InstanceId, start: .LaunchTime }')
               if [[ -n "$result" ]]; then
                   echo "### Found instances in region $region" >> report.md
                   for json in $result; do
