@@ -34,7 +34,14 @@ jobs:
             --cloud-region=__AWS_REGION__ \
             --cloud-hdd-size=10 \
             --cloud-type=t3.small 
-  #include "../includes/tests/on-test.yml"
+  TEST_JOB_ID:
+    needs: [JOB_ID]
+    runs-on: [self-hosted, LABEL]
+    continue-on-error: true
+    #ifdef NEEDS_AWS
+    #include "../includes/environment.yml"
+    #endif
+    steps:
   #// steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/tests/cml-version.yml"

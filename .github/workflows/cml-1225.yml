@@ -32,6 +32,7 @@ jobs:
   test-fill_the_disk:
     needs: [fill_the_disk]
     runs-on: [self-hosted, fill_the_disk-test]
+    continue-on-error: true
     environment: test
     steps:
       - uses: actions/checkout@v3
