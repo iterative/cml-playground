@@ -3,17 +3,16 @@ on:
   repository_dispatch:
     types:
       - new-cml
-      - pr
+
 jobs:
-  cml-pr:
+  debug:
     runs-on: ubuntu-latest
     steps:
       - name: TODO
         run: |
           echo "${{ github.event.event_type }}"
           echo "${{ github.event.client_playload.branch }}"
-  cml-published:
-    if: ${{ github.event.event_type == 'new-cml' }}
+  is-published:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -35,8 +34,8 @@ jobs:
           fi
         env:
           EXPECTED: ${{ github.event.client_payload.tag }}
-  cml-published-failure:
-    needs: cml-published
+  publish-failure:
+    needs: is-published
     if: failure()
     runs-on: ubuntu-latest
     steps:
@@ -45,3 +44,5 @@ jobs:
           jq --raw-input {text:.} | curl --header content-type:application/json --data @- "$SLACK_WEBHOOK"
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+
