@@ -1,5 +1,8 @@
 name: cml#1233 --ci-fetch depth
 on:
+  push:
+    branches:
+      - '1233'
   workflow_dispatch:
 jobs:
   unshallow:
