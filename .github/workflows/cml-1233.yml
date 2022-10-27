@@ -1,9 +1,15 @@
 name: cml#1233 --ci-fetch depth
 on:
-  push:
-    branches:
-      - '1233'
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+env:
+  TEST_CML_BRANCH: ${{ inputs.branch || 'master' }}
 jobs:
   unshallow:
     runs-on: ubuntu-latest
@@ -11,9 +17,15 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: main
-      - name: Using CML Branch internal-deepyaman
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
       - name: cml ci fetch-depth
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -30,9 +42,15 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: main
-      - name: Using CML Branch internal-deepyaman
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
       - name: cml ci fetch-depth
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -49,9 +67,15 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: main
-      - name: Using CML Branch internal-deepyaman
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
       - name: cml ci fetch-depth
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -59,7 +83,6 @@ jobs:
           cml ci --fetch-depth 10
       - name: verify
         run: |
-          git log --oneline
           count=$(git rev-list --count HEAD)
           echo "$count"
           test $count = 10
@@ -69,9 +92,15 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: main
-      - name: Using CML Branch internal-deepyaman
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
       - name: cml ci fetch-depth
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
