@@ -1,0 +1,73 @@
+#// https://github.com/iterative/cml/pull/1228
+#// https://github.com/iterative/cml/pull/1241
+
+
+#define __CML_BRANCH__ internal-deepyaman
+
+name: cml#1228 comment --target=
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - comment-targets
+
+jobs:
+  target-pr:
+    runs-on: ubuntu-latest
+    steps: 
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - run: echo "make pr"
+      - run: echo "make create comment"
+      - run: echo "check for comment"
+      - run: echo "clean up"
+  target-commit:
+    runs-on: ubuntu-latest
+    steps: 
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - run: echo "make comment"
+      - name: comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml create commet --target=commit
+      - run: echo "check for comment"
+      - name: check
+        id: check
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          api_response=$(curl \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments)
+          
+          num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          echo "$num_comments"
+          test "$num_comments" = 1
+          comment_id=$(echo "$api_response" | jq '[].id') # comment ID
+          echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
+      - run: echo "clean up comment"
+      - id: delete
+        run: |
+          curl \
+            -X DELETE \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/comments/${{ steps.check.outputs.comment_id }}
+  target-issue:
+    runs-on: ubuntu-latest
+    steps: 
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - run: echo "make issue"
+      - run: echo "make comment"
+      - run: echo "check issue"
+      - run: echo "clean up"
+  target-neg:
+    runs-on: ubuntu-latest
+    steps: 
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - run: echo "todo"
