@@ -28,7 +28,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml create commet --target=commit
+          cml create comment --target=commit
       - run: echo "check for comment"
       - name: check
         id: check
