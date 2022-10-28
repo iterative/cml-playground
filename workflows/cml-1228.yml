@@ -2,7 +2,7 @@
 #// https://github.com/iterative/cml/pull/1241
 
 
-#define __CML_BRANCH__ internal-deepyaman
+#define __CML_BRANCH__ d009-comment-target
 
 name: cml#1228 comment --target=
 on:

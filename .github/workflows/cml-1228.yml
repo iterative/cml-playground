@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Using CML Branch internal-deepyaman
+      - name: Using CML Branch d009-comment-target
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d009-comment-target
       - run: echo "make pr"
       - run: echo "make create comment"
       - run: echo "check for comment"
@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Using CML Branch internal-deepyaman
+      - name: Using CML Branch d009-comment-target
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d009-comment-target
       - run: echo "make comment"
       - name: comment
         env:
@@ -49,9 +49,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Using CML Branch internal-deepyaman
+      - name: Using CML Branch d009-comment-target
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d009-comment-target
       - run: echo "make issue"
       - run: echo "make comment"
       - run: echo "check issue"
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Using CML Branch internal-deepyaman
+      - name: Using CML Branch d009-comment-target
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#internal-deepyaman
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d009-comment-target
       - run: echo "todo"
