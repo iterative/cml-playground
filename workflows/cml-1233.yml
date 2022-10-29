@@ -4,7 +4,7 @@ name: cml#1233 --ci-fetch depth
 on:
   workflow_dispatch:
 
-#define __CML_BRANCH__ internal-deepyaman
+#define __CML_BRANCH__ master
 
 jobs:
   unshallow:
@@ -76,3 +76,21 @@ jobs:
           count=$(git rev-list --count HEAD)
           echo "$count"
           test $count = 1
+  neg-test-2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      #include "../includes/steps/cml.yml"
+      - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml ci
+      - name: verify
+        run: |
+          count=$(git rev-list --count HEAD)
+          echo "$count"
+          test $count > 1
