@@ -4,7 +4,7 @@ name: cml#1233 --ci-fetch depth
 on:
   workflow_dispatch:
 
-#define __CML_BRANCH__ master
+#define __CML_BRANCH__ fetch-depth
 
 jobs:
   unshallow:
