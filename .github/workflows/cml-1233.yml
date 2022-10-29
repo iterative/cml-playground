@@ -93,9 +93,10 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
+          git rev-list --count HEAD
           cml ci
       - name: verify
         run: |
           count=$(git rev-list --count HEAD)
           echo "$count"
-          test $count > 1
+          test $count != 1
