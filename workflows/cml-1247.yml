@@ -18,6 +18,7 @@ jobs:
       - name: Install tensorboard
         run: |
           pip install -U tensorboard
+          pip install tensorflow
       - name: cml tensorboard connect respects TB_CREDENTIALS
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
