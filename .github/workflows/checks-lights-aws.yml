@@ -44,7 +44,7 @@ jobs:
         if: ${{ steps.lights.outputs.report }}
         uses: dacbd/create-issue-action@v1
         with:
-          token: ${{ secrets.REPO_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           title: Someone left the lights on
           body: ${{ steps.lights.outputs.report }}
           assignees: dacbd
