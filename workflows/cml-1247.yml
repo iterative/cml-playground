@@ -4,7 +4,7 @@ name: cml#1247 tensorboard launch with `TB_CREDENTIALS`
 on:
   push:
     branches:
-      - fix-env-aliases
+      - cml-1247
   workflow_dispatch:
 
 #define __CML_BRANCH__ fix-env-aliases
