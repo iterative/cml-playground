@@ -12,6 +12,9 @@ jobs:
       - name: Using CML Branch fix-env-aliases
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#fix-env-aliases
+      - name: Install tensorboard
+        run: |
+          pip install -U tensorboard
       - name: cml tensorboard connect respects TB_CREDENTIALS
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}

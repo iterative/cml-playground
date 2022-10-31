@@ -15,6 +15,9 @@ jobs:
     steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
+      - name: Install tensorboard
+        run: |
+          pip install -U tensorboard
       - name: cml tensorboard connect respects TB_CREDENTIALS
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
