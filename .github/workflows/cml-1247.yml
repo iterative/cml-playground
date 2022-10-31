@@ -17,4 +17,4 @@ jobs:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
           TB_CREDENTIALS: ${{ secrets.TB_CREDENTIALS }}
         run: |
-          cml ci --unshallow
+          cml tensorboard connect
