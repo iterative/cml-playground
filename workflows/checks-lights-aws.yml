@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 #include "../includes/token.yml"
-
+  issues: write
 jobs:
   check-lights:
     #include "../includes/environment.yml"
