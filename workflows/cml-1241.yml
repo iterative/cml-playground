@@ -1,0 +1,22 @@
+#// https://github.com/iterative/cml/pull/1173
+#// issue
+
+name: cml#1173 Custom CML comment watermarks.
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**1241.txt'
+#define __CML_BRANCH__ d009-comment-target
+env:
+   REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  #define JOB_ID custom_1
+  JOB_ID:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      #include "../includes/tests/comment/label.yml"

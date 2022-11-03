@@ -1,0 +1,27 @@
+#// jobs
+  #// jobid
+    #// steps
+      - name: Create or Update comment (auto)
+        run: |
+          echo '### This is an auto comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create ./comment.md
+      - name: Create or Update comment (auto)
+        run: |
+          echo '### This is an auto comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create ./comment.md
+      - name: Create or Update comment (commit)
+        run: |
+          echo '### This is a commit comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create --target=commit ./comment.md
+      - name: Create or Update comment (pr)
+        run: |
+          echo '### This is a pr comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create --target=pr ./comment.md
