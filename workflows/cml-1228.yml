@@ -67,6 +67,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: Target for comment testing
       - name: Create Comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo '### This is a issue comment.' > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
