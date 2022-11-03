@@ -31,7 +31,10 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml create comment --target=commit
+          echo '### This is a commit comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create --target=commit ./comment.md
       - run: echo "check for comment"
       - name: check
         id: check
