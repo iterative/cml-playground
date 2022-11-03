@@ -12,10 +12,13 @@ build() {
   printf "Checking and Building."
   for workflow in workflows/*
   do
-    current_file_hash=$(openssl md5 .github/$workflow | awk '{print $2}')
+    current_file_hash=''
+    if test -f ".github/$workflow"; then
+      current_file_hash=$(openssl md5 .github/$workflow | awk '{print $2}')
+    fi
     new_file_hash=$(cpp -nostdinc -w -P $workflow | sed '/./,$!d' | openssl md5 | awk '{print $2}')
     printf "."
-    if test $current_file_hash != $new_file_hash; then
+    if test "$current_file_hash" != "$new_file_hash"; then
       printf "\nChange detected: building $workflow > .github/$workflow\n"
       #cpp -nostdinc -P $workflow | sed '/./,$!d' > .github/$workflow
       cpp -nostdinc -w -P $workflow | sed '/./,$!d' > .github/$workflow
