@@ -43,7 +43,7 @@ jobs:
           num_comments=$(echo "$api_response" | jq '. | length') # number of comments
           echo "$num_comments"
           test "$num_comments" = 1
-          comment_id=$(echo "$api_response" | jq '[].id') # comment ID
+          comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
       - run: echo "clean up comment"
       - id: delete
