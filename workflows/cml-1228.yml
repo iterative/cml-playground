@@ -60,10 +60,40 @@ jobs:
     steps: 
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
-      - run: echo "make issue"
-      - run: echo "make comment"
-      - run: echo "check issue"
-      - run: echo "clean up"
+      - name: Create Issue
+        id: issue
+        uses: dacbd/create-issue-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Target for comment testing
+      - name: Create Comment
+        run: |
+          echo '### This is a issue comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create --target=issue#${{ steps.issue.outputs.number }} ./comment.md
+      - name: Check Comment
+        id: check
+        run: |
+          api_response=$(curl \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ steps.issue.outputs.number }}/comments")
+
+          num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          test "$num_comments" = 1
+          comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
+          echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
+      - name: Clean Up
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl \
+            -X DELETE \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/comments/${{ steps.check.outputs.comment_id }}"
+          gh issue delete ${{ steps.issue.outputs.number }} --confirm
   target-neg:
     runs-on: ubuntu-latest
     steps: 
