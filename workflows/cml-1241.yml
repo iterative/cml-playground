@@ -1,7 +1,7 @@
-#// https://github.com/iterative/cml/pull/1173
+#// https://github.com/iterative/cml/pull/1241
 #// issue
 
-name: cml#1173 Custom CML comment watermarks.
+name: cml#1241 CML comment target flag
 on:
   push:
   pull_request:
