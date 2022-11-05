@@ -1,8 +1,15 @@
 name: tpi#621 APT install lock
 on:
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
 env:
-  TEST_CML_BRANCH: master
+  TEST_CML_BRANCH: ${{ inputs.branch || 'master' }}
 permissions:
   id-token: write
   contents: write
