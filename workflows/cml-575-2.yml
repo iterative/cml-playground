@@ -5,9 +5,19 @@
 
 name: cml#575 Takes multiple jobs
 on:
+  #include "../includes/schedule.yml"
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+
+env:
+  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
 
 #include "../includes/token.yml"
+
 #//  Not strictly parallel because of GitHub Actions queuing jobs
 #//  but logicly parallel via default mechanics of GHA
 jobs:

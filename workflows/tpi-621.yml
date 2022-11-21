@@ -4,10 +4,17 @@
 
 name: tpi#621 APT install lock
 on:
+  #include "../includes/schedule.yml"
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
 
 env:
-  TEST_CML_BRANCH: master
+  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
+
 
 #include "../includes/token.yml"
 jobs:

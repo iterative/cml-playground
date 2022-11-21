@@ -1,6 +1,7 @@
 # cml-playground
 
-generate github actions cml workflows with `./build.sh`
+Generate github actions workflows with `./build.sh`
+
 
 ## List of CML examples
 - https://github.com/iterative/cml-examples-dev
@@ -13,9 +14,10 @@ generate github actions cml workflows with `./build.sh`
 - https://github.com/iterative/stale-model-example
 
 ## defintions / vars
+TODO
 
 ## File Structure
-- `examples` (WIP, build docs/demos/etc examples from here and PR to there repestive locations)
+- `examples` (WIP, build docs/demos/etc examples from here and PR to there respective locations)
 - `workflows` (tests/base for `.github/workflows`)
     - `.` workflows that run in this repo
     - `checks-*.yml` tools to make sure nothing is going wrong
