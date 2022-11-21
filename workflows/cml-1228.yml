@@ -88,14 +88,14 @@ jobs:
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
       - name: Clean Up
         env: 
-          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           curl \
             -X DELETE \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/issues/comments/${{ steps.check.outputs.comment_id }}"
-          gh issue delete ${{ steps.issue.outputs.number }} --confirm
+          gh issue close ${{ steps.issue.outputs.number }} --reason completed
   target-neg:
     runs-on: ubuntu-latest
     steps: 
