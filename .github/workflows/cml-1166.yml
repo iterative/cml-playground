@@ -31,7 +31,7 @@ jobs:
           npx serverless info
           url=$(npx serverless info | awk 'match($0, "endpoint: "){ print substr($0, RSTART + 10)}')
           echo "$url"
-          echo "::set-output name=url::$url"
+          echo "url=$url" >> $GITHUB_OUTPUT
       - uses: actions/upload-artifact@v3
         with:
           name: state
