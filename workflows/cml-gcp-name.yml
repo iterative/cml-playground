@@ -18,7 +18,7 @@ env:
   TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
 #include "../includes/token.yml"
 
-#define CML_SOURCE master
+#define CML_SOURCE gcp-name-fix
 #define TPI_SOURCE gcp-Name-alias
 
 jobs:
@@ -40,6 +40,7 @@ jobs:
             --single \
             --labels=LABEL \
             --cloud=gcp \
+            --cml-version="github:iterative/cml#gcp-name-fix" \
             --cloud-region=us-west \
             --cloud-metadata="notname=test3" \
             --cloud-type=c2-standard-4
