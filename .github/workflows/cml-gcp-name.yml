@@ -39,7 +39,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-name-test --cloud=gcp --cloud-region=us-west --cloud-metadata="name=test" --cloud-type=c2-standard-4
+          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-name-test --cloud=gcp --cloud-region=us-west --cloud-metadata="Name=test2" --cloud-type=c2-standard-4
   test-gcp-name:
     needs: [gcp-name]
     runs-on: [self-hosted, gcp-name-test]
