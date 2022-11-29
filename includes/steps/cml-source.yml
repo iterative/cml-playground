@@ -48,5 +48,5 @@
         run: |
           pushd tpi
           make build
-          make install_tpi
+          make install-tpi
       #endif

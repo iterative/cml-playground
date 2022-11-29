@@ -65,7 +65,7 @@ jobs:
         run: |
           pushd tpi
           make build
-          make install_tpi
+          make install-tpi
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'
         with:

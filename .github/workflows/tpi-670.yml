@@ -59,7 +59,7 @@ jobs:
         run: |
           pushd tpi
           make build
-          make install_tpi
+          make install-tpi
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
@@ -127,7 +127,7 @@ jobs:
         run: |
           pushd tpi
           make build
-          make install_tpi
+          make install-tpi
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
