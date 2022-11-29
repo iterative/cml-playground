@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: iterative/cml
-          ref: true
+          ref: master
           path: cml
       - name: CML deps
         run: |

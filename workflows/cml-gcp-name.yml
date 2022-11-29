@@ -18,7 +18,7 @@ env:
   TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
 #include "../includes/token.yml"
 
-#define CML_SOURCE true
+#define CML_SOURCE master
 #define TPI_SOURCE gcp-Name-alias
 
 jobs:
