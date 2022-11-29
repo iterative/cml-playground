@@ -35,12 +35,13 @@ jobs:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml runner \
+            --name test \
             __SSH_KEYS__ \
             --single \
             --labels=LABEL \
             --cloud=gcp \
             --cloud-region=us-west \
-            --cloud-metadata="Name=test3" \
+            --cloud-metadata="notname=test3" \
             --cloud-type=c2-standard-4
 
   #include "../includes/tests/on-test.yml"
