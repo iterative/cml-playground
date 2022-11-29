@@ -22,15 +22,50 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Test a CML Branch
-        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
-        run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
-      - name: Standard CML setup
-        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
-        uses: iterative/setup-cml@v1
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+          node-version: 16
+      - name: Clone CML
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/cml
+          ref: true
+          path: cml
+      - name: CML deps
+        run: |
+          pushd cml
+          npm ci
+          popd
+      - name: Hack cml for local tpi
+        run: |
+          pushd cml
+          sed -i "s/source: 'iterative\/iterative',/source: 'github.com\/iterative\/iterative'/g" src/terraform.js
+          sed -i "/...(tpiVersion && { version: tpiVersion })/d" src/terraform.js
+          popd
+      - name: Install CML
+        run: |
+          pushd cml
+          npm install -g .
+          popd
+      - name: Install misc CML tooling
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.18.0
+      - name: Clone TPI
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/terraform-provider-iterative
+          ref: gcp-Name-alias
+          path: tpi
+      - name: Build/Install TPI
+        run: |
+          pushd tpi
+          make build
+          make install_tpi
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'
         with:
