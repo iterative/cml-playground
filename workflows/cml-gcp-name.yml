@@ -33,12 +33,11 @@ jobs:
         run: |
           cml runner \
             __SSH_KEYS__ \
-            --name test2 \
             --single \
             --labels=LABEL \
             --cloud=gcp \
             --cloud-region=us-west \
-            --cloud-metadata="name=test2" \
+            --cloud-metadata="Name=test3" \
             --cloud-type=c2-standard-4
 
   #include "../includes/tests/on-test.yml"
