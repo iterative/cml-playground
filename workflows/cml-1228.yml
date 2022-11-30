@@ -10,13 +10,12 @@ on:
   push:
     branches:
       - comment-targets
-
+  pull_request:
 jobs:
   #define __PULL_REQUEST__ true
   target-pr-legacy:
     name: Legacy --pr flag
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
@@ -53,7 +52,6 @@ jobs:
   target-pr:
     name: Using --target=pr flag
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"

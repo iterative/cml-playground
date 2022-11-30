@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - comment-targets
+  pull_request:
 jobs:
   target-pr-legacy:
     name: Legacy --pr flag
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -42,7 +42,6 @@ jobs:
   target-pr:
     name: Using --target=pr flag
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
       - name: Using CML Branch feature-comment-target
