@@ -21,7 +21,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo '### This is a PR comment.' > ./comment.md
+          echo '### This is a legacy PR comment.' > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
           cml comment create --pr ./comment.md
@@ -32,6 +32,7 @@ jobs:
         run: |
           api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/comments")
           num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          echo "comment count: ${num_comments}"
           test "$num_comments" = 1
           comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
@@ -62,6 +63,7 @@ jobs:
         run: |
           api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/comments")
           num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          echo "comment count: ${num_comments}"
           test "$num_comments" = 1
           comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
@@ -94,6 +96,7 @@ jobs:
         run: |
           api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/comments")
           num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          echo "comment count: ${num_comments}"
           test "$num_comments" = 1
           comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT

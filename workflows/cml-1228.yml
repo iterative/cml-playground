@@ -37,6 +37,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/comments")
           num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          echo "comment count: ${num_comments}"
           test "$num_comments" = 1
           comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
@@ -73,6 +74,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/comments")
           num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          echo "comment count: ${num_comments}"
           test "$num_comments" = 1
           comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
@@ -110,6 +112,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/comments")
           num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          echo "comment count: ${num_comments}"
           test "$num_comments" = 1
           comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
