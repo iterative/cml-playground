@@ -54,7 +54,7 @@ jobs:
           echo '### This is a PR comment.' > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
-          cml comment create --target=PR ./comment.md
+          cml comment create --target=pr ./comment.md
       - name: Check
         id: check
         env:
@@ -86,7 +86,7 @@ jobs:
           echo "### This is a PR comment for ${PR_NUMBER}." > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
-          cml comment create --target=PR\#${PR_NUMBER} ./comment.md
+          cml comment create --target=pr\#${PR_NUMBER} ./comment.md
       - name: Check
         id: check
         env:
@@ -136,6 +136,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
       - name: Using CML Branch feature-comment-target
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#feature-comment-target
