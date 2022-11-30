@@ -23,7 +23,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo '### This is a PR comment.' > ./comment.md
+          echo '### This is a legacy PR comment.' > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
           cml comment create --pr ./comment.md
