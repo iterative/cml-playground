@@ -39,7 +39,7 @@ jobs:
             report="${report//'%'/'%25'}"
             report="${report//$'\n'/'%0A'}"
             report="${report//$'\r'/'%0D'}"
-            echo "::set-output name=report::$report"
+            echo "report=$report" >> $GITHUB_OUTPUT
           fi
       - name: Send Notification
         if: ${{ steps.lights.outputs.report }}

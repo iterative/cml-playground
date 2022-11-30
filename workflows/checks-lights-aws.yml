@@ -14,7 +14,7 @@ jobs:
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
-          aws-region: us-east-1 
+          aws-region: us-east-1
       - name: Check the lights
         id: lights
         run: |
@@ -38,7 +38,7 @@ jobs:
             report="${report//'%'/'%25'}"
             report="${report//$'\n'/'%0A'}"
             report="${report//$'\r'/'%0D'}"
-            echo "::set-output name=report::$report"
+            echo "report=$report" >> $GITHUB_OUTPUT
           fi
       - name: Send Notification
         if: ${{ steps.lights.outputs.report }}
