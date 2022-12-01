@@ -34,10 +34,8 @@ jobs:
           done
           if [[ -e ./report.md ]]; then
             report=$(cat ./report.md)
-            #// https://github.com/orgs/community/discussions/26288
-            #// report="${report//'%'/'%25'}"
-            #// report="${report//$'\n'/'%0A'}"
-            #// report="${report//$'\r'/'%0D'}"
+            #// https://github.com/orgs/community/discussions/26288#discussioncomment-3876281
+            #// https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
             delim="$(openssl rand -hex 8)"
             echo "report<<${delim}" >> $GITHUB_OUTPUT
             echo "${report}" >> $GITHUB_OUTPUT
