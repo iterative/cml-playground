@@ -18,6 +18,7 @@ jobs:
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#feature-comment-target
       - name: Comment
+        id: comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -54,6 +55,7 @@ jobs:
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#feature-comment-target
       - name: Comment
+        id: comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -91,6 +93,7 @@ jobs:
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#feature-comment-target
       - name: Comment
+        id: comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{github.event.number}}

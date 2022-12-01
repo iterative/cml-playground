@@ -20,6 +20,7 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
       - name: Comment
+        id: comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -62,6 +63,7 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
       - name: Comment
+        id: comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -104,6 +106,7 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
       - name: Comment
+        id: comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{github.event.number}}
