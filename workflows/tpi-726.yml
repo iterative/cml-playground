@@ -40,7 +40,7 @@ jobs:
             --single \
             --labels=LABEL \
             --cloud=gcp \
-            --cloud-region=us-west-1a \
+            --cloud-region=us-west-1c \
             --cloud-metadata="notname=test3" \
             --cloud-type=e2-highcpu-2 
 
@@ -66,7 +66,7 @@ jobs:
             --single \
             --labels=LABEL \
             --cloud=gcp \
-            --cloud-region=us-west-1a \
+            --cloud-region=us-west-1c \
             --cloud-metadata="notname=test3" \
             --cloud-type=e2-highcpu-2 
 
