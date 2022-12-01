@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: iterative/cml
-          ref: gcp-name-fix
+          ref: master
           path: cml
       - name: CML deps
         run: |
@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: iterative/terraform-provider-iterative
-          ref: gcp-Name-alias
+          ref: human-readable-names
           path: tpi
       - name: Build/Install TPI
         run: |
@@ -74,10 +74,77 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --name test --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-name-test --cloud=gcp --cml-version="github:iterative/cml#gcp-name-fix" --cloud-region=us-west --cloud-metadata="notname=test3" --cloud-type=c2-standard-4
+          cml runner --name test --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-name-test --cloud=gcp --cloud-region=us-west --cloud-metadata="notname=test3" --cloud-type=c2-standard-4
   test-gcp-name:
     needs: [gcp-name]
     runs-on: [self-hosted, gcp-name-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+      - run: sleep 180
+  gcp-name_neg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Clone CML
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/cml
+          ref: master
+          path: cml
+      - name: CML deps
+        run: |
+          pushd cml
+          npm ci
+          popd
+      - name: Hack cml for local tpi
+        run: |
+          pushd cml
+          sed -i "s/source: 'iterative\/iterative',/source: 'github.com\/iterative\/iterative'/g" src/terraform.js
+          sed -i "/...(tpiVersion && { version: tpiVersion })/d" src/terraform.js
+          popd
+      - name: Install CML
+        run: |
+          pushd cml
+          npm install -g .
+          popd
+      - name: Install misc CML tooling
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.18.0
+      - name: Clone TPI
+        uses: actions/checkout@v3
+        with:
+          repository: iterative/terraform-provider-iterative
+          ref: human-readable-names
+          path: tpi
+      - name: Build/Install TPI
+        run: |
+          pushd tpi
+          make build
+          make install-tpi
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: ${{ secrets.GCP_CML_RUNNER_KEY }}
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-name_neg-test --cloud=gcp --cloud-region=us-west --cloud-metadata="notname=test3" --cloud-type=c2-standard-4
+  test-gcp-name_neg:
+    needs: [gcp-name_neg]
+    runs-on: [self-hosted, gcp-name_neg-test]
     steps:
       - uses: actions/checkout@v3
       - name: CML Version Test

@@ -18,8 +18,8 @@ env:
   TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
 #include "../includes/token.yml"
 
-#define CML_SOURCE gcp-name-fix
-#define TPI_SOURCE gcp-Name-alias
+#define CML_SOURCE master
+#define TPI_SOURCE human-readable-names
 
 jobs:
   #define JOB_ID gcp-name
@@ -40,7 +40,32 @@ jobs:
             --single \
             --labels=LABEL \
             --cloud=gcp \
-            --cml-version="github:iterative/cml#gcp-name-fix" \
+            --cloud-region=us-west \
+            --cloud-metadata="notname=test3" \
+            --cloud-type=c2-standard-4
+
+  #include "../includes/tests/on-test.yml"
+    #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+      - run: sleep 180
+  #define JOB_ID gcp-name_neg
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/gcp/auth-key.yml"
+      #// user's example
+      #// https://cloud.google.com/compute/docs/general-purpose-machines#n1-high-memory
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            __SSH_KEYS__ \
+            --single \
+            --labels=LABEL \
+            --cloud=gcp \
             --cloud-region=us-west \
             --cloud-metadata="notname=test3" \
             --cloud-type=c2-standard-4
