@@ -36,7 +36,10 @@ jobs:
           done
           if [[ -e ./report.md ]]; then
             report=$(cat ./report.md)
-            echo "report=$report" >> $GITHUB_OUTPUT
+            delim="$(openssl rand -hex 8)"
+            echo "report<<${delim}" >> $GITHUB_OUTPUT
+            echo "${report}" >> $GITHUB_OUTPUT
+            echo "${delim}" >> $GITHUB_OUTPUT
           fi
       - name: Send Notification
         if: ${{ steps.lights.outputs.report }}
