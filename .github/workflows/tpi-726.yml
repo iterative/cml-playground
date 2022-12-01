@@ -1,4 +1,4 @@
-name: cml gcp name
+name: tpi#726/cml human readable Ids
 on:
   schedule:
     - cron: '45 14 * * 1' # Mondays 1445 UTC
@@ -74,7 +74,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --name test --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-name-test --cloud=gcp --cloud-region=us-west --cloud-metadata="notname=test3" --cloud-type=e2-highcpu-2
+          cml runner --name test --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-name-test --cloud=gcp --cloud-region=us-west-1a --cloud-metadata="notname=test3" --cloud-type=e2-highcpu-2
   test-gcp-name:
     needs: [gcp-name]
     runs-on: [self-hosted, gcp-name-test]
@@ -141,7 +141,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-name_neg-test --cloud=gcp --cloud-region=us-west --cloud-metadata="notname=test3" --cloud-type=e2-highcpu-2
+          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-name_neg-test --cloud=gcp --cloud-region=us-west-1a --cloud-metadata="notname=test3" --cloud-type=e2-highcpu-2
   test-gcp-name_neg:
     needs: [gcp-name_neg]
     runs-on: [self-hosted, gcp-name_neg-test]

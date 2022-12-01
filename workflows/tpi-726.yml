@@ -1,7 +1,7 @@
-#// https://github.com/iterative/cml/issues/1048
-#// https://github.com/iterative/cml/pull/1049
+#// https://github.com/iterative/terraform-provider-iterative/pull/726 
+#// https://iterativeai.slack.com/archives/C01900GSB4J/p1669753951467269?thread_ts=1669753212.337149&cid=C01900GSB4J
 #include "../includes/common_defines.yml"
-name: cml gcp name
+name: tpi#726/cml human readable Ids
 on:
   #include "../includes/schedule.yml"
   push:
@@ -40,7 +40,7 @@ jobs:
             --single \
             --labels=LABEL \
             --cloud=gcp \
-            --cloud-region=us-west \
+            --cloud-region=us-west-1a \
             --cloud-metadata="notname=test3" \
             --cloud-type=e2-highcpu-2 
 
@@ -66,7 +66,7 @@ jobs:
             --single \
             --labels=LABEL \
             --cloud=gcp \
-            --cloud-region=us-west \
+            --cloud-region=us-west-1a \
             --cloud-metadata="notname=test3" \
             --cloud-type=e2-highcpu-2 
 
