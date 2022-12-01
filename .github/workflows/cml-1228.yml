@@ -9,6 +9,7 @@ jobs:
   target-pr-legacy:
     name: Legacy --pr flag
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -36,7 +37,7 @@ jobs:
         run: |
           uuid="${{ steps.comment.outputs.uuid }}"
           api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
-          comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(${uuid}) | .id")
+          comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(\"${uuid}\")) | .id")
           num_comments=$(echo "$comment_ids" | wc -l) # number of comments
           echo "comment count: ${num_comments}"
           test "$num_comments" = 1
@@ -49,6 +50,7 @@ jobs:
   target-pr:
     name: Using --target=pr flag
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
       - name: Using CML Branch feature-comment-target
@@ -73,7 +75,7 @@ jobs:
         run: |
           uuid="${{ steps.comment.outputs.uuid }}"
           api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
-          comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(${uuid}) | .id")
+          comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(\"${uuid}\")) | .id")
           num_comments=$(echo "$comment_ids" | wc -l) # number of comments
           echo "comment count: ${num_comments}"
           test "$num_comments" = 1
@@ -112,7 +114,7 @@ jobs:
         run: |
           uuid="${{ steps.comment.outputs.uuid }}"
           api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
-          comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(${uuid}) | .id")
+          comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(\"${uuid}\")) | .id")
           num_comments=$(echo "$comment_ids" | wc -l) # number of comments
           echo "comment count: ${num_comments}"
           test "$num_comments" = 1
