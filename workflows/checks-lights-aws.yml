@@ -35,9 +35,9 @@ jobs:
           if [[ -e ./report.md ]]; then
             report=$(cat ./report.md)
             #// https://github.com/orgs/community/discussions/26288
-            report="${report//'%'/'%25'}"
-            report="${report//$'\n'/'%0A'}"
-            report="${report//$'\r'/'%0D'}"
+            #// report="${report//'%'/'%25'}"
+            #// report="${report//$'\n'/'%0A'}"
+            #// report="${report//$'\r'/'%0D'}"
             echo "report=$report" >> $GITHUB_OUTPUT
           fi
       - name: Send Notification
