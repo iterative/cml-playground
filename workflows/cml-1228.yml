@@ -26,20 +26,25 @@ jobs:
           echo '### This is a legacy PR comment.' > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
+          uuid=$(uuidgen) # Mark the comment with a unique identifier.
+          echo "uuid=${uuid}" >> $GITHUB_OUTPUT
+          echo "${uuid}" >> ./comment.md
           cml comment create --pr ./comment.md
       - name: Check
         id: check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          uuid="${{ steps.comment.outputs.uuid }}"
           api_response=$(curl \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/comments")
-          num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
+          comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(${uuid}) | .id")
+          num_comments=$(echo "$comment_ids" | wc -l) # number of comments
           echo "comment count: ${num_comments}"
           test "$num_comments" = 1
-          comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
+          comment_id=$(echo "$comment_ids" | head -1) # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
       - name: Clean up
         id: delete
@@ -63,20 +68,25 @@ jobs:
           echo '### This is a PR comment.' > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
+          uuid=$(uuidgen) # Mark the comment with a unique identifier.
+          echo "uuid=${uuid}" >> $GITHUB_OUTPUT
+          echo "${uuid}" >> ./comment.md
           cml comment create --target=pr ./comment.md
       - name: Check
         id: check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          uuid="${{ steps.comment.outputs.uuid }}"
           api_response=$(curl \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/comments")
-          num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
+          comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(${uuid}) | .id")
+          num_comments=$(echo "$comment_ids" | wc -l) # number of comments
           echo "comment count: ${num_comments}"
           test "$num_comments" = 1
-          comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
+          comment_id=$(echo "$comment_ids" | head -1) # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
       - name: Clean up
         id: delete
@@ -101,20 +111,25 @@ jobs:
           echo "### This is a PR comment for ${PR_NUMBER}." > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
+          uuid=$(uuidgen) # Mark the comment with a unique identifier.
+          echo "uuid=${uuid}" >> $GITHUB_OUTPUT
+          echo "${uuid}" >> ./comment.md
           cml comment create --target=pr\#${PR_NUMBER} ./comment.md
       - name: Check
         id: check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          uuid="${{ steps.comment.outputs.uuid }}"
           api_response=$(curl \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/comments")
-          num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
+          comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(${uuid}) | .id")
+          num_comments=$(echo "$comment_ids" | wc -l) # number of comments
           echo "comment count: ${num_comments}"
           test "$num_comments" = 1
-          comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
+          comment_id=$(echo "$comment_ids" | head -1) # comment ID
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
       - name: Clean up
         id: delete
