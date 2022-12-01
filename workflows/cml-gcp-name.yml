@@ -42,7 +42,7 @@ jobs:
             --cloud=gcp \
             --cloud-region=us-west \
             --cloud-metadata="notname=test3" \
-            --cloud-type=c2-standard-4
+            --cloud-type=e2-highcpu-2 
 
   #include "../includes/tests/on-test.yml"
     #// steps:
@@ -68,7 +68,7 @@ jobs:
             --cloud=gcp \
             --cloud-region=us-west \
             --cloud-metadata="notname=test3" \
-            --cloud-type=c2-standard-4
+            --cloud-type=e2-highcpu-2 
 
   #include "../includes/tests/on-test.yml"
     #// steps:
