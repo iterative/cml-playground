@@ -15,6 +15,7 @@ jobs:
   is-published:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         distribution: [binary, image, package]
         include:
