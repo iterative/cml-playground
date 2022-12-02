@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distribution: [binary, image, package]
+        distribution: [binary, container, package, action]
         include:
           - distribution: binary
             version: "curl --location https://github.com/iterative/cml/releases/latest/download/cml-linux-x64 --output cml && chmod a+x cml && ./cml --version"
@@ -24,7 +24,12 @@ jobs:
             version: docker run --interactive ghcr.io/iterative/cml --version
           - distribution: package
             version: npx --yes @dvcorg/cml --version
+          - distribution: action
+            version: cml --version
     steps:
+      - name: Setup CML
+        if: ${{ matrix.distribution == "action" }}
+        uses: iterative/setup-cml@v1
       - name: Check release artifacts
         run: |
           version="v$(${{ matrix.version }})"
