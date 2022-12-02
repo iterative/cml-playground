@@ -147,9 +147,19 @@ jobs:
   target-commit:
     name: Using --target=commit
     runs-on: ubuntu-latest
+    env:
+      REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
+      - name: Determine commit sha
+        id: commitsha
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo commit_sha="${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
+          else
+            echo commit_sha="${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
       - name: Comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -166,7 +176,7 @@ jobs:
           api_response=$(curl \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments")
+            "https://api.github.com/repos/${{ github.repository }}/commits/${{ steps.commitsha.outputs.commit_sha }}/comments")
           num_comments=$(echo "$api_response" | jq '. | length') # number of comments
           echo "comment count: ${num_comments}"
           test "$num_comments" = 1
