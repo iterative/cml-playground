@@ -15,6 +15,10 @@ jobs:
     steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
+      - name: Run cml ci
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cml ci
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
@@ -30,6 +34,10 @@ jobs:
     steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
+      - name: Run cml ci
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cml ci
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
