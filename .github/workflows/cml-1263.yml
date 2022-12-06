@@ -14,6 +14,7 @@ jobs:
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
+          git diff
       - name: CML PR
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,9 +30,11 @@ jobs:
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
+          git diff
       - name: Create Manual commit
         run: |
           git commit -am "cml#1263 test commit"
+          git status
       - name: CML PR
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
