@@ -25,6 +25,8 @@ jobs:
           cml pr create
   #define JOB_ID pr-commit-made
   JOB_ID:
+    runs-on: ubuntu-latest
+    steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
       - name: Modifiy file for PR

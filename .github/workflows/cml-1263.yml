@@ -20,6 +20,8 @@ jobs:
         run: |
           cml pr create
   pr-commit-made:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
       - name: Using CML Branch revert-revert
         run: |
