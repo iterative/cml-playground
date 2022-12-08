@@ -21,8 +21,8 @@ jobs:
           git diff
       - name: run unset twice error
         run: |
-          git config --unset http.https:
-          git config --unset http.https:
+          git config --unset "http.https://github.com/.extraheader"
+          git config --unset "http.https://github.com/.extraheader"
       - name: Create Manual commit
         run: |
           git commit -am "cml#1263 test commit"
