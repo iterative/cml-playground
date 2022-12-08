@@ -14,15 +14,14 @@ jobs:
       - name: Run cml ci
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: cml ci
+        run: |
+          git config --get http
+          cml ci
+          git config --get http
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
           git diff
-      - name: run unset twice error
-        run: |
-          git config --unset "http.https://github.com/.extraheader"
-          git config --unset "http.https://github.com/.extraheader"
       - name: Create Manual commit
         run: |
           git commit -am "cml#1263 test commit"
