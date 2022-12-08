@@ -11,10 +11,6 @@ jobs:
       - name: Using CML Branch revert-revert
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#revert-revert
-      - name: Run cml ci
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: cml ci
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
