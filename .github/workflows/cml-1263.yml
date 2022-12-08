@@ -15,13 +15,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --list
-          echo "*******"
-          git config --get "http.https://github.com/.extraheader"
-          echo "*******"
           cml ci
-          echo "*******"
-          git config --list
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
@@ -35,3 +29,19 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cml pr create
+  neg-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Using CML Branch revert-revert
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#revert-revert
+      - name: Modifiy file for PR
+        run: |
+          echo "$(date +%s%N) - pr cml#1263" >> cml.log
+          git diff
+      - name: CML PR
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr create --branch="test-${{ github.run_id }}" .

@@ -19,14 +19,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --list
-          echo "*******"
-          git config --get "http.https://github.com/.extraheader"
-          echo "*******"
           cml ci
-          echo "*******"
-          git config --list
-
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
@@ -40,3 +33,18 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cml pr create
+  #define JOB_ID neg-test
+  JOB_ID:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      - name: Modifiy file for PR
+        run: |
+          echo "$(date +%s%N) - pr cml#1263" >> cml.log
+          git diff
+      - name: CML PR
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr create --branch="test-${{ github.run_id }}" .
