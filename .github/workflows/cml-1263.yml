@@ -19,6 +19,10 @@ jobs:
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
           git diff
+      - name: run unset twice error
+        run: |
+          git config --unset http.https:
+          git config --unset http.https:
       - name: Create Manual commit
         run: |
           git commit -am "cml#1263 test commit"
