@@ -15,9 +15,9 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --get http
+          git config --get http.https
           cml ci
-          git config --get http
+          git config --get http.https
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
