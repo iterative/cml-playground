@@ -16,7 +16,9 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --list
-          ## git config --get "http.https://github.com/.extraheader"
+          echo "*******"
+          git config --get "http.https://github.com/.extraheader"
+          echo "*******"
           cml ci
           git config --list
       - name: Modifiy file for PR
