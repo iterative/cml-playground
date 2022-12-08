@@ -24,7 +24,8 @@ jobs:
           git config --get "http.https://github.com/.extraheader"
           echo "*******"
           cml ci
-          git config --list
+          echo "*******"
+          git config --get "http.https://github.com/.extraheader"
       - name: Modifiy file for PR
         run: |
           echo "$(date +%s%N) - pr cml#1263" >> cml.log
