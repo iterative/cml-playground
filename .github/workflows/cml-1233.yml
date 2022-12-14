@@ -109,7 +109,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: main
           fetch-depth: 0
       - name: Using CML Branch cml-ci-tags
         run: |

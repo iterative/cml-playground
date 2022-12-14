@@ -105,7 +105,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: main
           fetch-depth: 0
       #include "../includes/steps/cml.yml"
       - name: cml ci fetch-depth
