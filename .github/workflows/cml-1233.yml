@@ -123,4 +123,4 @@ jobs:
         run: |
           git fetch --all --tags --depth=3
           git rev-list --count HEAD
-          git tags --list
+          git tag --list
