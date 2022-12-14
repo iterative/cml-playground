@@ -124,3 +124,4 @@ jobs:
           git fetch --all --tags --depth=3
           git rev-list --count HEAD
           git tag --list
+          git checkout test-tag
