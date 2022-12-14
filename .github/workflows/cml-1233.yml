@@ -22,7 +22,7 @@ jobs:
           echo "$count"
           test $count != 1
           tags=$(git tag --list)
-          test $tags != ""
+          test -n "$tags"
   test:
     runs-on: ubuntu-latest
     steps:
@@ -82,7 +82,7 @@ jobs:
           echo "$count"
           test $count = 1
           tags=$(git tag --list)
-          test $tags = ""
+          test -z "$tags"
   neg-test-2:
     runs-on: ubuntu-latest
     steps:
