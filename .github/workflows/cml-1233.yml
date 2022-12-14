@@ -104,3 +104,24 @@ jobs:
           count=$(git rev-list --count HEAD)
           echo "$count"
           test $count != 1
+  temp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Using CML Branch cml-ci-tags
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#cml-ci-tags
+      - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          git rev-list --count HEAD
+          cml ci
+      - name: verify
+        run: |
+          git fetch --all --tags --depth=3
+          git rev-list --count HEAD
+          git tags --list

@@ -100,3 +100,23 @@ jobs:
           count=$(git rev-list --count HEAD)
           echo "$count"
           test $count != 1
+  temp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      #include "../includes/steps/cml.yml"
+      - name: cml ci fetch-depth
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          git rev-list --count HEAD
+          cml ci
+      - name: verify
+        run: |
+          git fetch --all --tags --depth=3
+          git rev-list --count HEAD
+          git tags --list
+
