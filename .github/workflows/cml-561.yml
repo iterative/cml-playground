@@ -20,7 +20,7 @@ jobs:
           sudo apt install fuse s3fs
       - run: |
           tee "$(mktemp)" <<< "$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" > /dev/null
-          s3fs -o passwd_file="$_" "$AWS_S3_BUCKET" /path/to/mountpoint 
+          s3fs -o passwd_file="$_" "$AWS_S3_BUCKET" /mnt
         env:
           AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
@@ -36,7 +36,7 @@ jobs:
       - run: |
           sudo apt install fuse blobfuse
       - run: |
-          blobfuse --tmp-path="$(mktemp --directory)" --container-name="$AZURE_STORAGE_CONTAINER" /path/to/moun
+          blobfuse --tmp-path="$(mktemp --directory)" --container-name="$AZURE_STORAGE_CONTAINER" /mnt
         env:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           AZURE_STORAGE_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCESS_KEY }}
