@@ -61,5 +61,5 @@ jobs:
           printenv GOOGLE_APPLICATION_CREDENTIALS_DATA > "$GOOGLE_APPLICATION_CREDENTIALS"
           sudo -E gcsfuse "$GOOGLE_CLOUD_STORAGE_BUCKET" /mnt/objects
         env:
-          GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GCP_KEY }}
+          GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GCP_CML_RUNNER_KEY }}
           GOOGLE_CLOUD_STORAGE_BUCKET: iterative-images
