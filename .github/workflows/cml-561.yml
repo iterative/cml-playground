@@ -40,11 +40,11 @@ jobs:
       - run: |
           sudo mkdir /mnt/objects
       - run: |
-          sudo blobfuse2 --tmp-path="$(mktemp --directory)" --container-name="$AZURE_STORAGE_CONTAINER" /mnt/objects
+          sudo -E blobfuse2 --tmp-path="$(mktemp --directory)"  /mnt/objects
         env:
           AZURE_STORAGE_ACCOUNT: dvctemp
+          AZURE_STORAGE_ACCOUNT_CONTAINER: dvc-temp
           AZURE_STORAGE_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCESS_KEY }}
-          AZURE_STORAGE_CONTAINER: dvc-temp
   gcp:
     runs-on: ubuntu-latest
     steps:
