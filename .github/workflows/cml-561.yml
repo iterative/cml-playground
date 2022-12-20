@@ -19,7 +19,7 @@ jobs:
       - run: |
           sudo apt install fuse s3fs
       - run: |
-          mkdir /mnt/objects
+          sudo mkdir /mnt/objects
       - run: |
           tee "$(mktemp)" <<< "$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" > /dev/null
           sudo s3fs -o passwd_file="$_" "$AWS_S3_BUCKET" /mnt/objects
@@ -38,7 +38,7 @@ jobs:
       - run: |
           sudo apt install fuse blobfuse
       - run: |
-          mkdir /mnt/objects
+          sudo mkdir /mnt/objects
       - run: |
           blobfuse --tmp-path="$(mktemp --directory)" --container-name="$AZURE_STORAGE_CONTAINER" /mnt/objects
         env:
@@ -55,11 +55,11 @@ jobs:
       - run: |
           sudo apt-get install fuse gcsfuse
       - run: |
-          mkdir /mnt/objects
+          sudo mkdir /mnt/objects
       - run: |
           export GOOGLE_APPLICATION_CREDENTIALS="$(mktemp)"
           printenv GOOGLE_APPLICATION_CREDENTIALS_DATA > "$GOOGLE_APPLICATION_CREDENTIALS"
-          gcsfuse "$GOOGLE_CLOUD_STORAGE_BUCKET" /mnt/objects
+          sudo gcsfuse "$GOOGLE_CLOUD_STORAGE_BUCKET" /mnt/objects
         env:
           GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GCP_KEY }}
           GOOGLE_CLOUD_STORAGE_BUCKET: mybucket
