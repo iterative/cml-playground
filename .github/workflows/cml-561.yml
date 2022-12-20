@@ -36,11 +36,11 @@ jobs:
           rm /tmp/packages-microsoft-prod.deb
           sudo apt update
       - run: |
-          sudo apt install fuse blobfuse2
+          sudo apt install fuse3 blobfuse2
       - run: |
           sudo mkdir /mnt/objects
       - run: |
-          sudo blobfuse --tmp-path="$(mktemp --directory)" --container-name="$AZURE_STORAGE_CONTAINER" /mnt/objects
+          sudo blobfuse2 --tmp-path="$(mktemp --directory)" --container-name="$AZURE_STORAGE_CONTAINER" /mnt/objects
         env:
           AZURE_STORAGE_ACCOUNT: dvctemp
           AZURE_STORAGE_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCESS_KEY }}
