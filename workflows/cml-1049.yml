@@ -44,3 +44,4 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/tests/cml-version.yml"
       #include "../includes/tests/nvidia.yml"
+      #include "../includes/tests/spin.yml"

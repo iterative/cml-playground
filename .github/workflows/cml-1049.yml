@@ -49,3 +49,9 @@ jobs:
       - name: Nvidia drivers
         run: |
           nvidia-smi
+      - name: Do work
+        run: |
+          echo "work for 30"
+          timeout 30s bash -c 'md5sum /dev/zero'
+          echo "work for 30"
+          timeout 30s bash -c 'md5sum /dev/zero'
