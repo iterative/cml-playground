@@ -89,6 +89,7 @@ jobs:
           echo "comment count: ${num_comments}"
           test "$num_comments" = 1
           comment_id=$(echo "$comment_ids" | head -1) # comment ID
+          echo "comment_id = $comment_id"
           echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
       - name: Clean up
         id: delete
