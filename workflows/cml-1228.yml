@@ -2,14 +2,10 @@
 #// https://github.com/iterative/cml/pull/1241
 
 
-#define __CML_BRANCH__ master
 
 name: cml#1228 comment --target=
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - comment-targets
   pull_request:
 jobs:
   #define __PULL_REQUEST__ true
@@ -101,7 +97,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/comments/${{ steps.check.outputs.comment_id }}"
   target-pr-number:
-    name: Using --target=pr#<num>
+    name: Using --target=pr/<num>
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
@@ -192,7 +188,7 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/comments/${{ steps.check.outputs.comment_id }}"
   target-commit-sha:
   #define __PULL_REQUEST__ true
-    name: Using --target=commit#<sha>
+    name: Using --target=commit/<sha>
     runs-on: ubuntu-latest
     steps:
       #include "../includes/steps/base-checkout.yml"
@@ -229,7 +225,7 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/comments/${{ steps.check.outputs.comment_id }}"
   #undef __PULL_REQUEST__
   target-issue:
-    name: Using --target=issue#<num>
+    name: Using --target=issue/<num>
     runs-on: ubuntu-latest
     steps:
       #include "../includes/steps/base-checkout.yml"
