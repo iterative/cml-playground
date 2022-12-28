@@ -85,7 +85,7 @@ jobs:
           uuid="${{ steps.comment.outputs.uuid }}"
           api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
           comment_ids=$(echo "$api_response" | jq ".[] | select(.body | contains(\"${uuid}\")) | .id")
-          echo "$api_response" jq ".[].body"
+          echo "$api_response" | jq ".[].body"
           echo "$comment_ids"
           num_comments=$(echo "$comment_ids" | wc -l) # number of comments
           echo "comment count: ${num_comments}"
