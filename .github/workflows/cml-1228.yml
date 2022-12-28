@@ -106,7 +106,7 @@ jobs:
           uuid=$(uuidgen) # Mark the comment with a unique identifier.
           echo "uuid=${uuid}" >> $GITHUB_OUTPUT
           echo "${uuid}" >> ./comment.md
-          cml comment create --target=pr\#${PR_NUMBER} ./comment.md
+          cml comment create --target=pr/${PR_NUMBER} ./comment.md
       - name: Check
         id: check
         env:
@@ -184,7 +184,7 @@ jobs:
           echo "### This is a commit comment for ${COMMIT_SHA}." > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
-          cml comment create --target=commit\#${COMMIT_SHA} ./comment.md
+          cml comment create --target=commit/${COMMIT_SHA} ./comment.md
       - name: Check
         id: check
         env:
@@ -220,7 +220,7 @@ jobs:
           echo '### This is a issue comment.' > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
-          cml comment create --target=issue#${{ steps.issue.outputs.number }} ./comment.md
+          cml comment create --target=issue/${{ steps.issue.outputs.number }} ./comment.md
       - name: Check Comment
         id: check
         run: |
