@@ -1,0 +1,295 @@
+name: cml#1228 comment --target=
+on:
+  workflow_dispatch:
+  pull_request:
+jobs:
+  target-pr-legacy:
+    name: Legacy --pr flag
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - name: Comment
+        id: comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo '### This is a legacy PR comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          uuid=$(uuidgen) # Mark the comment with a unique identifier.
+          echo "uuid=${uuid}" >> $GITHUB_OUTPUT
+          echo "${uuid}" >> ./comment.md
+          cml comment create --pr ./comment.md
+      - name: Check
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          uuid="${{ steps.comment.outputs.uuid }}"
+          api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
+          comment_ids=$(echo "$api_response" | jq '.[] | select(.body | contains("'$uuid'")) | .id')
+          test -n "$comment_ids"
+          num_comments=$(echo "$comment_ids" | wc -l) # number of comments
+          echo "comment count: ${num_comments}"
+          test "$num_comments" = 1
+          comment_id=$(echo "$comment_ids" | head -1) # comment ID
+          echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
+      - name: Clean up
+        id: delete
+        run: |
+          curl -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/comments/${{ steps.check.outputs.comment_id }}"
+  target-pr:
+    name: Using --target=pr flag
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - name: Comment
+        id: comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo '### This is a PR comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          uuid=$(uuidgen) # Mark the comment with a unique identifier.
+          echo "uuid=${uuid}" >> $GITHUB_OUTPUT
+          echo "${uuid}" >> ./comment.md
+          cml comment create --target=pr ./comment.md
+      - name: Check
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          uuid="${{ steps.comment.outputs.uuid }}"
+          sleep 120
+          api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
+          comment_ids=$(echo "$api_response" | jq '.[] | select(.body | contains("'$uuid'")) | .id')
+          test -n "$comment_ids"
+          num_comments=$(echo "$comment_ids" | wc -l) # number of comments
+          echo "comment count: ${num_comments}"
+          test "$num_comments" = 1
+          comment_id=$(echo "$comment_ids" | head -1) # comment ID
+          echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
+      - name: Clean up
+        id: delete
+        run: |
+          curl -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/comments/${{ steps.check.outputs.comment_id }}"
+  target-pr-number:
+    name: Using --target=pr/<num>
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - name: Comment
+        id: comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{github.event.number}}
+        run: |
+          echo "### This is a PR comment for ${PR_NUMBER}." > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          uuid=$(uuidgen) # Mark the comment with a unique identifier.
+          echo "uuid=${uuid}" >> $GITHUB_OUTPUT
+          echo "${uuid}" >> ./comment.md
+          cml comment create --target=pr/${PR_NUMBER} ./comment.md
+      - name: Check
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          uuid="${{ steps.comment.outputs.uuid }}"
+          api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
+          comment_ids=$(echo "$api_response" | jq '.[] | select(.body | contains("'$uuid'")) | .id')
+          num_comments=$(echo "$comment_ids" | wc -l) # number of comments
+          echo "comment count: ${num_comments}"
+          test "$num_comments" = 1
+          comment_id=$(echo "$comment_ids" | head -1) # comment ID
+          echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
+      - name: Clean up
+        id: delete
+        run: |
+          curl -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/comments/${{ steps.check.outputs.comment_id }}"
+  target-commit:
+    name: Using --target=commit
+    runs-on: ubuntu-latest
+    env:
+      REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - name: Determine commit sha
+        id: commitsha
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo commit_sha="${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
+          else
+            echo commit_sha="${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+      - name: Comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo '### This is a commit comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create --target=commit ./comment.md
+      - name: Check
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/commits/${{ steps.commitsha.outputs.commit_sha }}/comments")
+          num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          echo "comment count: ${num_comments}"
+          test "$num_comments" = 1
+          comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
+          echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
+      - name: Clean up
+        id: delete
+        run: |
+          curl -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/comments/${{ steps.check.outputs.comment_id }}"
+  target-commit-sha:
+    name: Using --target=commit/<sha>
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - name: Comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          echo "### This is a commit comment for ${COMMIT_SHA}." > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create --target=commit/${COMMIT_SHA} ./comment.md
+      - name: Check
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments")
+          num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          test "$num_comments" = 1
+          comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
+          echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
+      - name: Clean up
+        id: delete
+        run: |
+          curl -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/comments/${{ steps.check.outputs.comment_id }}"
+  target-issue:
+    name: Using --target=issue/<num>
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - name: Create Issue
+        id: issue
+        uses: dacbd/create-issue-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Target for comment testing
+      - name: Create Comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo '### This is a issue comment.' > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create --target=issue/${{ steps.issue.outputs.number }} ./comment.md
+      - name: Check Comment
+        id: check
+        run: |
+          api_response=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ steps.issue.outputs.number }}/comments")
+          num_comments=$(echo "$api_response" | jq '. | length') # number of comments
+          test "$num_comments" = 1
+          comment_id=$(echo "$api_response" | jq '.[].id') # comment ID
+          echo "comment_id=$comment_id" >> $GITHUB_OUTPUT
+      - name: Clean Up
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/issues/comments/${{ steps.check.outputs.comment_id }}"
+          gh issue close ${{ steps.issue.outputs.number }} --reason completed
+  target-auto:
+    name: Using --target=auto
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+      - name: Standard CML setup
+        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+      - name: Comment
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "### This is an auto comment." > ./comment.md
+          echo ${GITHUB_JOB} >> ./comment.md
+          echo "${{ github.event.action }}" >> ./comment.md
+          cml comment create --target=auto ./comment.md
