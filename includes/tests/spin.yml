@@ -1,0 +1,11 @@
+#
+  #
+    #
+      - name: Do work
+        run: |
+          function spin() {
+            echo "work for 30"
+            timeout --preserve-status 30s bash -c 'md5sum /dev/zero'
+          }
+          spin || true
+          spin || true
