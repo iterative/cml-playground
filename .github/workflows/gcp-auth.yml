@@ -11,14 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test a CML Branch
-        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        id: cml-setup
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
       - name: Standard CML setup
-        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        if: ${{ steps.cml-setup.outcome != 'success' }}
         uses: iterative/setup-cml@v1
         with:
-          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+          version: latest
       - name: Create Runner
         env:
           GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GCP_KEY }}
@@ -39,14 +40,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test a CML Branch
-        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        id: cml-setup
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
       - name: Standard CML setup
-        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        if: ${{ steps.cml-setup.outcome != 'success' }}
         uses: iterative/setup-cml@v1
         with:
-          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+          version: latest
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'
         with:
@@ -70,14 +72,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test a CML Branch
-        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        id: cml-setup
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
       - name: Standard CML setup
-        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        if: ${{ steps.cml-setup.outcome != 'success' }}
         uses: iterative/setup-cml@v1
         with:
-          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+          version: latest
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'
         with:

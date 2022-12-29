@@ -8,8 +8,6 @@ on:
         description: 'branch to test'
         required: false
         type: string
-env:
-  TEST_CML_BRANCH: ${{ inputs.branch || 'master' }}
 permissions:
   id-token: write
   contents: write
@@ -21,14 +19,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test a CML Branch
-        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        id: cml-setup
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || master }}
       - name: Standard CML setup
-        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        if: ${{ steps.cml-setup.outcome != 'success' }}
         uses: iterative/setup-cml@v1
         with:
-          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+          version: latest
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
@@ -57,14 +56,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test a CML Branch
-        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        id: cml-setup
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || master }}
       - name: Standard CML setup
-        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        if: ${{ steps.cml-setup.outcome != 'success' }}
         uses: iterative/setup-cml@v1
         with:
-          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+          version: latest
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser

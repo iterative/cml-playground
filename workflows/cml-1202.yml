@@ -1,14 +1,11 @@
 #// https://github.com/iterative/cml/pull/1202
 #// issue
+#include "../includes/common_defines.yml"
 
 name: cml#1202 CML Comment on issue
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'branch to test'
-        required: false
-        type: string
+  #include "../includes/workflow_dispatch.yml"
+
 #define __CML_BRANCH__ d003-issue-comments
 
 jobs:
