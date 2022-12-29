@@ -21,7 +21,8 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo '### This is a legacy PR comment.' > ./comment.md
+          echo "### This is a legacy PR comment." > ./comment.md
+          echo "this comment should be automaticlly deleted" > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
           uuid=$(uuidgen) # Mark the comment with a unique identifier.
@@ -67,6 +68,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo '### This is a PR comment.' > ./comment.md
+          echo "this comment should be automaticlly deleted" > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
           uuid=$(uuidgen) # Mark the comment with a unique identifier.
@@ -113,6 +115,7 @@ jobs:
           PR_NUMBER: ${{github.event.number}}
         run: |
           echo "### This is a PR comment for ${PR_NUMBER}." > ./comment.md
+          echo "this comment should be automaticlly deleted" > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
           uuid=$(uuidgen) # Mark the comment with a unique identifier.
@@ -164,6 +167,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo '### This is a commit comment.' > ./comment.md
+          echo "this comment should be automaticlly deleted" > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
           cml comment create --target=commit ./comment.md
@@ -202,6 +206,7 @@ jobs:
           COMMIT_SHA: ${{ github.sha }}
         run: |
           echo "### This is a commit comment for ${COMMIT_SHA}." > ./comment.md
+          echo "this comment should be automaticlly deleted" > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
           cml comment create --target=commit/${COMMIT_SHA} ./comment.md
@@ -244,6 +249,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo '### This is a issue comment.' > ./comment.md
+          echo "this comment should be automaticlly deleted" > ./comment.md
           echo ${GITHUB_JOB} >> ./comment.md
           echo "${{ github.event.action }}" >> ./comment.md
           cml comment create --target=issue/${{ steps.issue.outputs.number }} ./comment.md
