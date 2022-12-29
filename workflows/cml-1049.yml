@@ -35,7 +35,6 @@ jobs:
             --cloud=gcp \
             --cloud-region=us-west \
             --cloud-type=n1-highmem-2 \
-            --cloud-spot \
             --cloud-gpu=nvidia-tesla-t4 \
             --cloud-hdd-size=50
 

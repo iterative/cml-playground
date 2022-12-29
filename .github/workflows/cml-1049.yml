@@ -36,7 +36,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-t4-test --cloud=gcp --cloud-region=us-west --cloud-type=n1-highmem-2 --cloud-spot --cloud-gpu=nvidia-tesla-t4 --cloud-hdd-size=50
+          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-t4-test --cloud=gcp --cloud-region=us-west --cloud-type=n1-highmem-2 --cloud-gpu=nvidia-tesla-t4 --cloud-hdd-size=50
   test-gcp-t4:
     needs: [gcp-t4]
     runs-on: [self-hosted, gcp-t4-test]
@@ -52,6 +52,6 @@ jobs:
       - name: Do work
         run: |
           echo "work for 30"
-          timeout 30s bash -c 'md5sum /dev/zero'
+          timeout --preserve-status 30s bash -c 'md5sum /dev/zero'
           echo "work for 30"
-          timeout 30s bash -c 'md5sum /dev/zero'
+          timeout --preserve-status 30s bash -c 'md5sum /dev/zero'
