@@ -55,5 +55,5 @@ jobs:
             echo "work for 30"
             timeout --preserve-status 30s bash -c 'md5sum /dev/zero'
           }
-          trap spin EXIT
-          trap spin EXIT
+          spin || true
+          spin || true
