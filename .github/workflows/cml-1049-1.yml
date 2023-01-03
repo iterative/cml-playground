@@ -1,4 +1,4 @@
-name: cml#1049 Allow Native GPU types (Turing arch)
+name: cml#1049 Allow Native GPU types (Volta arch)
 on:
   schedule:
     - cron: '45 14 * * 1' # Mondays 1445 UTC
@@ -15,7 +15,7 @@ permissions:
   contents: write
   pull-requests: write
 jobs:
-  gcp-t4:
+  gcp-v100:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,10 +36,10 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-t4-test --cloud=gcp --cloud-region=us-west --cloud-type=n1-highmem-2 --cloud-gpu=nvidia-tesla-t4 --cloud-hdd-size=50
-  test-gcp-t4:
-    needs: [gcp-t4]
-    runs-on: [self-hosted, gcp-t4-test]
+          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-v100-test --cloud=gcp --cloud-region=us-west --cloud-type=n1-highmem-2 --cloud-gpu=nvidia-tesla-v100 --cloud-hdd-size=50
+  test-gcp-v100:
+    needs: [gcp-v100]
+    runs-on: [self-hosted, gcp-v100-test]
     steps:
       - uses: actions/checkout@v3
       - name: CML Version Test

@@ -1,7 +1,7 @@
 #// https://github.com/iterative/cml/issues/1048
 #// https://github.com/iterative/cml/pull/1049
 #include "../includes/common_defines.yml"
-name: cml#1049 Allow Native GPU types (Turing arch)
+name: cml#1049 Allow Native GPU types (Pascal arch)
 on:
   #include "../includes/schedule.yml"
   workflow_dispatch:
@@ -16,7 +16,7 @@ env:
 #include "../includes/token.yml"
 
 jobs:
-  #define JOB_ID gcp-t4
+  #define JOB_ID gcp-p100
   #define TEST_JOB_ID test-JOB_ID
   #define LABEL JOB_ID-test
   #include "../includes/setup.yml"
@@ -35,7 +35,7 @@ jobs:
             --cloud=gcp \
             --cloud-region=us-west \
             --cloud-type=n1-highmem-2 \
-            --cloud-gpu=nvidia-tesla-t4 \
+            --cloud-gpu=nvidia-tesla-p100 \
             --cloud-hdd-size=50
 
   #include "../includes/tests/on-test.yml"
