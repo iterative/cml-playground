@@ -1,4 +1,4 @@
 #define __COMMENT__ #
-#define __CML_DEFAULT_BRANCH__ master
+#define __CML_DEFAULT_BRANCH__ "master"
 #define __LINK_RUN__ --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 #define __SSH_KEYS__ --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0)
