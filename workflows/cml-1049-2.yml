@@ -16,7 +16,7 @@ env:
 #include "../includes/token.yml"
 
 jobs:
-  #define JOB_ID gcp-t4
+  #define JOB_ID gcp-p100
   #define TEST_JOB_ID test-JOB_ID
   #define LABEL JOB_ID-test
   #include "../includes/setup.yml"
