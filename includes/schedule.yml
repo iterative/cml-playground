@@ -1,6 +1,10 @@
 #
-  #ifndef SCHEDULE
+#// these schedule offsets can be used to avoid gpu quota issues in gcp
   schedule:
+    #if SCHEDULE == 1
+    - cron: '15 15 * * 1' # Mondays 1515 UTC
+    #elif SCHEDULE == 2
+    - cron: '45 15 * * 1' # Mondays 1545 UTC
+    #else
     - cron: '45 14 * * 1' # Mondays 1445 UTC
-  #endif
-  # // if SCHUDULE == 'weekly' include weekly?
+    #endif
