@@ -4,15 +4,7 @@
 #include "../includes/common_defines.yml"
 name: cml#1166 comment --publish-url self-hosted
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'branch to test'
-        required: false
-        type: string
-
-env:
-  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
+  #include "../includes/workflow_dispatch.yml"
 
 jobs:
   #include "../includes/aws/self-host-publish-setup.yml"

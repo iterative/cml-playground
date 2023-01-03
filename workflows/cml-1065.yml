@@ -4,17 +4,12 @@
 
 #include "../includes/common_defines.yml"
 #define NEEDS_AWS true
-#define __AWS_REGION__ us-west-1
+#define __AWS_REGION__ us-west-2
 
 name: cml#1065 validate gpu functionality (Ampere arch)
 on:
   #include "../includes/schedule.yml"
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'branch to test'
-        required: false
-        type: string
+  #include "../includes/workflow_dispatch.yml"
 
 #include "../includes/token.yml"
 
@@ -35,7 +30,7 @@ jobs:
             --single \
             --labels=LABEL \
             --cloud=aws \
-            --cloud-region=us-west \
+            --cloud-region=us-west-2 \
             --cloud-type=g5.xlarge
   #include "../includes/tests/on-test.yml"
     #// steps:

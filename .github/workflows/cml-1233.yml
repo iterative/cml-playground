@@ -9,6 +9,7 @@ jobs:
         with:
           ref: main
       - name: Using CML Branch fetch-depth
+        id: cml-setup
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#fetch-depth
       - name: cml ci fetch-depth
@@ -28,6 +29,7 @@ jobs:
         with:
           ref: main
       - name: Using CML Branch fetch-depth
+        id: cml-setup
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#fetch-depth
       - name: cml ci fetch-depth
@@ -47,6 +49,7 @@ jobs:
         with:
           ref: main
       - name: Using CML Branch fetch-depth
+        id: cml-setup
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#fetch-depth
       - name: cml ci fetch-depth
@@ -67,6 +70,7 @@ jobs:
         with:
           ref: main
       - name: Using CML Branch fetch-depth
+        id: cml-setup
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#fetch-depth
       - name: cml ci fetch-depth
@@ -87,6 +91,7 @@ jobs:
           ref: main
           fetch-depth: 0
       - name: Using CML Branch fetch-depth
+        id: cml-setup
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#fetch-depth
       - name: cml ci fetch-depth

@@ -6,8 +6,6 @@ on:
         description: 'branch to test'
         required: false
         type: string
-env:
-  TEST_CML_BRANCH: ${{ inputs.branch || 'master' }}
 jobs:
   aws-self-host-setup:
     outputs:

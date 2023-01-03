@@ -1,6 +1,11 @@
 name: cml#1164 Private ENV secrets
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
 permissions:
   id-token: write
   contents: write

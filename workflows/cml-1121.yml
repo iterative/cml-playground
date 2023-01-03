@@ -6,15 +6,7 @@
 name: cml#1121 AWS subnet/SG usage - extraneous json error
 on:
   #include "../includes/schedule.yml"
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'branch to test'
-        required: false
-        type: string
-
-env:
-  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
+  #include "../includes/workflow_dispatch.yml"
 
 #include "../includes/token.yml"
 

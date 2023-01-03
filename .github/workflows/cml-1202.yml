@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Using CML Branch d003-issue-comments
+        id: cml-setup
         run: |
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d003-issue-comments
       - uses: dacbd/create-issue-action@v1
