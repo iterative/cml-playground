@@ -1,0 +1,52 @@
+name: cml#1303 --cloud-image Usage (aws)
+on:
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+jobs:
+  aws:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Using CML Branch runner-cloud-image
+        id: cml-setup
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#runner-cloud-image
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-1
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=aws-test --cloud=aws --cloud-image="debian-10-amd64-20220911-1135"
+            --cloud-region=us-west --cloud-type=t3.small
+  test-aws:
+    needs: [aws]
+    runs-on: [self-hosted, aws-test]
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
+      - name: Do work
+        run: |
+          function spin() {
+            echo "work for 30"
+            timeout --preserve-status 30s bash -c 'md5sum /dev/zero'
+          }
+          spin || true
+          spin || true
