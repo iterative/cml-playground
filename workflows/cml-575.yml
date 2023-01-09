@@ -3,6 +3,8 @@
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
 
+#define __CML_BRANCH__ debug-1255-1
+
 name: cml#575 Reuse Idle Runners
 on:
   #include "../includes/schedule.yml"
@@ -24,6 +26,7 @@ jobs:
           cml runner \
             __LINK_RUN__ \
             __SSH_KEYS__ \
+            --cml-version="github:iterative/cml#debug-1255-1" \
             --reuse-idle \
             --labels=LABEL \
             --cloud=aws \
@@ -38,6 +41,7 @@ jobs:
           cml runner \
             __LINK_RUN__ \
             __SSH_KEYS__ \
+            --cml-version="github:iterative/cml#debug-1255-1" \
             --reuse-idle \
             --labels=LABEL \
             --cloud=aws \
@@ -62,6 +66,7 @@ jobs:
             __LINK_RUN__ \
             __SSH_KEYS__ \
             --reuse-idle \
+            --cml-version="github:iterative/cml#debug-1255-1" \
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
@@ -90,6 +95,7 @@ jobs:
             __LINK_RUN__ \
             __SSH_KEYS__ \
             --reuse-idle \
+            --cml-version="github:iterative/cml#debug-1255-1" \
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \

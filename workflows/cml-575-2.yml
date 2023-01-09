@@ -3,6 +3,9 @@
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
 
+
+#define __CML_BRANCH__ debug-1255-1
+
 name: cml#575 Takes multiple jobs
 on:
   #include "../includes/schedule.yml"
@@ -24,6 +27,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml runner \
+            --cml-version="github:iterative/cml#debug-1255-1" \
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
@@ -53,6 +57,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           cml runner \
+            --cml-version="github:iterative/cml#debug-1255-1" \
             --labels=LABEL \
             --cloud=aws \
             --cloud-region=us-west \
