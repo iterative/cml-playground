@@ -30,7 +30,7 @@ jobs:
             --single \
             --labels=LABEL \
             --cloud=aws \
-            --cloud-image="debian-10-amd64-20220911-1135"
+            --cloud-image="*ubuntu/images/hvm-ssd/ubuntu-focal-20.04*"
             --cloud-region=us-west \
             --cloud-type=t3.small
   #include "../includes/tests/on-test.yml"
