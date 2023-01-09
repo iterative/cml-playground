@@ -28,7 +28,7 @@ jobs:
             --labels=LABEL \
             --cloud=gcp \
             --cloud-region=us-west \
-            --clould-image="ubuntu-os-cloud/ubuntu-2204-lts" \
+            --cloud-image="ubuntu-os-cloud/ubuntu-2204-lts" \
             --cloud-type="e2-highcpu-2"
 
   #include "../includes/tests/on-test.yml"
