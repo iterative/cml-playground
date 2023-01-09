@@ -29,8 +29,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-test --cloud=gcp --cloud-region=us-west #
-            --clould-image="ubuntu-os-cloud/ubuntu-2204-lts" --cloud-type="e2-highcpu-2"
+          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-test --cloud=gcp --cloud-region=us-west --clould-image="ubuntu-os-cloud/ubuntu-2204-lts" --cloud-type="e2-highcpu-2"
   test-gcp:
     needs: [gcp]
     runs-on: [self-hosted, gcp-test]

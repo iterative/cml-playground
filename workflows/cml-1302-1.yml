@@ -28,7 +28,6 @@ jobs:
             --labels=LABEL \
             --cloud=gcp \
             --cloud-region=us-west \
-            #// --cloud-image="ubuntu-os-cloud/ubuntu-2204-jammy-v20230107"
             --clould-image="ubuntu-os-cloud/ubuntu-2204-lts" \
             --cloud-type="e2-highcpu-2"
 
