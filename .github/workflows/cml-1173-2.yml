@@ -1,3 +1,4 @@
+publish-sha-hash
 name: cml#1173 part 2
 on:
   pull_request:

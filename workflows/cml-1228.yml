@@ -3,6 +3,8 @@
 
 
 
+#define __CML_BRANCH__ publish-sha-hash
+
 name: cml#1228 comment --target=
 on:
   workflow_dispatch:

@@ -11,16 +11,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Test a CML Branch
+      - name: Using CML Branch publish-sha-hash
         id: cml-setup
-        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
-      - name: Standard CML setup
-        if: ${{ steps.cml-setup.outcome != 'success' }}
-        uses: iterative/setup-cml@v1
-        with:
-          version: latest
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
       - name: Create or Update comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -42,16 +36,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Test a CML Branch
+      - name: Using CML Branch publish-sha-hash
         id: cml-setup
-        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
-      - name: Standard CML setup
-        if: ${{ steps.cml-setup.outcome != 'success' }}
-        uses: iterative/setup-cml@v1
-        with:
-          version: latest
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
       - name: Create or Update comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,16 +61,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Test a CML Branch
+      - name: Using CML Branch publish-sha-hash
         id: cml-setup
-        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
-      - name: Standard CML setup
-        if: ${{ steps.cml-setup.outcome != 'success' }}
-        uses: iterative/setup-cml@v1
-        with:
-          version: latest
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
       - name: Create or Update comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

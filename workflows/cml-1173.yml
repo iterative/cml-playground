@@ -1,6 +1,8 @@
 #// https://github.com/iterative/cml/pull/1173
 #// issue
 
+#define __CML_BRANCH__ publish-sha-hash
+
 name: cml#1173 Custom CML comment watermarks.
 on:
   pull_request:
