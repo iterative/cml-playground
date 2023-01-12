@@ -4,7 +4,7 @@ on:
     branches:
       - main
 jobs:
-  custom_1:
+  custom_1_d:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,16 +20,16 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
-          echo custom_1 >> ./comment.md
+          echo custom_1_d >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
-            cml comment create --pr --watermark-title custom_1-wm ./comment.md
+            cml comment create --pr --watermark-title custom_1_d-wm ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
-            cml comment update --pr --watermark-title custom_1-wm ./comment.md
+            cml comment update --pr --watermark-title custom_1_d-wm ./comment.md
           fi
-  custom_2:
+  custom_2_d:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -45,16 +45,16 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
-          echo custom_2 >> ./comment.md
+          echo custom_2_d >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
-            cml comment create --pr --watermark-title custom_2-wm ./comment.md
+            cml comment create --pr --watermark-title custom_2_d-wm ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
-            cml comment update --pr --watermark-title custom_2-wm ./comment.md
+            cml comment update --pr --watermark-title custom_2_d-wm ./comment.md
           fi
-  workflow_label:
+  workflow_label_d:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -70,7 +70,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
-          echo workflow_label >> ./comment.md
+          echo workflow_label_d >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
             cml comment create --pr --watermark-title "{workflow}" ./comment.md

@@ -10,7 +10,7 @@ on:
       - main
 #define __PULL_REQUEST__ true
 jobs:
-  #define JOB_ID custom_1
+  #define JOB_ID custom_1_d
   JOB_ID:
     runs-on: ubuntu-latest
     steps:
@@ -18,7 +18,7 @@ jobs:
       #include "../includes/steps/cml.yml"
       #define WM_LABEL JOB_ID-wm
       #include "../includes/tests/comment/label.yml"
-  #define JOB_ID custom_2
+  #define JOB_ID custom_2_d
   JOB_ID:
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +26,7 @@ jobs:
       #include "../includes/steps/cml.yml"
       #define WM_LABEL JOB_ID-wm
       #include "../includes/tests/comment/label.yml"
-  #define JOB_ID workflow_label
+  #define JOB_ID workflow_label_d
   JOB_ID:
     runs-on: ubuntu-latest
     steps:

@@ -10,11 +10,11 @@ on:
       - main
 #define __PULL_REQUEST__ true
 jobs:
-  #define JOB_ID workflow_label_2
+  #define JOB_ID workflow_label_2_d
   JOB_ID:
     runs-on: ubuntu-latest
     steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/steps/cml.yml"
-      #define WM_LABEL "{workflow}"
+      #define WM_LABEL "{workflow}_d"
       #include "../includes/tests/comment/label.yml"

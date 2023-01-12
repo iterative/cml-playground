@@ -4,7 +4,7 @@ on:
     branches:
       - main
 jobs:
-  workflow_label_2:
+  workflow_label_2_d:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,12 +20,12 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "### Custom Water Mark Test" > ./comment.md
-          echo workflow_label_2 >> ./comment.md
+          echo workflow_label_2_d >> ./comment.md
           if [ "${{ github.event.action }}" == "opened" ]; then
             echo "PR Opened" >> ./comment.md
-            cml comment create --pr --watermark-title "{workflow}" ./comment.md
+            cml comment create --pr --watermark-title "{workflow}_d" ./comment.md
           fi
           if [ "${{ github.event.action }}" == "synchronize" ]; then
             echo "PR commit count: $(git rev-list origin/main.. --count)" >> ./comment.md
-            cml comment update --pr --watermark-title "{workflow}" ./comment.md
+            cml comment update --pr --watermark-title "{workflow}_d" ./comment.md
           fi
