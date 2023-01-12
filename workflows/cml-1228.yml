@@ -3,7 +3,7 @@
 
 
 
-#define __CML_BRANCH__ publish-sha-hash
+#define __CML_BRANCH__ d018-watermark-sha
 
 name: cml#1228 comment --target=
 on:

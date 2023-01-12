@@ -12,10 +12,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Using CML Branch publish-sha-hash
+      - name: Using CML Branch d018-watermark-sha
         id: cml-setup
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d018-watermark-sha
       - name: Comment
         id: comment
         env:
@@ -52,10 +52,10 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
-      - name: Using CML Branch publish-sha-hash
+      - name: Using CML Branch d018-watermark-sha
         id: cml-setup
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d018-watermark-sha
       - name: Comment
         id: comment
         env:
@@ -93,10 +93,10 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
-      - name: Using CML Branch publish-sha-hash
+      - name: Using CML Branch d018-watermark-sha
         id: cml-setup
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d018-watermark-sha
       - name: Comment
         id: comment
         env:
@@ -134,10 +134,10 @@ jobs:
       REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-      - name: Using CML Branch publish-sha-hash
+      - name: Using CML Branch d018-watermark-sha
         id: cml-setup
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d018-watermark-sha
       - name: Determine commit sha
         id: commitsha
         run: |
@@ -177,10 +177,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Using CML Branch publish-sha-hash
+      - name: Using CML Branch d018-watermark-sha
         id: cml-setup
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d018-watermark-sha
       - name: Comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -209,10 +209,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Using CML Branch publish-sha-hash
+      - name: Using CML Branch d018-watermark-sha
         id: cml-setup
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d018-watermark-sha
       - name: Create Issue
         id: issue
         uses: dacbd/create-issue-action@v1
@@ -246,10 +246,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Using CML Branch publish-sha-hash
+      - name: Using CML Branch d018-watermark-sha
         id: cml-setup
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#publish-sha-hash
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#d018-watermark-sha
       - name: Comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
