@@ -39,7 +39,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=private-key-test --cloud=aws --cloud-region=us-west --cloud-ssh-private="$(cat ./key.pem) " --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=private-key-test --cloud=aws --cloud-region=us-west --cloud-ssh-private="$(cat ./key.pem) " --cloud-type=t3.small
   test-private-key:
     needs: [private-key]
     runs-on: [self-hosted, private-key-test]
@@ -76,7 +76,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=private-key_852-test --cloud=aws --cloud-region=us-west --cloud-ssh-private="$(cat ./key.pem)" --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=private-key_852-test --cloud=aws --cloud-region=us-west --cloud-ssh-private="$(cat ./key.pem)" --cloud-type=t3.small
   test-private-key_852:
     needs: [private-key_852]
     runs-on: [self-hosted, private-key_852-test]
