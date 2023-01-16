@@ -35,7 +35,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-p100-test --cloud=gcp --cloud-region=us-west --cloud-type=n1-highmem-2 --cloud-gpu=nvidia-tesla-p100 --cloud-hdd-size=50
+          cml runner --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=gcp-p100-test --cloud=gcp --cloud-region=us-west --cloud-type=n1-highmem-2 --cloud-gpu=nvidia-tesla-p100 --cloud-hdd-size=50
   test-gcp-p100:
     needs: [gcp-p100]
     runs-on: [self-hosted, gcp-p100-test]
