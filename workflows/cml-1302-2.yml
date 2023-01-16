@@ -5,9 +5,12 @@
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
 
-#define __CML_BRANCH__ runner-cloud-image
+#define __CML_BRANCH__ master
 name: cml#1303 --cloud-image Usage (aws)
 on:
+  push:
+    branches:
+      - cloud-image-test
   #include "../includes/schedule.yml"
   #include "../includes/workflow_dispatch.yml"
 
