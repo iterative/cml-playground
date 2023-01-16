@@ -36,7 +36,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=aws-test --cloud=aws --cloud-image="ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20221206" --cloud-region=us-west --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=aws-test --cloud=aws --cloud-image="ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20221206" --cloud-region=us-west --cloud-type=t3.small
   test-aws:
     needs: [aws]
     runs-on: [self-hosted, aws-test]
