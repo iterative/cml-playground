@@ -22,7 +22,7 @@ jobs:
         id: cml-setup
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || 'master' }}
       - name: Standard CML setup
         if: ${{ steps.cml-setup.outcome != 'success' }}
         uses: iterative/setup-cml@v1
@@ -61,7 +61,7 @@ jobs:
         id: cml-setup
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || 'master' }}
       - name: Standard CML setup
         if: ${{ steps.cml-setup.outcome != 'success' }}
         uses: iterative/setup-cml@v1
