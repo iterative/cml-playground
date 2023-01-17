@@ -13,16 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Test a CML Branch
+      - name: Using CML Branch hotfix-hidden-opts
         id: cml-setup
-        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || 'master' }}
-      - name: Standard CML setup
-        if: ${{ steps.cml-setup.outcome != 'success' }}
-        uses: iterative/setup-cml@v1
-        with:
-          version: latest
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#hotfix-hidden-opts
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
@@ -32,7 +26,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
           CML_RUNNER_PATH: some/junk/here
         run: |
-          cml runner --single --idle-timeout=1000 --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=verify-example-test --cloud=aws --cloud-region=us-west-2 --cloud-hdd-size=50 --cloud-aws-subnet=subnet-72a04658 --cloud-aws-security-group=launch-wizard-2 --cloud-type=t3.small
+          cml runner --cml-version="github:iterative/cml#hotfix-hidden-opts" --single --idle-timeout=1000 --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=verify-example-test --cloud=aws --cloud-region=us-west-2 --cloud-hdd-size=50 --cloud-aws-subnet=subnet-72a04658 --cloud-aws-security-group=launch-wizard-2 --cloud-type=t3.small
   test-verify-example:
     needs: [verify-example]
     runs-on: [self-hosted, verify-example-test]

@@ -1,7 +1,7 @@
 #include "../includes/common_defines.yml"
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-2
-
+#define __CML_BRANCH__ hotfix-hidden-opts
 name: failed cml runner
 on:
   push:
@@ -23,6 +23,7 @@ jobs:
           CML_RUNNER_PATH: some/junk/here
         run: |
           cml runner \
+            --cml-version="github:iterative/cml#hotfix-hidden-opts" \
             --single \
             --idle-timeout=1000 \
             __LINK_RUN__ \
