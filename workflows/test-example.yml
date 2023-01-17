@@ -1,0 +1,39 @@
+#include "../includes/common_defines.yml"
+#define NEEDS_AWS true
+#define __AWS_REGION__ us-west-2
+
+name: failed cml runner
+on:
+  push:
+    branches:
+      - failed-example
+
+#include "../includes/token.yml"
+
+jobs:
+  #define JOB_ID metadata
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/aws/aws-creds.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            --single \
+            --idle-timeout=1000 \
+            __LINK_RUN__ \
+            __SSH_KEYS__ \
+            --labels=LABEL \
+            --cloud=aws \
+            --cloud-region=__AWS_REGION__ \
+            --cloud-hdd-size=50 \
+            --cloud-aws-subnet=subnet-72a04658 \
+            --cloud-aws-security-group=launch-wizard-2 \
+            --cloud-type=t3.small
+  #include "../includes/tests/on-test.yml"
+  #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"

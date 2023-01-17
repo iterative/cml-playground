@@ -1,0 +1,44 @@
+name: failed cml runner
+on:
+  push:
+    branches:
+      - failed-example
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+jobs:
+  metadata:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        id: cml-setup
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || 'master' }}
+      - name: Standard CML setup
+        if: ${{ steps.cml-setup.outcome != 'success' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: latest
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-2
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner --single --idle-timeout=1000 --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=metadata-test --cloud=aws --cloud-region=us-west-2 --cloud-hdd-size=50 --cloud-aws-subnet=subnet-72a04658 --cloud-aws-security-group=launch-wizard-2 --cloud-type=t3.small
+  test-metadata:
+    needs: [metadata]
+    runs-on: [self-hosted, metadata-test]
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: CML Version Test
+        run: |
+          which cml
+          cml --version
