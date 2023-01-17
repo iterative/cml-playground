@@ -20,7 +20,7 @@ jobs:
       - name: Create Runner
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-          RUNNER_PATH: some/junk/here
+          CML_RUNNER_PATH: some/junk/here
         run: |
           cml runner \
             --single \

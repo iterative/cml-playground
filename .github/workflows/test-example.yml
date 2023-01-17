@@ -30,7 +30,7 @@ jobs:
       - name: Create Runner
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-          RUNNER_PATH: some/junk/here
+          CML_RUNNER_PATH: some/junk/here
         run: |
           cml runner --single --idle-timeout=1000 --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=verify-example-test --cloud=aws --cloud-region=us-west-2 --cloud-hdd-size=50 --cloud-aws-subnet=subnet-72a04658 --cloud-aws-security-group=launch-wizard-2 --cloud-type=t3.small
   test-verify-example:
