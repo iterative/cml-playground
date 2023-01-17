@@ -11,7 +11,7 @@ on:
 #include "../includes/token.yml"
 
 jobs:
-  #define JOB_ID metadata
+  #define JOB_ID verify-example
   #define TEST_JOB_ID test-JOB_ID
   #define LABEL JOB_ID-test
   #include "../includes/setup.yml"
@@ -20,6 +20,7 @@ jobs:
       - name: Create Runner
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+          RUNNER_PATH: some/junk/here
         run: |
           cml runner \
             --single \
@@ -37,3 +38,4 @@ jobs:
   #// steps:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/tests/cml-version.yml"
+      #include "../includes/tests/spin.yml"
