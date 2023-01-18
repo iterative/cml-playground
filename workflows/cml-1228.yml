@@ -1,6 +1,8 @@
 #// https://github.com/iterative/cml/pull/1228
 #// https://github.com/iterative/cml/pull/1241
 
+#include "../includes/common_defines.yml"
+
 
 
 name: cml#1228 comment --target=

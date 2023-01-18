@@ -1,5 +1,6 @@
 #// https://github.com/iterative/cml/pull/1173
 #// issue
+#include "../includes/common_defines.yml"
 
 name: cml#1173 part 2
 on:
