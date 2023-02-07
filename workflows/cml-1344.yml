@@ -3,11 +3,11 @@
 
 #include "../includes/common_defines.yml"
 #include "../includes/token.yml"
-#define __CML_BRANCH__ cml-pr-create-subdirectories
+
 name: cml#1344 `cml pr create` from sub dir
 on:
-  workflow_dispatch:
-  push:
+  #include "../includes/schedule.yml"
+  #include "../includes/workflow_dispatch.yml"
 jobs:
   test:
     runs-on: ubuntu-latest
