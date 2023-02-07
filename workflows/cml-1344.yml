@@ -2,6 +2,7 @@
 #// https://github.com/iterative/cml/issues/1344
 
 #include "../includes/common_defines.yml"
+#include "../includes/token.yml"
 
 name: cml#1344 `cml pr create` from sub dir
 on:
@@ -15,6 +16,8 @@ jobs:
       #include "../includes/steps/cml.yml"
       #include "../includes/tests/create-modification.yml"
       - name: cml pr create
+        env: 
+          REPO_TOKEN: ${{ github.token }}
         run: |
           git pull
           pushd ./examples
