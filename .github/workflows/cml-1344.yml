@@ -17,11 +17,10 @@ jobs:
           npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#cml-pr-create-subdirectories
       - name: Create Modification
         run: |
-          echo "$(date +%s%N) - modication" >> cml.log
+          echo "$(date +%s%N) - modication" >> examples/cml.log
       - name: cml pr create
         env:
           REPO_TOKEN: ${{ github.token }}
         run: |
-          git pull
-          pushd ./examples
+          cd examples
           cml pr create --squash .
