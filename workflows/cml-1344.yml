@@ -3,7 +3,7 @@
 
 #include "../includes/common_defines.yml"
 #include "../includes/token.yml"
-
+#define __CML_BRANCH__ cml-pr-create-subdirectories
 name: cml#1344 `cml pr create` from sub dir
 on:
   workflow_dispatch:
