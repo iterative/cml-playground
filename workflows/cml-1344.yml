@@ -1,0 +1,21 @@
+#// https://github.com/iterative/cml/pull/1345
+#// https://github.com/iterative/cml/issues/1344
+
+#include "../includes/common_defines.yml"
+
+name: cml#1344 `cml pr create` from sub dir
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      #include "../includes/tests/create-modification.yml"
+      - name: cml pr create
+        run: |
+          git pull
+          pushd ./examples
+          cml pr create --squash .

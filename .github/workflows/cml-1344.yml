@@ -1,0 +1,27 @@
+name: cml#1344 `cml pr create` from sub dir
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test a CML Branch
+        id: cml-setup
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || 'master' }}
+      - name: Standard CML setup
+        if: ${{ steps.cml-setup.outcome != 'success' }}
+        uses: iterative/setup-cml@v1
+        with:
+          version: latest
+      - name: Create Modification
+        run: |
+          echo "$(date +%s%N) - modication" >> cml.log
+      - name: cml pr create
+        run: |
+          git pull
+          pushd ./examples
+          cml pr create --squash .
