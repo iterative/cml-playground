@@ -3,4 +3,4 @@
     #
       - name: Create Modification
         run: |
-          echo "$(date +%s%N) - modification" >> cml.log
+          echo "$(date +%s%N) - modification from https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> cml.log

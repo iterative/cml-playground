@@ -1,0 +1,25 @@
+#// https://github.com/iterative/cml/pull/1326
+
+#include "../includes/common_defines.yml"
+#include "../includes/token.yml"
+
+#define __CML_BRANCH__ dfinteligenz/add-target-branch
+
+name: cml#1326 `cml pr create` --target-branch
+on:
+  push:
+  #include "../includes/schedule.yml"
+  #include "../includes/workflow_dispatch.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/steps/cml.yml"
+      #include "../includes/tests/create-modification.yml"
+      - name: test
+        env:
+          REPO_TOKEN: ${{ github.token }}
+        run: |
+          git pull
+          cml pr create --target-branch main . 

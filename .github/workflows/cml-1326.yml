@@ -1,0 +1,33 @@
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+name: cml#1326 `cml pr create` --target-branch
+on:
+  push:
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to test'
+        required: false
+        type: string
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Using CML Branch dfinteligenz/add-target-branch
+        id: cml-setup
+        run: |
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#dfinteligenz/add-target-branch
+      - name: Create Modification
+        run: |
+          echo "$(date +%s%N) - modification from https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> cml.log
+      - name: test
+        env:
+          REPO_TOKEN: ${{ github.token }}
+        run: |
+          git pull
+          cml pr create --target-branch main .
