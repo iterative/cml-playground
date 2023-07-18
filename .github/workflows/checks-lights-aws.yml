@@ -13,7 +13,7 @@ jobs:
     environment: test
     runs-on: ubuntu-latest
     steps:
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
           aws-region: us-east-1
