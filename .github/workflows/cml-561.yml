@@ -26,7 +26,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          AWS_S3_BUCKET: workshopdvcdata	
+          AWS_S3_BUCKET: workshopdvcdata
   az:
     runs-on: ubuntu-latest
     steps:
