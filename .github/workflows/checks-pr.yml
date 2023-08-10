@@ -9,5 +9,4 @@ jobs:
     steps:
       - name: TODO
         run: |
-          echo "${{ github.event.event_type }}"
-          echo "${{ github.event.client_playload.branch }}"
+          echo "${{ github.event.client_payload.branch }}"

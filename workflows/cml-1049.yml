@@ -1,18 +1,11 @@
 #// https://github.com/iterative/cml/issues/1048
 #// https://github.com/iterative/cml/pull/1049
 #include "../includes/common_defines.yml"
-name: cml#1049 Allow Native GPU types
+name: cml#1049 Allow Native GPU types (Turing arch)
 on:
   #include "../includes/schedule.yml"
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'branch to test'
-        required: false
-        type: string
+  #include "../includes/workflow_dispatch.yml"
 
-env:
-  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
 #include "../includes/token.yml"
 
 jobs:
@@ -35,7 +28,6 @@ jobs:
             --cloud=gcp \
             --cloud-region=us-west \
             --cloud-type=n1-highmem-2 \
-            --cloud-spot \
             --cloud-gpu=nvidia-tesla-t4 \
             --cloud-hdd-size=50
 
@@ -44,3 +36,4 @@ jobs:
       #include "../includes/steps/base-checkout.yml"
       #include "../includes/tests/cml-version.yml"
       #include "../includes/tests/nvidia.yml"
+      #include "../includes/tests/spin.yml"

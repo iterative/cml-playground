@@ -68,7 +68,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=target_avail_zone-test --cloud=aws --cloud-region=us-west-1b --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=target_avail_zone-test --cloud=aws --cloud-region=us-west-1b --cloud-type=t3.small
   test-target_avail_zone:
     needs: [target_avail_zone]
     runs-on: [self-hosted, target_avail_zone-test]
@@ -136,7 +136,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=jump_avail_zones-test --cloud=aws --cloud-region=eu-central-1 --cloud-type=g4dn.2xlarge
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --single --labels=jump_avail_zones-test --cloud=aws --cloud-region=eu-central-1 --cloud-type=g4dn.2xlarge
   test-jump_avail_zones:
     needs: [jump_avail_zones]
     runs-on: [self-hosted, jump_avail_zones-test]

@@ -8,8 +8,6 @@ on:
         description: 'branch to test'
         required: false
         type: string
-env:
-  TEST_CML_BRANCH: ${{ inputs.branch || 'master' }}
 permissions:
   id-token: write
   contents: write
@@ -21,14 +19,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test a CML Branch
-        if: ${{ env.TEST_CML_VERSION != null || github.event_name != 'schedule' }}
+        id: cml-setup
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ env.TEST_CML_BRANCH }}
+          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || 'master' }}
       - name: Standard CML setup
-        if: ${{ env.TEST_CML_VERSION == null || github.event_name == 'schedule' }}
+        if: ${{ steps.cml-setup.outcome != 'success' }}
         uses: iterative/setup-cml@v1
         with:
-          version: ${{ env.TEST_CML_VERSION || 'latest' }}
+          version: latest
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
@@ -37,7 +36,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'echo "$(curl https://github.com/'"$GITHUB_ACTOR"'.keys)" >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=metadata-test --cloud=aws --cloud-region=us-west-1 --cloud-metadata="condition one=KeyHasASpace" --cloud-metadata='"condition two"="KeyAndValueAreWrappedWithQuotes"' --cloud-metadata='"condition three"=KeyIsWrappedValueIsNot' --cloud-type=t3.small
+          cml runner --cloud-metadata="actions_link=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" --cloud-startup-script=$(echo 'curl https://github.com/${{ github.actor }}.keys >> /home/ubuntu/.ssh/authorized_keys' | base64 -w 0) --labels=metadata-test --cloud=aws --cloud-region=us-west-1 --cloud-metadata="condition one=KeyHasASpace" --cloud-metadata='"condition two"="KeyAndValueAreWrappedWithQuotes"' --cloud-metadata='"condition three"=KeyIsWrappedValueIsNot' --cloud-type=t3.small
   test-metadata:
     needs: [metadata]
     runs-on: [self-hosted, metadata-test]

@@ -1,0 +1,13 @@
+name: Receive CML Push Event
+on:
+  repository_dispatch:
+    types:
+      - push
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Receive Push Event
+        run: |
+          echo "${{ github.event.client_payload.branch }}"

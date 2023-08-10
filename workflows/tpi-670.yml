@@ -6,12 +6,7 @@
 
 name: tpi#670 AWS auto-select-aws-availability-zone
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'branch to test'
-        required: false
-        type: string
+  #include "../includes/workflow_dispatch.yml"
 
 #include "../includes/token.yml"
 #define CML_SOURCE master

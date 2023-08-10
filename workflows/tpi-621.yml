@@ -1,19 +1,12 @@
 #// https://github.com/iterative/terraform-provider-iterative/pull/621
+#include "../includes/common_defines.yml"
 #define NEEDS_AWS true
 #define __AWS_REGION__ us-west-1
 
 name: tpi#621 APT install lock
 on:
   #include "../includes/schedule.yml"
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'branch to test'
-        required: false
-        type: string
-
-env:
-  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
+  #include "../includes/workflow_dispatch.yml"
 
 
 #include "../includes/token.yml"

@@ -1,0 +1,37 @@
+#// https://github.com/iterative/cml/pull/1302
+#// https://github.com/iterative/cml/issues/1285
+
+#include "../includes/common_defines.yml"
+
+name: cml#1303 --cloud-image Usage (gcp)
+on:
+  #include "../includes/schedule.yml"
+  #include "../includes/workflow_dispatch.yml"
+
+#include "../includes/token.yml"
+
+jobs:
+  #define JOB_ID gcp
+  #define TEST_JOB_ID test-JOB_ID
+  #define LABEL JOB_ID-test
+  #include "../includes/setup.yml"
+    #// steps:
+      #include "../includes/gcp/auth-key.yml"
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          cml runner \
+            __SSH_KEYS__ \
+            --single \
+            --labels=LABEL \
+            --cloud=gcp \
+            --cloud-region=us-west \
+            --cloud-image="ubuntu-os-cloud/ubuntu-2204-lts" \
+            --cloud-type="e2-highcpu-2"
+
+  #include "../includes/tests/on-test.yml"
+    #// steps:
+      #include "../includes/steps/base-checkout.yml"
+      #include "../includes/tests/cml-version.yml"
+      #include "../includes/tests/spin.yml"

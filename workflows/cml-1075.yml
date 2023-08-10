@@ -3,15 +3,7 @@
 #include "../includes/common_defines.yml"
 name: cml#1075 Self-Host Publish
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'branch to test'
-        required: false
-        type: string
-
-env:
-  TEST_CML_BRANCH:  ${{ inputs.branch || 'master' }}
+  #include "../includes/workflow_dispatch.yml"
 
 #include "../includes/token.yml"
 jobs:
