@@ -1,0 +1,65 @@
+name: cml#561 mounting cloud object storage with FUSE
+on:
+  schedule:
+    - cron: '45 14 * * 1' # Mondays 1445 UTC
+  push:
+permissions:
+  id-token: write
+jobs:
+  aws:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
+          aws-region: us-west-1
+      - run: |
+          sudo apt update
+      - run: |
+          sudo apt install fuse s3fs
+      - run: |
+          sudo mkdir /mnt/objects
+      - run: |
+          tee "$(mktemp)" <<< "$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" > /dev/null
+          sudo s3fs -o passwd_file="$_" "$AWS_S3_BUCKET" /mnt/objects
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET: workshopdvcdata
+  az:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb" --output /tmp/packages-microsoft-prod.deb
+          sudo apt install /tmp/packages-microsoft-prod.deb
+          rm /tmp/packages-microsoft-prod.deb
+          sudo apt update
+      - run: |
+          sudo apt install fuse3 blobfuse2
+      - run: |
+          sudo mkdir /mnt/objects
+      - run: |
+          sudo -E blobfuse2 --tmp-path="$(mktemp --directory)"  /mnt/objects
+        env:
+          AZURE_STORAGE_ACCOUNT: dvctemp
+          AZURE_STORAGE_ACCOUNT_CONTAINER: dvc-temp
+          AZURE_STORAGE_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCESS_KEY }}
+  gcp:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          sudo tee /etc/apt/sources.list.d/gcsfuse.list <<< "deb http://packages.cloud.google.com/apt gcsfuse-$(lsb_release -cs) main"
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+          sudo apt-get update
+      - run: |
+          sudo apt-get install fuse gcsfuse
+      - run: |
+          sudo mkdir /mnt/objects
+      - run: |
+          export GOOGLE_APPLICATION_CREDENTIALS="$(mktemp)"
+          printenv GOOGLE_APPLICATION_CREDENTIALS_DATA > "$GOOGLE_APPLICATION_CREDENTIALS"
+          sudo -E gcsfuse "$GOOGLE_CLOUD_STORAGE_BUCKET" /mnt/objects
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GCP_STORAGE_KEY }}
+          GOOGLE_CLOUD_STORAGE_BUCKET: fuse-mount-test
