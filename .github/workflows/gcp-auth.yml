@@ -1,102 +1,58 @@
-name: GCP - Auth Methods
-on:
-  workflow_dispatch:
+on: push
 permissions:
   id-token: write
-  contents: write
-  pull-requests: write
 jobs:
-  as-env:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Test a CML Branch
-        id: cml-setup
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
-      - name: Standard CML setup
-        if: ${{ steps.cml-setup.outcome != 'success' }}
-        uses: iterative/setup-cml@v1
-        with:
-          version: latest
-      - name: Create Runner
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GCP_KEY }}
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: |
-          cml runner --single --labels=as-env-test --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2
-  test-as-env:
-    needs: [as-env]
-    runs-on: [self-hosted, as-env-test]
-    steps:
-      - uses: actions/checkout@v3
-      - name: CML Version Test
-        run: |
-          which cml
-          cml --version
-  as-file:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Test a CML Branch
-        id: cml-setup
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
-      - name: Standard CML setup
-        if: ${{ steps.cml-setup.outcome != 'success' }}
-        uses: iterative/setup-cml@v1
-        with:
-          version: latest
-      - name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          credentials_json: ${{ secrets.GCP_CML_RUNNER_KEY }}
-      - name: Create Runner
-        env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: |
-          cml runner --single --labels=as-file-test --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2
-  test-as-file:
-    needs: [as-file]
-    runs-on: [self-hosted, as-file-test]
-    steps:
-      - uses: actions/checkout@v3
-      - name: CML Version Test
-        run: |
-          which cml
-          cml --version
   as-oidc:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Test a CML Branch
-        id: cml-setup
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: |
-          npm install -g canvas@2 vega@5 vega-cli@5 vega-lite@5 github:iterative/cml#${{ inputs.branch || __CML_DEFAULT_BRANCH__ }}
-      - name: Standard CML setup
-        if: ${{ steps.cml-setup.outcome != 'success' }}
-        uses: iterative/setup-cml@v1
-        with:
-          version: latest
-      - name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          workload_identity_provider: 'projects/200200923017/locations/global/workloadIdentityPools/gh-actions-pool/providers/github-actions'
-          service_account: 'cml-runner@cml-pulse.iam.gserviceaccount.com'
-      - name: Create Runner
-        env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: |
-          cml runner --single --labels=as-oidc-test --cloud=gcp --cloud-region=us-west --cloud-type=e2-highcpu-2
-  test-as-oidc:
-    needs: [as-oidc]
-    runs-on: [self-hosted, as-oidc-test]
-    steps:
-      - uses: actions/checkout@v3
-      - name: CML Version Test
-        run: |
-          which cml
-          cml --version
+      run: |
+        export TOKEN="$(curl --header "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=projects/200200923017/locations/global/workloadIdentityPools/gh-actions-pool/providers/github-actions" | jq --raw-output .value)"
+        printenv script | python3
+      env:
+        script: |
+
+          options = {
+          "workload_identity_provider": "projects/200200923017/locations/global/workloadIdentityPools/gh-actions-pool/providers/github-actions"
+          "service_account": "cml-runner@cml-pulse.iam.gserviceaccount.com"
+          }
+          
+          provider = self.options["provider_id"]
+          account = self.options["service_account_email"]
+  
+          audience = f"//iam.googleapis.com/{provider}"
+          id_token = os.getenv("TOKEN")
+  
+          import requests
+  
+          federated_token = (
+              requests.post(
+                  "https://sts.googleapis.com/v1/token",
+                  headers={"accept": "application/json"},
+                  json={
+                      "audience": audience,
+                      "grantType": "urn:ietf:params:oauth:grant-type:token-exchange",
+                      "requestedTokenType": "urn:ietf:params:oauth:token-type:access_token",
+                      "scope": (scope := "https://www.googleapis.com/auth/cloud-platform"),
+                      "subjectTokenType": "urn:ietf:params:oauth:token-type:jwt",
+                      "subjectToken": id_token,
+                  },
+              )
+              .json()
+              .get("access_token")
+          )
+  
+          access_token = (
+              requests.post(
+                  f"https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/{account}:generateAccessToken",
+                  json={"scope": [scope], "lifetime": self.expiration.total_seconds()},
+                  headers={
+                      "accept": "application/json",
+                      "authorization": f"bearer {federated_token}",
+                  },
+              )
+              .json()
+              .get("accessToken")
+          )
+
+          print(access_token)
+          return {"credentials": access_token}
