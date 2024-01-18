@@ -5,7 +5,7 @@ jobs:
   as-oidc:
     runs-on: ubuntu-latest
     steps:
-      run: |
+    - run: |
         export TOKEN="$(curl --header "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=projects/200200923017/locations/global/workloadIdentityPools/gh-actions-pool/providers/github-actions" | jq --raw-output .value)"
         printenv script | python3
       env:
