@@ -12,7 +12,7 @@ jobs:
         script: |
 
           options = {
-          "workload_identity_provider": "projects/200200923017/locations/global/workloadIdentityPools/gh-actions-pool/providers/github-actions"
+          "workload_identity_provider": "projects/200200923017/locations/global/workloadIdentityPools/gh-actions-pool/providers/github-actions",
           "service_account": "cml-runner@cml-pulse.iam.gserviceaccount.com"
           }
           
